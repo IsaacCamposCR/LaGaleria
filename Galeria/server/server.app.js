@@ -1,6 +1,12 @@
 var express = require("express");
 var path = require("path");
 
+// Mongoose ODM...
+var mongoose = require("mongoose");
+
+//Connect to MongoDB...
+mongoose.connect("mongodb://camposi:123qweEE@ds057176.mlab.com:57176/gallerydb");
+
 var app = express();
 var rootPath = path.normalize(__dirname + "/../");
 
