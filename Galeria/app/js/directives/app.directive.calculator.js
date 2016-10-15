@@ -8,6 +8,13 @@ galleryApp.directive("calculator", function ($compile) {
         templateUrl: "/templates/directives/app.template.directive.calculator.html",
         scope: {
             product: "=product"
+        },
+        link: function (scope, element, attrs, controller) {
+            scope.$watch("scope.product", function (newValue) {
+                console.log(scope.product.base);
+                console.log("Aloja");
+                console.log(newValue);
+            }, true);
         }
     };
 });

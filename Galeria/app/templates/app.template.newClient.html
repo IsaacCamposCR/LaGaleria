@@ -1,6 +1,20 @@
 <div>
     <h1>Nuevo Cliente</h1>
-    <new-client client="client" />
-    <button type="button">Guardar</button>
-    <button type="button">Cancelar</button>
+
+    <div>
+        <label for="name">Nombre: </label>
+        <input type="text" id="name" ng-model="client.clientName">
+        <br/>
+        <label for="phone">Telefono(s): </label>
+        <button type="button" ng-click="addNewClientPhone()">+</button>
+        <div ng-repeat="newPhone in client.clientPhones track by $index">
+            Telefono #{{$index + 1}}:
+            <input type="number" id="phone" ng-model="newPhone" ng-change="savePhone($index, newPhone)">
+            <button type="button" ng-click="removeNewClientPhone($index)">X</button>
+        </div>
+    </div>
+
+    <!--<new-client client="client" addnew="addNewClientPhone()" save="savePhone(index, phone)"/>-->
+    <button type="button" ng-click="addNewClient()">Guardar</button>
+    <button type="button" ng-class="cancel()">Cancelar</button>
 </div>
