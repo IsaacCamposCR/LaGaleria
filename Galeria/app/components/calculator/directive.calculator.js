@@ -5,7 +5,7 @@ galleryApp.directive("calculator", function ($compile) {
     return {
         restrict: "E",
         replace: true,
-        templateUrl: "/templates/directives/app.template.directive.calculator.html",
+        templateUrl: "/components/calculator/template.directive.calculator.html",
         scope: {
             product: "=product"
         },

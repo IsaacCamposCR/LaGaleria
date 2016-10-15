@@ -5,13 +5,13 @@ var galleryApp = angular.module('galleryApp', ["ngResource", "ngRoute"])
         console.log("Creating routes...");
         $routeProvider.when("/calculadora",
             {
-                templateUrl: "templates/app.template.calculator.html",
+                templateUrl: "components/calculator/template.calculator.html",
                 controller: "CalculatorController"
             }
         );
         $routeProvider.when("/cliente",
             {
-                templateUrl: "templates/app.template.newClient.html",
+                templateUrl: "components/client/template.newClient.html",
                 controller: "NewClientController"
             }
         );
