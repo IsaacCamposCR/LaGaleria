@@ -1,85 +1,107 @@
 galleryApp.factory("calculator", function () {
     console.log("Registering calculator service...");
 
-    var Product = function (type, name, refillRequired) {
+    // Template for each calculator.
+    var Product = function (name, cmPrice, refillRequired) {
         return {
-            type: type,
             name: name,
             required: refillRequired,
             base: 0,
             height: 0,
             refill: 0,
-            cmPrice: 0,
+            cmPrice: cmPrice,
             total: 0
         };
     };
 
-    //Bastidor con Tela
+    // Creates a new calculator: Bastidor con Tela.
     var calculateFrame = function () {
-        //Bastidor
-        var frame = Product("Bastidor con Tela", "Bastidor", false);
-        frame.calculate = function(){
-            frame.cmPrice = (frame.base * frame.height);
+
+        var frame = Product("Bastidor", 30, false);
+        frame.calculate = function () {
+            frame.total = ((frame.base + frame.height) * 2) * frame.cmPrice;
+            totals();
         };
 
-        //Tela
-        var cloth = Product("Bastidor con Tela", "Tela", false);
-        cloth.calculate = function(){
-            cloth.cmPrice = (cloth.base * cloth.height);
+        var cloth = Product("Tela", 1.5, false);
+        cloth.calculate = function () {
+            cloth.total = (cloth.base * cloth.height) * cloth.cmPrice;
+            totals();
+        };
+
+        var totals = function () {
+            frame.subtotal = frame.total + cloth.total;
+            frame.others = frame.subtotal * 0.10;
+            frame.productTotal = frame.subtotal + frame.others;
         };
 
         return [frame, cloth];
     };
 
-    //Corriente
+    // Creates a new calculator: Corriente.
     var calculateNormal = function () {
-        //Moldura
-        var molding = Product("Corriente", "Moldura", true);
-        molding.calculate = function(){
-            molding.cmPrice = (molding.base * molding.height);
+
+        var molding = Product("Moldura", 50, true);
+        molding.calculate = function () {
+            molding.total = (((molding.base + molding.height) * 2) + molding.refill) * molding.cmPrice;
+            totals();
         };
 
-        //Maria Luisa Carton
-        var cardboard = Product("Corriente", "Maria Luisa Carton", false);
-        cardboard.calculate = function(){
-            cardboard.cmPrice = (cardboard.base * cardboard.height);
+        var cardboard = Product("Maria Luisa Carton", 4, false);
+        cardboard.calculate = function () {
+            cardboard.total = (cardboard.base * cardboard.height) * cardboard.cmPrice;
+            totals();
         };
 
-        //Filo
-        var edge = Product("Corriente", "Filo", false);
-        edge.calculate = function(){
-            edge.cmPrice = (edge.base * edge.height);
+        var edge = Product("Filo", 22, false);
+        edge.calculate = function () {
+            edge.total = ((edge.base + edge.height) * 2) * edge.cmPrice;
+            totals();
+        };
+
+        var totals = function () {
+            molding.subtotal = molding.total + cardboard.total + edge.total;
+            molding.others = molding.subtotal * 0.10;
+            molding.productTotal = molding.subtotal + molding.others;
         };
 
         return [molding, cardboard, edge];
     };
 
-    //Oleo
+    // Creates a new calculator: Oleo.
     var calculateOil = function () {
-        //Moldura
-        var molding = Product("Oleo", "Moldura", true);
-        molding.calculate = function(){
-            molding.cmPrice = (molding.base * molding.height);
+
+        var molding = Product("Moldura", 50, true);
+        molding.calculate = function () {
+            molding.total = (((molding.base + molding.height) * 2) + molding.refill) * molding.cmPrice;
+            totals();
         };
 
-        //Maria Luisa Madera
-        var wood = Product("Oleo", "Maria Luisa Madera", true);
-        wood.calculate = function(){
-            wood.cmPrice = (wood.base * wood.height);
+        var wood = Product("Maria Luisa Madera", 0, true);
+        wood.calculate = function () {
+            wood.total = (((wood.base + wood.height) * 2) + wood.refill) * wood.cmPrice;
+            totals();
         };
 
-        //Bastidor
-        var frame = Product("Oleo", "Bastidor", false);
-        frame.calculate = function(){
-            frame.cmPrice = (frame.base * frame.height);
+        var frame = Product("Bastidor", 30, false);
+        frame.calculate = function () {
+            frame.total = ((frame.base + frame.height) * 2) * frame.cmPrice;
+            totals();
         };
+
+        var totals = function () {
+            molding.subtotal = molding.total + wood.total + frame.total;
+            molding.others = molding.subtotal * 0.10;
+            molding.productTotal = molding.subtotal + molding.others;
+        }
 
         return [molding, wood, frame];
     };
 
     return {
+        // Controller will ask for a set of calculators determined by the type, 
+        // these functions create the correct set of calculator forms.
         generateCalculators: function (type) {
-            console.log("Generating calculators for... " + type);
             switch (type) {
                 case "Bastidor":
                     return calculateFrame();

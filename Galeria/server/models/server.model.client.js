@@ -6,7 +6,7 @@ var clientSchema = new Schema({
         type: String
     },
     phone: {
-        type: String
+        type: Array
     }
 });
 

@@ -1,7 +1,14 @@
 <div>
-    <h1>{{product.type}}</h1>
+    <label for="selectCalculator">Tipo de Arte: </label>
+    <select id="selectCalculator" ng-model="selectedCalculator" ng-options="calculator for calculator in calculators" ng-change="renderCalculators()">
+    </select>
     <br/>
     <div ng-repeat="product in products">
         <calculator product="product" />
     </div>
+    <span>Subtotal: {{products[0].subtotal | currency}}</span>
+    <br/>
+    <span>Otros: {{products[0].others | currency}}</span>
+    <br/>
+    <span>Total: {{products[0].productTotal | currency}}</span>
 </div>
