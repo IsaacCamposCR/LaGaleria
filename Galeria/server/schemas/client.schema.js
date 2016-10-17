@@ -5,10 +5,10 @@ var clientSchema = new Schema({
     name: {
         type: String
     },
-    phone: {
+    phones: {
         type: Array
     }
 });
 
 // Export model...
-module.exports = mongoose.model("Client", clientSchema);
+module.exports = mongoose.model("ClientSchema", clientSchema);

@@ -4,7 +4,7 @@
 
     var module = angular.module("theGallery");
 
-    module.factory("calculator", function () {
+    module.factory("calculatorService", function () {
         console.log("Registering calculator service...");
 
         // Template for each calculator.

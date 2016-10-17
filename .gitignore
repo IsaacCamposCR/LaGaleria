@@ -48,3 +48,4 @@ Temporary Items
 
 # Ignore node_modules Folder
 node_modules
+npm-debug

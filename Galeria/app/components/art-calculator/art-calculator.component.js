@@ -5,13 +5,13 @@
     var module = angular.module("theGallery");
 
     console.log("Creating art-calculator component...");
-    module.component("artCalculator", {
-        templateUrl: "/components/calculator/art-calculator.component.html",
+    module.component("artCalculatorComponent", {
+        templateUrl: "/components/art-calculator/art-calculator.component.html",
         controllerAs: "model",
-        controller: ["calculator", artCalculatorController]
+        controller: ["calculatorService", artCalculatorController]
     });
 
-    function artCalculatorController(calculator) {
+    function artCalculatorController(calculatorService) {
 
         var model = this;
 
@@ -24,12 +24,12 @@
             model.others = 0;
             model.productTotal = 0;
 
-            model.products = calculator.generateCalculators(model.selectedArt);
+            model.products = calculatorService.generateCalculators(model.selectedArt);
         };
 
         // Whenever a new type is selected the calculator set must be refreshed.
         model.renderCalculators = function () {
-            model.products = calculator.generateCalculators(model.selectedArt);
+            model.products = calculatorService.generateCalculators(model.selectedArt);
         };
 
         model.totals = function () {

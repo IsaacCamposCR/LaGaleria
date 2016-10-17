@@ -5,20 +5,18 @@
     var module = angular.module("theGallery");
 
     console.log("Creating client component...");
-    module.component("client", {
+    module.component("clientComponent", {
         templateUrl: "/components/client/client.component.html",
         controllerAs: "model",
-        controller: [clientController]
+        controller: ["clientService", clientController]
     });
 
-    function clientController() {
+    function clientController(clientService) {
 
         var model = this;
 
         model.$onInit = function () {
-
-            console.log("Init client");
-            model.name = "Isaac";
+            model.name = "";
             model.phones = [""];
         };
 
@@ -35,6 +33,15 @@
         };
 
         model.addNewClient = function () {
+            var client = {
+                id: "1",
+                name: model.name,
+                phones: model.phones
+            };
+
+            console.log("client.component: Saving client...");
+            console.log(client);
+            clientService.save(client);
         };
 
         model.cancel = function () {

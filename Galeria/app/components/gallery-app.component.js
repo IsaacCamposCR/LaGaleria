@@ -7,8 +7,8 @@
     module.component("galleryApp", {
         templateUrl: "/components/gallery-app.component.html",
         $routeConfig: [
-            { path: "/cliente", component: "client", name: "Client" },
-            { path: "/calculadora", component: "artCalculator", name: "ArtCalculator" },
+            { path: "/cliente", component: "clientComponent", name: "Client" },
+            { path: "/calculadora", component: "artCalculatorComponent", name: "ArtCalculator" },
             { path: "/**", redirectTo: ["ArtCalculator"] }
         ]
     });
