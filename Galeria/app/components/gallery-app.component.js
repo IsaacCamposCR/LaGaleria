@@ -8,8 +8,8 @@
         templateUrl: "/components/gallery-app.component.html",
         $routeConfig: [
             { path: "/cliente", component: "client", name: "Client" },
-            //{ path: "/calculadora", component: "calculator", name: "Calculator" },
-            { path: "/**", redirectTo: ["Client"] }
+            { path: "/calculadora", component: "artCalculator", name: "ArtCalculator" },
+            { path: "/**", redirectTo: ["ArtCalculator"] }
         ]
     });
 } ());
