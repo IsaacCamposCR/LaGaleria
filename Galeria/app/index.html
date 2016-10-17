@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="galleryApp">
+<html lang="en" ng-app="theGallery">
 
 <head>
     <base href="/" />
@@ -8,24 +8,19 @@
 </head>
 
 <body ng-cloak>
-    <div ng-view>
-    </div>
+    <gallery-app></gallery-app>
 
-    <script src="/lib/angular/angular.js"></script>
-    <script src="/lib/angular/angular-resource.js"></script>
-    <script src="/lib/angular/angular-route.js"></script>
-    <script src="/lib/angular/angular-locale_es-cr.js"></script>
+    <script src="/lib/angular-1.5.8/angular.js"></script>
+    <script src="/lib/angular-1.5.8/angular-resource.js"></script>
+    <script src="/lib/angular-1.5.8/angular-component-router.js"></script>
+    <script src="/lib/angular-1.5.8/angular-locale_es-cr.js"></script>
     <script src="/app.angular.js"></script>
 
-    <!--CONTROLLERS-->
-    <script src="/components/calculator/controller.calculator.js"></script>
-    <script src="/components/client/controller.newClient.js"></script>
-
-    <!--DIRECTIVES-->
-    <script src="/components/calculator/directive.calculator.js"></script>
+    <!--COMPONENTS-->
+    <script src="/components/gallery-app.component.js"></script>
+    <script src="/components/client/client.component.js"></script>
 
     <!--SERVICES-->
-    <script src="/components/calculator/service.calculator.js"></script>
 </body>
 
 </html>
