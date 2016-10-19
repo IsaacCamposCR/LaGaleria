@@ -1,0 +1,15 @@
+Validators:
+-Calculator:
+    Keep numbers = 0 when empty
+    Apply currency filter to price inputs
+
+-Client:
+    Required fields
+    Valid form
+    Phone format Masks
+    Validate empty phones
+    No same name clients: error or override?
+    Callbacks for database errors
+    Minimum one phone (just add required field?)
+
+Masks:

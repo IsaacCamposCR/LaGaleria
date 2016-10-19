@@ -1,0 +1,44 @@
+<div>
+    <h1>Clientes</h1>
+    <div>
+        <input type="text" id="search" ng-model="model.clientName" placeholder="Busqueda de clientes...">
+        <button type="button" ng-click="model.findClient()">Buscar</button>
+    </div>
+    <div>
+        <table>
+            <thead>
+                <th>Nombre</th>
+                <th>Telefono</th>
+                <th>
+                    <button type="button" ng-click="model.newClient()">Nuevo Cliente</button>
+                </th>
+            </thead>
+            <tr ng-repeat="client in model.clients">
+                <td>
+                    <span>{{client.name}}</span>
+                </td>
+                <td>
+                    <span>{{client.phones[0]}}</span>
+                </td>
+                <td>
+                    <button type="button" ng-click="model.clientPage(client._id)">Detalles</button>
+                </td>
+            </tr>
+        </table>
+
+
+
+        <ul>
+            <div>
+                <span>Nombre</span>
+                <span>Telefono</span>
+                <button type="button" ng-click="model.newClient()">Nuevo Cliente</button>
+            </div>
+            <li ng-repeat="client in model.clients">
+                <span>{{client.name}}</span>
+                <span>{{client.phones[0]}}</span>
+                <button type="button" ng-click="model.clientPage(client._id)">Detalles</button>
+            </li>
+        </ul>
+    </div>
+</div>

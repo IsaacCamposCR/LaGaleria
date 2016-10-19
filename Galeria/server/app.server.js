@@ -22,20 +22,19 @@ var app = express();
 var rootPath = path.normalize(__dirname + "/../");
 var bodyParser = require("body-parser");
 
-app.use(morgan("dev")); 
+//app.use(morgan("dev")); 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static(rootPath + "/app"));
 
 // Client endpoints
-app.post("/data/client/:id", clients.save);
+app.post("/data/client/", clients.save);
+app.get("/data/client/", clients.list);
+app.get("/data/client/:name", clients.find);
 
 app.get("*", function (req, res) {
     res.sendFile(rootPath + "/app/index.html");
 });
 
-app.listen(8000);/*
-console.log("rootPath: " + rootPath);
-console.log(rootPath + "../app/index.html");
-console.log(rootPath + "/app");*/
+app.listen(8000);
 console.log("Listening on port 8000...");

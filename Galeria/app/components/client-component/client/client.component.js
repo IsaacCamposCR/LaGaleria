@@ -6,7 +6,7 @@
 
     console.log("Creating client component...");
     module.component("clientComponent", {
-        templateUrl: "/components/client/client.component.html",
+        templateUrl: "/components/client-component/client/client.component.html",
         controllerAs: "model",
         controller: ["clientService", clientController]
     });
@@ -34,7 +34,6 @@
 
         model.addNewClient = function () {
             var client = {
-                id: "1",
                 name: model.name,
                 phones: model.phones
             };
