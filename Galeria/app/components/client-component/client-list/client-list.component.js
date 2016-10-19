@@ -8,10 +8,7 @@
     module.component("clientListComponent", {
         templateUrl: "/components/client-component/client-list/client-list.component.html",
         controllerAs: "model",
-        controller: ["clientService", clientListController],
-        bindings: {
-            "$router": "<"
-        }
+        controller: ["clientService", clientListController]
     });
 
     function clientListController(clientService) {
@@ -20,14 +17,6 @@
 
         model.$onInit = function () {
             model.clients = clientService.list();
-        };
-
-        model.clientPage = function (clientId) {
-            model.$router.navigate(["Client", { id: clientId }]);
-        };
-
-        model.newClient = function () {
-            model.$router.navigate(["Client"]);
         };
 
         model.findClient = function () {

@@ -2,20 +2,22 @@
     <h1>Nuevo Cliente</h1>
 
     <form name="clientForm">
-        <div>
-            <label for="name">Nombre: </label>
-            <input required oninvalid="this.setCustomValidity('Debe ingresar el nombre del cliente.')" type="text" id="name" ng-model="model.name">
-            <br/>
-            <label for="phoneInput">Telefono(s): </label>
-            <button type="button" ng-click="model.addNewClientPhone()">+</button>
-            <div ng-repeat="phone in model.phones track by $index">
-                <label for="phoneInput">Telefono #{{$index + 1}}:</label>
-                <input type="number" id="phoneInput" ng-model="phone" ng-change="model.savePhone($index, phone)">
-                <button type="button" ng-click="model.removeNewClientPhone($index)">X</button>
+        <fieldset ng-disabled="model.disableForm">
+            <div>
+                <label for="name">Nombre: </label>
+                <input required oninvalid="this.setCustomValidity('Debe ingresar el nombre del cliente.')" type="text" id="name" ng-model="model.name">
+                <br/>
+                <label for="phoneInput">Telefono(s): </label>
+                <button type="button" ng-click="model.addNewClientPhone()">+</button>
+                <div ng-repeat="phone in model.phones track by $index">
+                    <label for="phoneInput">Telefono #{{$index + 1}}:</label>
+                    <input type="number" id="phoneInput" ng-model="phone" ng-change="model.savePhone($index, phone)">
+                    <button type="button" ng-click="model.removeNewClientPhone($index)">X</button>
+                </div>
             </div>
-        </div>
 
-        <button type="submit" ng-click="model.addNewClient()">Guardar</button>
-        <button type="button" ng-click="model.cancel()">Cancelar</button>
+            <button type="submit" ng-click="model.addNewClient()">Guardar</button>
+            <button type="button" ng-click="model.cancel()">Cancelar</button>
+        </fieldset>
     </form>
 </div>

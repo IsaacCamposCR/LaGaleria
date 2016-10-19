@@ -15,9 +15,24 @@
 
         var model = this;
 
+        model.$routerOnActivate = function (next) {
+            if (next.params.id) {
+                clientService.get(next.params.id)
+                    .$promise.then(function (result) {
+                        model.id = result.id;
+                        model.name = result.name;
+                        model.phones = result.phones;
+                        model.disableForm = true;
+                    });
+            }
+            else {
+                model.name = "";
+                model.phones = [""];
+                model.disableForm = false;
+            }
+        };
+
         model.$onInit = function () {
-            model.name = "";
-            model.phones = [""];
         };
 
         model.addNewClientPhone = function () {

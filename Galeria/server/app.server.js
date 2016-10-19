@@ -2,9 +2,6 @@ var express = require("express");
 var morgan = require("morgan");
 var path = require("path");
 
-// Client Server
-var clients = require("./modules/client.server");
-
 // Mongoose ODM...
 var mongoose = require("mongoose");
 
@@ -27,10 +24,13 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static(rootPath + "/app"));
 
+// Client Server
+var clients = require("./modules/client.server");
 // Client endpoints
 app.post("/data/client/", clients.save);
-app.get("/data/client/", clients.list);
-app.get("/data/client/:name", clients.find);
+app.get("/data/client/:id", clients.get);
+app.get("/data/clients/", clients.list);
+app.get("/data/clients/:name", clients.find);
 
 app.get("*", function (req, res) {
     res.sendFile(rootPath + "/app/index.html");

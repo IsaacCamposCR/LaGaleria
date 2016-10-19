@@ -20,7 +20,7 @@ module.exports.save = function (req, res) {
 
 module.exports.list = function (req, res) {
     console.log("exports.list: Getting all clients...");
-    
+
     var query = ClientSchema.find();
 
     query.sort({ name: "desc" })
@@ -40,7 +40,7 @@ module.exports.list = function (req, res) {
 module.exports.find = function (req, res) {
     console.log("exports.find: Finding by client name");
 
-    var query = ClientSchema.find({'name': {"$regex": req.params.name, "$options": "i"}});
+    var query = ClientSchema.find({ 'name': { "$regex": req.params.name, "$options": "i" } });
 
     query.sort({ create: "desc" });
 
@@ -55,4 +55,22 @@ module.exports.find = function (req, res) {
             res.end();
         }
     });
-}
+};
+
+module.exports.get = function (req, res) {
+    console.log("exports.find: Finding by client id");
+
+    var query = ClientSchema.findById(req.params.id);
+
+    query.exec(function (err, results) {
+        if (err) {
+            console.log("Errors");
+            var errMsg = "Sorry, there was an error retrieving the client. " + err;
+        }
+        else {
+            console.log("No errors");
+            res.send(results);
+            res.end();
+        }
+    });
+};
