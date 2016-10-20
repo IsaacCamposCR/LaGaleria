@@ -11,6 +11,7 @@
         controller: [calculatorController],
         bindings: {
             product: "<",
+            // Binds the totals function from the parent in order to update the totals in the parent.
             totals: "&"
         },
     });
@@ -21,6 +22,7 @@
 
         model.$onInit = function () { };
 
+        // Everytime an input changes in the calculator, the total function bound is executed.
         model.$onChanges = function () {
             model.totals();
         };

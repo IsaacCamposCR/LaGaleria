@@ -8,6 +8,7 @@
     module.component("artCalculatorComponent", {
         templateUrl: "/components/art-calculator/art-calculator.component.html",
         controllerAs: "model",
+        //The calculatorService must be added as a literal string in order to remain when the js is minified.
         controller: ["calculatorService", artCalculatorController]
     });
 
@@ -16,14 +17,18 @@
         var model = this;
 
         model.$onInit = function () {
+            // Creates the dropdown menu options for different art types.
             model.arts = ["Bastidor", "Corriente", "Oleo"];
 
+            // Selects a default art type.
             model.selectedArt = "Bastidor";
 
             model.subtotal = 0;
             model.others = 0;
             model.productTotal = 0;
 
+            // Updates the products array with the necessary calculators from the service, 
+            // this will in turn, update the UI with multiple calculators.
             model.products = calculatorService.generateCalculators(model.selectedArt);
         };
 

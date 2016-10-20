@@ -5,7 +5,7 @@
         <fieldset ng-disabled="model.disableForm">
             <div>
                 <label for="name">Nombre: </label>
-                <input required oninvalid="this.setCustomValidity('Debe ingresar el nombre del cliente.')" type="text" id="name" ng-model="model.name">
+                <input type="text" id="name" ng-model="model.name">
                 <br/>
                 <label for="phoneInput">Telefono(s): </label>
                 <button type="button" ng-click="model.addNewClientPhone()">+</button>
@@ -15,9 +15,9 @@
                     <button type="button" ng-click="model.removeNewClientPhone($index)">X</button>
                 </div>
             </div>
-
+            <hr/>
             <button type="submit" ng-click="model.addNewClient()">Guardar</button>
-            <button type="button" ng-click="model.cancel()">Cancelar</button>
+            <button type="button" ng-link="['ClientList']">Cancelar</button>
         </fieldset>
     </form>
 </div>

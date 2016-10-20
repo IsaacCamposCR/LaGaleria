@@ -8,6 +8,7 @@
     module.component("clientListComponent", {
         templateUrl: "/components/client-component/client-list/client-list.component.html",
         controllerAs: "model",
+        //The clientService must be added as a literal string in order to remain when the js is minified.
         controller: ["clientService", clientListController]
     });
 
@@ -15,10 +16,12 @@
 
         var model = this;
 
+        // When the component is initialized, loads all the clients.
         model.$onInit = function () {
             model.clients = clientService.list();
         };
 
+        // Searches for clients by name.
         model.findClient = function () {
             console.log("Finding " + model.clientName);
             model.clients = clientService.find(model.clientName);

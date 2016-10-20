@@ -26,10 +26,15 @@ app.use(express.static(rootPath + "/app"));
 
 // Client Server
 var clients = require("./modules/client.server");
+
 // Client endpoints
+// Creates a new client
 app.post("/data/client/", clients.save);
+// Gets a client by _id
 app.get("/data/client/:id", clients.get);
+// Gets a list of all clients
 app.get("/data/clients/", clients.list);
+// Gets a list of all clients by name
 app.get("/data/clients/:name", clients.find);
 
 app.get("*", function (req, res) {

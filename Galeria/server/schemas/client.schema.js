@@ -10,5 +10,5 @@ var clientSchema = new Schema({
     }
 });
 
-// Export model...
-module.exports = mongoose.model("ClientSchema", clientSchema);
+// Export model. The name parameter will set the collection name in MongoDB
+module.exports = mongoose.model("Client", clientSchema);
