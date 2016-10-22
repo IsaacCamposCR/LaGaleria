@@ -6,20 +6,25 @@
             <label for="category">Category: </label>
             <select id="category" ng-model="model.selectedCategory" ng-options="category for category in model.categories">
             </select>
+            <br/>
             <label for="provider">Proveedor: </label>
             <select id="provider" ng-model="model.selectedProvider" ng-options="provider for provider in model.providers">
             </select>
+            <br/>
             <label for="invoice"># de Factura: </label>
             <input id="invoice" type="text" ng-model="model.invoice">
+            <br/>
             <label for="description">Descripcion: </label>
             <input id="description" type="text" ng-model="model.description">
+            <br/>
             <label for="stock">Cantidad Disponible: </label>
             <input id="stock" type="number" ng-model="model.stock">
+            <br/>
             <label for="price">Precio: </label>
             <input id="price" type="number" ng-model="model.price">
             <hr/>
             <button type="submit" ng-click="model.addNewArticle()">Guardar</button>
-            <button type="button" ng-link="['Iventory']"></button>
+            <button type="button" ng-link="['Inventory']">Cancelar</button>
         </fieldset>
     </form>
 </div>

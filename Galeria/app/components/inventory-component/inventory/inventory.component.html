@@ -1,0 +1,34 @@
+<div>
+    <h1>Inventario</h1>
+    <div>
+        <input type="text" id="search" ng-model="model.article" placeholder="Busqueda de articulos...">
+        <button type="button">Buscar</button>
+    </div>
+    <div>
+        <div ng-repeat="category in model.categories">
+            <span ng-click="model.toggleCollapsedCategory(category)"><h3>{{category.name}}: {{category.articles.length}} articulo(s)</h3></span>
+            <div ng-show="category.collapsed">
+                <table>
+                    <thead>
+                        <th># Factura</th>
+                        <th>Descripcion</th>
+                        <th>Proveedor</th>
+                        <th>Cantidad</th>
+                        <th>Precio</th>
+                        <th>Total</th>
+                        <th><button type="button" ng-link="['Article']">Nuevo Articulo</button></th>
+                    </thead>
+                    <tr ng-repeat="article in category.articles">
+                        <td>{{article.invoice}}</td>
+                        <td>{{article.description}}</td>
+                        <td>{{article.provider}}</td>
+                        <td>{{article.stock}}</td>
+                        <td>{{article.price}}</td>
+                        <td>{{article.price * article.stock}}</td>
+                        <td><button type="button" ng-link="['EditArticle', {id: article._id}]">Detalles</button></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

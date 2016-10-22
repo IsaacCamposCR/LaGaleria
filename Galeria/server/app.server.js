@@ -26,16 +26,25 @@ app.use(express.static(rootPath + "/app"));
 
 // Client Server
 var clients = require("./modules/client.server");
+var articles = require("./modules/article.server");
 
 // Client endpoints
 // Creates a new client
-app.post("/data/client/", clients.save);
+app.post("/api/client/", clients.save);
 // Gets a client by _id
-app.get("/data/client/:id", clients.get);
+app.get("/api/client/:id", clients.get);
 // Gets a list of all clients
-app.get("/data/clients/", clients.list);
+app.get("/api/clients/", clients.list);
 // Gets a list of all clients by name
-app.get("/data/clients/:name", clients.find);
+app.get("/api/clients/:name", clients.find);
+
+// Inventory endpoints
+// Creates a new article
+app.post("/api/article/", articles.save);
+// Gets a list of all articles
+app.get("/api/article/", articles.list);
+// Gets an article by _id
+app.get("/api/article/:id", articles.get);
 
 app.get("*", function (req, res) {
     res.sendFile(rootPath + "/app/index.html");

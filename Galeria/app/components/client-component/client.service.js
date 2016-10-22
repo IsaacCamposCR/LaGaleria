@@ -12,7 +12,7 @@
             console.log("client.service: Saving client...");
 
             // Creates a new resource object for the endpoint.
-            var resource = $resource("/data/client/");
+            var resource = $resource("/api/client/");
 
             // Validation: Remove empty phones from the phones array.
             for (var i = 0; i <= client.phones.length; i++) {
@@ -21,7 +21,7 @@
                 }
             }
             
-            // Returns the result from the endpoint, asynchronous.
+            // Saves the data to the endpoint, asynchronous.
             return resource.save(client);
         };
 
@@ -30,7 +30,7 @@
             console.log("client.service: Getting single client by id...");
 
             // Creates a new resource for the endpoint with an id parameter.
-            var resource = $resource("/data/client/:id",
+            var resource = $resource("/api/client/:id",
                 { id: "@id" },
                 {
                     query: {
@@ -48,7 +48,7 @@
             console.log("client.service: Retrieving clients...");
 
             // Creates a new resource for the endpoint.
-            var resource = $resource("/data/clients/");
+            var resource = $resource("/api/clients/");
 
             // Returns the result from the endpoint, asynchronous.
             return resource.query();
@@ -59,7 +59,7 @@
             console.log("client.service: Finding by client name...");
             
             // Creates a new resource for the endpoint with a name parameter.
-            var resource = $resource("/data/clients/:name",
+            var resource = $resource("/api/clients/:name",
             { name: "@name" },
             {
                 query: {
