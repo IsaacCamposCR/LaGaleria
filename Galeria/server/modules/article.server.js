@@ -7,7 +7,7 @@ module.exports.save = function (req, res) {
     // Creates an instance of the article schema with the data from the request body.
     var article = new ArticleSchema({
         category: req.body.category,
-        invoice: req.body.invoice,
+        code: req.body.code,
         description: req.body.description,
         provider: req.body.provider,
         stock: req.body.stock,
@@ -31,7 +31,13 @@ module.exports.list = function (req, res) {
     // Creates a new query to find all articles and sort them ascendingly by category and name.
     var query = ArticleSchema.find();
 
-    query.where({ category: req.query.name });
+    if (req.query.description) {
+        console.log("article.list: Getting articles by description...");
+        // Creates a new query to find all articles and filters them by description (Regex for LIKE) taken from the request query parameters.
+        query = ArticleSchema.find({ 'description': { "$regex": req.query.description, "$options": "i" } });
+    }
+
+    query.where({ category: req.query.category });
     query.sort({ category: "asc", description: "asc" });
 
     // Executes the find query.
@@ -42,7 +48,11 @@ module.exports.list = function (req, res) {
         }
         else {
             console.log("No errors");
+            //if (results.length === 0) {
+            //    res.send("No Results");
+            //} else {
             res.send(results);
+            //}
             res.end();
         }
     });
@@ -51,7 +61,7 @@ module.exports.list = function (req, res) {
 // Returns a single article by _id property from the database.
 module.exports.get = function (req, res) {
     console.log("exports.get: Finding by article id");
-    
+
     //Creates a new query to find a single client by _id taken from the request parameters.
     var query = ArticleSchema.findById(req.params.id);
 

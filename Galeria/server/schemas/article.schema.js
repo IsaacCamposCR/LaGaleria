@@ -5,7 +5,7 @@ var articleSchema = new Schema({
     category: {
         type: String
     },
-    invoice: {
+    code: {
         type: String
     },
     description: {

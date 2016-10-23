@@ -21,15 +21,25 @@
         };
 
         // Function to retrieve an unfiltered list of all articles.
-        var listArticles = function (name) {
+        var listArticles = function (category) {
             console.log("inventory.service: Getting all articles...");
 
             // Creates a new resource for the endpoint.
             var resource = $resource("/api/article/");
 
             // Returns the result from the endpoint, asynchronous.
-            return resource.query({ name: name });
+            return resource.query({ category: category });
         };
+
+        var listByArticleDescription = function (description, category) {
+            console.log("inventory.service: Getting articles by description");
+
+            // Creates a new resource for the endpoint with a name parameter.
+            var resource = $resource("/api/article/");
+
+            // Returns a result from the endpoint, asynchronous.
+            return resource.query({ description: description, category: category });
+        }
 
         var getArticle = function (id) {
             console.log("inventory.service: Getting single article by id...");
@@ -52,7 +62,8 @@
             //Exposed API's
             save: saveArticle,
             get: getArticle,
-            list: listArticles
+            list: listArticles,
+            find: listByArticleDescription
         };
     });
 } ());

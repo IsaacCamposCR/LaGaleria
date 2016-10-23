@@ -70,7 +70,7 @@
             var article = {
                 category: model.selectedCategory,
                 provider: model.selectedProvider,
-                invoice: model.invoice,
+                code: model.code,
                 description: model.description,
                 stock: model.stock,
                 price: model.price
@@ -80,7 +80,7 @@
             inventoryService.save(article);
 
             // Programatically navigates to the inventory component.
-            //model.$router.navigate(["Inventory"]);
+            model.$router.navigate(["Inventory"]);
         };
 
     }
