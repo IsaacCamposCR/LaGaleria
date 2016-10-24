@@ -8,6 +8,7 @@
         <h3>Cantidad Total de Articulos: {{model.totalArticles}}</h3>
         <h3>Cantidad de Articulos Unicos: {{model.uniqueArticles}}</h3>
         <h3>Total Inventario: {{model.total | currency}}</h3>
+        <button type="button" ng-link="['Article']">Nuevo Articulo</button>
     </div>
     <div>
         <div ng-repeat="category in model.categories">
@@ -21,7 +22,7 @@
                         <th>Cantidad</th>
                         <th>Precio</th>
                         <th>Total</th>
-                        <th><button type="button" ng-link="['Article']">Nuevo Articulo</button></th>
+                        <th></th>
                     </thead>
                     <tr ng-repeat="article in category.articles">
                         <td>{{article.code}}</td>

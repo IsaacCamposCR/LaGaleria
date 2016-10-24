@@ -3,9 +3,19 @@
 
     <form name="articleForm">
         <fieldset ng-disabled="model.disableForm">
-            <label for="category">Category: </label>
-            <select id="category" ng-model="model.selectedCategory" ng-options="category for category in model.categories">
+            <div ng-if="!model.editingCategory">
+                <label for="category">Category: </label>
+                <select id="category" ng-model="model.selectedCategory" ng-options="category for category in model.categories">
             </select>
+                <button type="button" ng-click="model.editCategory()">Editar</button>
+                <button type="button" ng-click="model.newCategory()">Agregar</button>
+            </div>
+            <div ng-if="model.editingCategory">
+                <label for="category">Category: </label>
+                <input type="text" name="category" ng-model="model.category">
+                <button type="button" ng-click="model.addNewCategory()">Guardar</button>
+                <button type="button" ng-click="model.cancelEdit()">Cancelar</button>
+            </div>
             <br/>
             <label for="provider">Proveedor: </label>
             <select id="provider" ng-model="model.selectedProvider" ng-options="provider for provider in model.providers">

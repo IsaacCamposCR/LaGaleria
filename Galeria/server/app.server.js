@@ -27,6 +27,7 @@ app.use(express.static(rootPath + "/app"));
 // Client Server
 var clients = require("./modules/client.server");
 var articles = require("./modules/article.server");
+var categories = require("./modules/category.server");
 
 // Client endpoints
 // Creates a new client
@@ -41,10 +42,16 @@ app.get("/api/clients/:name", clients.find);
 // Inventory endpoints
 // Creates a new article
 app.post("/api/article/", articles.save);
-// Gets a list of all articles
+// Gets a list of all articles, can be a search by description
 app.get("/api/article/", articles.list);
 // Gets an article by _id
 app.get("/api/article/:id", articles.get);
+// Creates a new category
+app.post("/api/category/", categories.save);
+// Gets a list of all categories
+app.get("/api/category/", categories.list);
+// Gets a category
+app.get("/api/category/:category", categories.get);
 
 app.get("*", function (req, res) {
     res.sendFile(rootPath + "/app/index.html");

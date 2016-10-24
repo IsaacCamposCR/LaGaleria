@@ -48,11 +48,7 @@ module.exports.list = function (req, res) {
         }
         else {
             console.log("No errors");
-            //if (results.length === 0) {
-            //    res.send("No Results");
-            //} else {
             res.send(results);
-            //}
             res.end();
         }
     });
@@ -62,7 +58,7 @@ module.exports.list = function (req, res) {
 module.exports.get = function (req, res) {
     console.log("exports.get: Finding by article id");
 
-    //Creates a new query to find a single client by _id taken from the request parameters.
+    //Creates a new query to find a single article by _id taken from the request parameters.
     var query = ArticleSchema.findById(req.params.id);
 
     // Executes the findById query.
