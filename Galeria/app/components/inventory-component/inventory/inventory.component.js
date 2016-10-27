@@ -18,15 +18,8 @@
 
         // When the component is initialized, loads all the articles.
         model.$onInit = function () {
-            // Replace this with an actual call to the database...
-            model.categories = [];
-            categoryService.list().$promise.then(function (results) {
-                results.forEach(function (item) {
-                    model.categories.push({ name: item.category });
-                });
-
-                model.populateArticles(false);
-            });
+            // The false parameter indicates it is not a find command.
+            populateArticles(false);
         };
 
         // Article lists are callapsed by default, clicking the article category toggles visibility.
@@ -36,39 +29,43 @@
 
         // Finds an article by description.
         model.findArticle = function () {
-            console.log("Finding " + model.articleDescription);
-
-            // Replace this with an actual call to the database...
-            model.categories = [{ name: "Angeles" }, { name: "Elefantes" }, { name: "Buhos" }];
-            model.populateArticles(true);
+            // The true parameter indicates it is a find command.
+            populateArticles(true);
         };
 
-        // Function creates the article list per each category object in the array. 
-        model.populateArticles = function (isFind) {
+        var populateArticles = function (isFind) {
+            var articlesPromise;
+            model.categories = [];
 
-            // For each member in the categories array, it will attach the article list for that category.
-            for (var i = 0; i < model.categories.length; i++) {
-                var category = model.categories[i].name;
-                if (isFind) {
-                    // Calls the article service to find articles by name and category.
-                    model.categories[i].articles =
-                        inventoryService.find(model.articleDescription, category);
-                } else {
-                    // Calls the article service to list articles by category.
-                    model.categories[i].articles =
-                        inventoryService.list(category);
-                }
+            categoryService.list().
+                $promise.then(function (results) {
+                    results.forEach(function (item) {
+                        var articles = [];
+                        if (isFind) {
+                            articlesPromise = inventoryService.find(model.articleDescription, item._id).$promise;
+                        } else {
+                            articlesPromise = inventoryService.list(item._id).$promise;
+                        }
+                        articlesPromise
+                            .then(function (results) {
+                                results.forEach(function (item) {
+                                    articles.push(item);
+                                });
 
-                // Handles the list promise to calculate the amount of articles and totals. (Using an unadviced function inside a function, this is very costly).
-                model.categories[i].articles.$promise.then(function (results) {
-                    model.updateTotals();
+                                model.categories.push({
+                                    id: item._id,
+                                    name: item.category,
+                                    articles: articles
+                                });
+
+                                updateTotals();
+                            });
+                    });
                 });
-            }
-
         };
 
         // Iterates every item from the promise results to calculate totals.
-        model.updateTotals = function () {
+        var updateTotals = function () {
 
             model.total = 0;
             model.uniqueArticles = 0;

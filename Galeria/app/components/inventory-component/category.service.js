@@ -47,10 +47,23 @@
             return resource.query({ category: category });
         };
 
+        var updateCategory = function (id, category) {
+            console.log("category.service: Updating category");
+
+            // Creates a resource with a custom method to update the category.
+            var resource = $resource("/api/category/", {
+                "update": { method: "PUT" }
+            });
+
+            // Saves the data to the endpoint, asynchronous.
+            return resource.update({ id: id, category: category });
+        };
+
         return {
             save: saveCategory,
             list: listCategories,
-            get: getCategory
+            get: getCategory,
+            update: updateCategory
         };
     });
 } ());

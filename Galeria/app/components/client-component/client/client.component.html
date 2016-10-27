@@ -9,11 +9,14 @@
                 <br/>
                 <label for="phoneInput">Telefono(s): </label>
                 <button type="button" ng-click="model.addNewClientPhone()">+</button>
+                <br/>
                 <div ng-repeat="phone in model.phones track by $index">
                     <label for="phoneInput">Telefono #{{$index + 1}}:</label>
                     <input type="number" id="phoneInput" ng-model="phone" ng-change="model.savePhone($index, phone)">
                     <button type="button" ng-click="model.removeNewClientPhone($index)">X</button>
                 </div>
+                <label for="created">Fecha de Ingreso</label>
+                <input type="date" id="created" ng-model="model.created">
             </div>
             <hr/>
             <button type="submit" ng-click="model.addNewClient()">Guardar</button>

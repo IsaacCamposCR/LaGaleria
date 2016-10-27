@@ -9,37 +9,19 @@
             <thead>
                 <th>Nombre</th>
                 <th>Telefono</th>
+                <th>Fecha Ingreso</th>
                 <th>
                     <button type="button" ng-link="['Client']">Nuevo Cliente</button>
                 </th>
             </thead>
             <tr ng-repeat="client in model.clients">
-                <td>
-                    <span>{{client.name}}</span>
-                </td>
-                <td>
-                    <span>{{client.phones[0]}}</span>
-                </td>
+                <td><span>{{client.name}}</span></td>
+                <td><span>{{client.phones[0]}}</span></td>
+                <td>{{client.created | date:"MM/dd/yyyy"}}</td>
                 <td>
                     <button type="button" ng-link="['EditClient', {id: client._id}]">Detalles</button>
                 </td>
             </tr>
         </table>
-
-
-        <!--
-        <ul>
-            <div>
-                <span>Nombre</span>
-                <span>Telefono</span>
-                <button type="button" ng-click="model.newClient()">Nuevo Cliente</button>
-            </div>
-            <li ng-repeat="client in model.clients">
-                <span>{{client.name}}</span>
-                <span>{{client.phones[0]}}</span>
-                <button type="button" ng-click="model.clientPage(client._id)">Detalles</button>
-            </li>
-        </ul>
-        -->
     </div>
 </div>

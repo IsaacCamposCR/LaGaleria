@@ -6,7 +6,12 @@ var clientSchema = new Schema({
         type: String
     },
     phones: {
-        type: Array
+        type: Array,
+        unique: true
+    },
+    created: {
+        type: Date,
+        Default: Date.now
     }
 });
 

@@ -31,6 +31,7 @@
                         model.id = result.id;
                         model.name = result.name;
                         model.phones = result.phones;
+                        model.created = new Date(result.created);
 
                         //Disable the form when an existing client is loaded.
                         model.disableForm = true;
@@ -40,6 +41,8 @@
                 // Creates a blank form for a new client.
                 model.name = "";
                 model.phones = [""];
+                model.created = new Date();
+                console.log(Date.now);
 
                 // Enables the form if no client is loaded.
                 model.disableForm = false;
@@ -68,7 +71,8 @@
         model.addNewClient = function () {
             var client = {
                 name: model.name,
-                phones: model.phones
+                phones: model.phones,
+                created: model.created
             };
 
             console.log("client.component: Saving client...");

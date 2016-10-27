@@ -32,12 +32,10 @@ var categories = require("./modules/category.server");
 // Client endpoints
 // Creates a new client
 app.post("/api/client/", clients.save);
+// Gets a list of all clients can be filtered by name.
+app.get("/api/client/", clients.list);
 // Gets a client by _id
 app.get("/api/client/:id", clients.get);
-// Gets a list of all clients
-app.get("/api/clients/", clients.list);
-// Gets a list of all clients by name
-app.get("/api/clients/:name", clients.find);
 
 // Inventory endpoints
 // Creates a new article

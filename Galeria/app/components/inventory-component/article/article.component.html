@@ -5,8 +5,8 @@
         <fieldset ng-disabled="model.disableForm">
             <div ng-if="!model.editingCategory">
                 <label for="category">Category: </label>
-                <select id="category" ng-model="model.selectedCategory" ng-options="category for category in model.categories">
-            </select>
+                <select id="category" ng-model="model.selectedCategory" ng-options="category.category for category in model.categories track by category._id">
+                </select>
                 <button type="button" ng-click="model.editCategory()">Editar</button>
                 <button type="button" ng-click="model.newCategory()">Agregar</button>
             </div>

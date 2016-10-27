@@ -1,7 +1,7 @@
 // References the schema for categories.
 var CategorySchema = require("../schemas/category.schema.js");
 
-module.exports.save = function (req, res) {
+var newCategory = function (req, res) {
     console.log("Saving category...");
 
     // Creates an instance of the category schema with the data from the request body.
@@ -10,14 +10,42 @@ module.exports.save = function (req, res) {
     });
 
     // Executes the save command to Mongo.
-    category.save(function (err) {
+    category.save(function (err, results) {
         if (err) {
+            console.log("Errors");
             var errMsg = "Sorry, there was an error saving the category. " + err;
         }
         else {
             console.log("New category was saved!");
+            console.log(results);
+            res.send(results);
+            res.end();
         }
     });
+};
+
+var updateCategory = function (req, res) {
+    console.log("category.update: Updating category...");
+
+    CategorySchema.update({ _id: req.body.id }, { category: req.body.category }, { multi: false }, function (err, numAffected) {
+        if (err) {
+            console.log("Errors");
+            var errMsg = "Sorry, there was an error updating the category. " + err;
+        } else {
+            console.log("Category was updated");
+            console.log(numAffected);
+            res.send({ _id: req.body.id });
+            res.end();
+        }
+    });
+};
+
+module.exports.save = function (req, res) {
+    if (req.body.id) {
+        updateCategory(req, res);
+    } else {
+        newCategory(req, res);
+    }
 };
 
 // Returns a single category by category property from the database.
@@ -45,8 +73,8 @@ module.exports.list = function (req, res) {
     console.log("category.list: Getting all categories...");
 
     // Creates a new query to find all categories and sort them ascendingly.
-    var query = CategorySchema.find().select({ "category": 1, "_id": 0 });;
-    query.sort({ category: "asc", description: "asc" });
+    var query = CategorySchema.find();//.select({ "category": 1, "_id": 0 });
+    query.sort({ category: "asc" });
 
     // Executes the find query.
     query.exec(function (err, results) {
@@ -64,4 +92,11 @@ module.exports.list = function (req, res) {
 
 module.exports.update = function (req, res) {
     console.log("category.update: Updating category...");
+    var id = req.query.id;
+    var category = req.query.category;
+    console.log(id, category);
+
+    CategorySchema.update({ _id: id }, { category: category }, { multi: false }, function (err, numAffected) {
+        //numAffected is the number of documents affected.
+    });
 };

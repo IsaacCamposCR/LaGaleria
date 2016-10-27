@@ -26,25 +26,18 @@
             model.categories = [];
 
             //The Category and Provider array must be filled regardless of the origin page.
-            categoryService.list().$promise
-                .then(function (results) {
+            loadCategories().then(function () {
 
-                    // Need to find an easier way to return an array with strings instead of an array of
-                    // objects straight from mongo.
-                    results.forEach(function (item) {
-                        model.categories.push(item.category);
-                    });
+                model.providers = ["MADI", "Coca-Cola"];
 
-                    model.providers = ["MADI", "Coca-Cola"];
-
-                    // Takes the id from the parameters in the new url.
-                    if (next.params.id) {
-                        loadArticle(next.params.id);
-                    }
-                    else {
-                        newArticle();
-                    }
-                });
+                // Takes the id from the parameters in the new url.
+                if (next.params.id) {
+                    loadArticle(next.params.id);
+                }
+                else {
+                    newArticle();
+                }
+            });
         };
 
         var loadArticle = function (id) {
@@ -55,8 +48,8 @@
                 // This call is asynchronous so a callback must be used in the promise to process the data.
                 .$promise.then(function (result) {
 
-                    model.selectedCategory = result.category;
                     console.log(result.category);
+                    model.selectedCategory = lookupCategoryFromModel(result.category);
                     model.selectedProvider = result.provider;
                     model.code = result.code;
                     model.description = result.description;
@@ -89,20 +82,43 @@
             model.disableForm = false;
         };
 
-        model.$onInit = function () { };
+        // Loads the categories into the selector. Returns a promise to be handled.
+        var loadCategories = function () {
+            // Cleans the categories array before populating it again.
+            model.categories = [];
+
+            var categoriesPromise = categoryService.list().$promise
+                .then(function (results) {
+                    // Creates the new updated category array.
+                    results.forEach(function (item) {
+                        model.categories.push(item);
+                    });
+
+                    model.selectedCategory = model.categories[0];
+                });
+
+            return categoriesPromise;
+        };
+
+        // Looks up the mode.categories array to select the one with a certain id.
+        var lookupCategoryFromModel = function (id) {
+            // The filter function is not supported on older browsers...
+            var result = model.categories.filter(function (category) {
+                return category._id == id;
+            });
+            return result[0];
+        };
 
         model.addNewArticle = function () {
             // Creates a new article to send to the service instead of the complete model.
             var article = {
-                category: model.selectedCategory,
+                category: model.selectedCategory._id,
                 provider: model.selectedProvider,
                 code: model.code,
                 description: model.description,
                 stock: model.stock,
                 price: model.price
             };
-
-            console.log(model.selectedCategory);
 
             console.log("article.component: Saving article...");
             inventoryService.save(article);
@@ -111,22 +127,44 @@
             model.$router.navigate(["Inventory"]);
         };
 
-        model.newCategory = function () {
-            model.editingCategory = true;
+        model.addNewCategory = function () {
+            console.log("saving new category...");
+            model.editingCategory = false;
+            var categoryPromise;
+
+            // If the category has to be added.
+            if (model.isNewCategory) {
+                categoryPromise = categoryService.save({ category: model.category }).$promise;
+            }
+            // If the category has to be updated.
+            else {
+                categoryPromise = categoryService.save({ id: model.selectedCategory._id, category: model.category }).$promise;
+            }
+
+            //categoryService.save({ id: model.selectedCategory._id, category: model.category }).$promise
+            categoryPromise
+                .then(function (response) {
+                    loadCategories()
+                        .then(function () {
+                            // Selects the newly added category.
+                            model.selectedCategory = lookupCategoryFromModel(response._id);
+                        });
+                })
+                .catch(function (response) { console.log("failure", response); });
         };
 
-        model.addNewCategory = function () {
-            model.editingCategory = false;
+        // Category Panel handling
 
-            categoryService.save({ category: model.category });
-            model.categories.push(model.category);
-            model.categories.sort();
-            model.selectedCategory = model.category;
+        model.newCategory = function () {
+            model.category = "";
+            model.isNewCategory = true;
+            model.editingCategory = true;
         };
 
         model.editCategory = function () {
-            model.editingCategory = true;
             model.category = model.selectedCategory.category;
+            model.isNewCategory = false;
+            model.editingCategory = true;
         };
 
         model.cancelEdit = function () {

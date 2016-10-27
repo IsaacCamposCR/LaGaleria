@@ -6,10 +6,12 @@ var articleSchema = new Schema({
         type: String
     },
     code: {
-        type: String
+        type: String,
+        unique: true
     },
     description: {
-        type: String
+        type: String,
+        unique: true
     },
     provider: {
         type: String

@@ -14,13 +14,16 @@
             // Creates a new resource object for the endpoint.
             var resource = $resource("/api/client/");
 
-            // Validation: Remove empty phones from the phones array.
+            // Validation: Remove empty phones from the phones array and then sorts.
             for (var i = 0; i <= client.phones.length; i++) {
                 if (client.phones[i] === "") {
                     client.phones.splice(i, 1);
                 }
             }
-            
+            client.phones.sort();
+
+            console.log(client.created);
+
             // Saves the data to the endpoint, asynchronous.
             return resource.save(client);
         };
@@ -48,7 +51,7 @@
             console.log("client.service: Retrieving clients...");
 
             // Creates a new resource for the endpoint.
-            var resource = $resource("/api/clients/");
+            var resource = $resource("/api/client/");
 
             // Returns the result from the endpoint, asynchronous.
             return resource.query();
@@ -57,16 +60,9 @@
         // Function to retrieve a list of all clients filtered by name.
         var listByClientName = function (clientName) {
             console.log("client.service: Finding by client name...");
-            
+
             // Creates a new resource for the endpoint with a name parameter.
-            var resource = $resource("/api/clients/:name",
-            { name: "@name" },
-            {
-                query: {
-                    method: "GET",
-                    isArray: true
-                }
-            });
+            var resource = $resource("/api/client/");
 
             // Returns a result from the endpoint, asynchronous.
             return resource.query({ name: clientName });
