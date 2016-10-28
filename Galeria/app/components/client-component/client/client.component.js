@@ -28,10 +28,10 @@
                 clientService.get(next.params.id)
                     // This call is asynchronous so a callback must be used in the promise to process the data.
                     .$promise.then(function (result) {
-                        model.id = result.id;
-                        model.name = result.name;
-                        model.phones = result.phones;
-                        model.created = new Date(result.created);
+                        model.id = result.results.id;
+                        model.name = result.results.name;
+                        model.phones = result.results.phones;
+                        model.created = new Date(result.results.created);
 
                         //Disable the form when an existing client is loaded.
                         model.disableForm = true;
@@ -42,7 +42,6 @@
                 model.name = "";
                 model.phones = [""];
                 model.created = new Date();
-                console.log(Date.now);
 
                 // Enables the form if no client is loaded.
                 model.disableForm = false;
@@ -80,6 +79,10 @@
 
             // Programatically navigates to the ClientList component.
             model.$router.navigate(["ClientList"]);
+        };
+
+        model.confirm = function () {
+            console.log("Hello!");
         };
     }
 

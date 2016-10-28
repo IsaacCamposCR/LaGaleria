@@ -88,9 +88,9 @@
             model.categories = [];
 
             var categoriesPromise = categoryService.list().$promise
-                .then(function (results) {
+                .then(function (result) {
                     // Creates the new updated category array.
-                    results.forEach(function (item) {
+                    result.results.forEach(function (item) {
                         model.categories.push(item);
                     });
 
@@ -134,20 +134,20 @@
 
             // If the category has to be added.
             if (model.isNewCategory) {
-                categoryPromise = categoryService.save({ category: model.category }).$promise;
+                // The object's categoryName is named this way so that the endpoint won't take it as query string parameter.
+                categoryPromise = categoryService.save({ categoryName: model.category }).$promise;
             }
             // If the category has to be updated.
             else {
-                categoryPromise = categoryService.save({ id: model.selectedCategory._id, category: model.category }).$promise;
+                categoryPromise = categoryService.save({ _id: model.selectedCategory._id, categoryName: model.category }).$promise;
             }
 
-            //categoryService.save({ id: model.selectedCategory._id, category: model.category }).$promise
             categoryPromise
                 .then(function (response) {
                     loadCategories()
                         .then(function () {
                             // Selects the newly added category.
-                            model.selectedCategory = lookupCategoryFromModel(response._id);
+                            model.selectedCategory = lookupCategoryFromModel(response.results._id);
                         });
                 })
                 .catch(function (response) { console.log("failure", response); });

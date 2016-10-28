@@ -18,7 +18,9 @@
 
         // When the component is initialized, loads all the clients.
         model.$onInit = function () {
-            model.clients = clientService.list();
+            clientService.list().$promise.then(function (result) {
+                model.clients = result.results;
+            });
         };
 
         // Searches for clients by name.

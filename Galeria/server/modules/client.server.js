@@ -2,7 +2,6 @@
 var ClientSchema = require("../schemas/client.schema.js");
 
 var newClient = function (req, res) {
-    console.log("Saving client...");
 
     // Creates an instance of the client schema with the data from the request body.
     var client = new ClientSchema({
@@ -11,21 +10,14 @@ var newClient = function (req, res) {
         created: req.body.created
     });
 
-    console.log(req.body.created);
-
     // Executes the save command to Mongo.
     client.save(function (err) {
-        if (err) {
-            var errMsg = "Sorry, there was an error saving the client. " + err;
-        }
-        else {
-            console.log("New client was saved!");
-        }
+        res.send({ results: req.body, errors: err });
+        res.end();
     });
 };
 
 var updateClient = function (req, res) {
-    console.log("category.update: Updating client...");
 
     var query = {
         _id: req.body.id
@@ -37,17 +29,11 @@ var updateClient = function (req, res) {
         created: req.body.created
     };
 
-    ClientSchema.update(query, newData, { multi: false }, function (err, numAffected) {
-        if (err) {
-            console.log("Errors");
-            var errMsg = "Sorry, there was an error updating the category. " + err;
-        } else {
-            console.log("Client was updated");
-            console.log(numAffected);
-            res.send({ _id: req.body.id });
+    ClientSchema.update(query, newData, { multi: false },
+        function (err, numAffected) {
+            res.send({ results: req.body, errors: err });
             res.end();
-        }
-    });
+        });
 };
 
 // Creates a new client object in the database.
@@ -72,35 +58,20 @@ module.exports.list = function (req, res) {
 
     // Executes the find query.
     query.exec(function (err, results) {
-        if (err) {
-            console.log("Errors");
-            var errMsg = "Sorry, there was an error retrieving the clients. " + err;
-        }
-        else {
-            console.log("No errors");
-            res.send(results);
-            res.end();
-        }
+        res.send({ results: results, errors: err });
+        res.end();
     });
 };
 
 // Returns a single client by _id property from the database.
 module.exports.get = function (req, res) {
-    console.log("exports.find: Finding by client id");
 
     //Creates a new query to find a single client by _id taken from the request parameters.
     var query = ClientSchema.findById(req.params.id);
 
     // Executes the findById query.
     query.exec(function (err, results) {
-        if (err) {
-            console.log("Errors");
-            var errMsg = "Sorry, there was an error retrieving the client. " + err;
-        }
-        else {
-            console.log("No errors");
-            res.send(results);
-            res.end();
-        }
+        res.send({ results: results, errors: err });
+        res.end();
     });
 };

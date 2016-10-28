@@ -15,6 +15,9 @@ mongoose.connect("mongodb://camposi:123qweEE@ds057176.mlab.com:57176/gallerydb",
     }
 });
 
+// Gets rid of the promise library deprecated warning from mongoose.
+mongoose.Promise = global.Promise;
+
 var app = express();
 var rootPath = path.normalize(__dirname + "/../");
 var bodyParser = require("body-parser");

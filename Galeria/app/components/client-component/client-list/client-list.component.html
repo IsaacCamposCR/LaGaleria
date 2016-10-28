@@ -1,27 +1,27 @@
 <div>
-    <h1>Clientes</h1>
-    <div>
-        <input type="text" id="search" ng-model="model.clientName" placeholder="Busqueda de clientes...">
-        <button type="button" ng-click="model.findClient()">Buscar</button>
-    </div>
-    <div>
-        <table>
-            <thead>
-                <th>Nombre</th>
-                <th>Telefono</th>
-                <th>Fecha Ingreso</th>
-                <th>
-                    <button type="button" ng-link="['Client']">Nuevo Cliente</button>
-                </th>
-            </thead>
-            <tr ng-repeat="client in model.clients">
-                <td><span>{{client.name}}</span></td>
-                <td><span>{{client.phones[0]}}</span></td>
-                <td>{{client.created | date:"MM/dd/yyyy"}}</td>
-                <td>
-                    <button type="button" ng-link="['EditClient', {id: client._id}]">Detalles</button>
-                </td>
-            </tr>
-        </table>
-    </div>
+	<h1>Clientes</h1>
+	<div>
+		<input type="text" id="search" ng-model="model.clientName" placeholder="Busqueda de clientes...">
+		<button type="button" ng-click="model.findClient()">Buscar</button>
+	</div>
+	<div>
+		<table>
+			<thead>
+				<th>Nombre</th>
+				<th>Telefono</th>
+				<th>Fecha Ingreso</th>
+				<th>
+					<button type="button" ng-link="['Client']">Nuevo Cliente</button>
+				</th>
+			</thead>
+			<tr ng-repeat="client in model.clients">
+				<td><span>{{client.name}}</span></td>
+				<td><span>{{client.phones[0]}}</span></td>
+				<td>{{client.created | date:"MM/dd/yyyy"}}</td>
+				<td>
+					<button type="button" ng-link="['EditClient', {id: client._id}]">Detalles</button>
+				</td>
+			</tr>
+		</table>
+	</div>
 </div>

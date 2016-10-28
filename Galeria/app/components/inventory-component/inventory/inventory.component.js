@@ -38,8 +38,8 @@
             model.categories = [];
 
             categoryService.list().
-                $promise.then(function (results) {
-                    results.forEach(function (item) {
+                $promise.then(function (result) {
+                    result.results.forEach(function (item) {
                         var articles = [];
                         if (isFind) {
                             articlesPromise = inventoryService.find(model.articleDescription, item._id).$promise;
@@ -47,8 +47,8 @@
                             articlesPromise = inventoryService.list(item._id).$promise;
                         }
                         articlesPromise
-                            .then(function (results) {
-                                results.forEach(function (item) {
+                            .then(function (result) {
+                                result.results.forEach(function (item) {
                                     articles.push(item);
                                 });
 
