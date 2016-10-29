@@ -1,0 +1,14 @@
+<div>
+    <label for="selectArt">Tipo de Arte: </label>
+    <select id="selectArt" ng-model="model.selectedArt" ng-options="art for art in model.arts" ng-change="model.renderCalculators()">
+    </select>
+    <br/>
+    <div ng-repeat="product in model.products">
+        <calculator product="product" totals="model.totals()" />
+    </div>
+    <span>Subtotal: {{model.subtotal | currency}}</span>
+    <br/>
+    <span>Otros: {{model.others | currency}}</span>
+    <br/>
+    <span>Total: {{model.productTotal | currency}}</span>
+</div>

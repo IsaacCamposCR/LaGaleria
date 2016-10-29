@@ -1,22 +1,39 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="galleryApp">
+<html lang="en" ng-app="theGallery">
 
 <head>
-    <base href="/" />
-    <meta charset='utf-8'>
-    <title>JC Artes Galeria</title>
+	<base href="/" />
+	<meta charset='utf-8'>
+	<title>JC Artes Galeria</title>
 </head>
 
 <body ng-cloak>
-    <div>
-        <ng-view>
-        </ng-view>
-    </div>
+	<gallery-app></gallery-app>
 
-    <script src="/lib/angular/angular.min.js"></script>
-    <script src="/lib/angular/angular-resource.min.js"></script>
-    <script src="/lib/angular/angular-route.min.js"></script>
-    <script src="/js/app.angular.js"></script>
+	<script src="/lib/angular-1.5.8/angular.js"></script>
+	<script src="/lib/angular-1.5.8/angular-resource.js"></script>
+	<script src="/lib/angular-1.5.8/angular-component-router.js"></script>
+	<script src="/lib/angular-1.5.8/angular-locale_es-cr.js"></script>
+	<script src="/app.angular.js"></script>
+
+	<!--COMPONENTS-->
+	<script src="/components/gallery-app.component.js"></script>
+
+	<script src="/components/message-component/message.component.js"></script>
+
+	<script src="/components/client-component/client/client.component.js"></script>
+	<script src="/components/client-component/client-list/client-list.component.js"></script>
+	<script src="/components/client-component/client.service.js"></script>
+
+	<script src="/components/art-calculator/art-calculator.component.js"></script>
+	<script src="/components/calculator/calculator.component.js"></script>
+	<script src="/components/art-calculator/art-calculator.service.js"></script>
+
+	<script src="/components/inventory-component/article/article.component.js"></script>
+	<script src="/components/inventory-component/inventory/inventory.component.js"></script>
+	<script src="/components/inventory-component/inventory.service.js"></script>
+	<script src="/components/inventory-component/category.service.js"></script>
+
 </body>
 
 </html>

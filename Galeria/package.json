@@ -2,10 +2,12 @@
     "name": "jca",
     "version": "0.0.0",
     "scripts": {
-        "start": "node server/server.app.js"
+        "start": "node server/app.server.js"
     },
     "dependencies": {
-        "express": "*",
-        "mongoose": "*"
+        "express": "4.13.0",
+        "mongoose": "*",
+        "body-parser": "1.13.1",
+        "morgan": "*"
     }
 }

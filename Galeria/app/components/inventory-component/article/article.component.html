@@ -1,0 +1,43 @@
+<div>
+	<h1>{{model.title}}</h1>
+
+	<form name="articleForm">
+		<fieldset ng-disabled="model.disableForm">
+			<div ng-if="!model.editingCategory">
+				<label for="category">Category: </label>
+				<select id="category" ng-model="model.selectedCategory" ng-options="category.category for category in model.categories track by category._id">
+                </select>
+				<button type="button" ng-click="model.editCategory()">Editar</button>
+				<button type="button" ng-click="model.newCategory()">Agregar</button>
+			</div>
+			<div ng-if="model.editingCategory">
+				<label for="category">Category: </label>
+				<input type="text" name="category" ng-model="model.category">
+				<button type="button" ng-click="model.addNewCategory()">Guardar</button>
+				<button type="button" ng-click="model.cancelEdit()">Cancelar</button>
+			</div>
+			<br/>
+			<label for="provider">Proveedor: </label>
+			<select id="provider" ng-model="model.selectedProvider" ng-options="provider for provider in model.providers">
+            </select>
+			<br/>
+			<label for="code">Codigo del Producto: </label>
+			<input id="code" type="text" ng-model="model.code">
+			<br/>
+			<label for="description">Descripcion: </label>
+			<input id="description" type="text" ng-model="model.description">
+			<br/>
+			<label for="stock">Cantidad Disponible: </label>
+			<input id="stock" type="number" ng-model="model.stock">
+			<br/>
+			<label for="price">Precio: </label>
+			<input id="price" type="number" ng-model="model.price">
+		</fieldset>
+		<div ng-show="!model.pop">
+			<button ng-if="!model.editingArticle" type="submit" ng-click="model.saveArticle()">Guardar</button>
+			<button type="button" ng-if="model.editingArticle" ng-click="model.editArticle()">Editar</button>
+			<button type="button" ng-click="model.cancel()">Cancelar</button>
+		</div>
+	</form>
+	<message message="model.message" show="model.pop" confirm="model.confirm()"></message>
+</div>
