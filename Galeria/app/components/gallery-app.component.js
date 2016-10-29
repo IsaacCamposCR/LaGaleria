@@ -3,7 +3,6 @@
 
     var module = angular.module("theGallery");
 
-    console.log("Defining galleryApp component...");
     module.component("galleryApp", {
         templateUrl: "/components/gallery-app.component.html",
         // Creates all the component routes.

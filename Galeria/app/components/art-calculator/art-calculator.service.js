@@ -5,7 +5,6 @@
     var module = angular.module("theGallery");
 
     module.factory("calculatorService", function () {
-        console.log("Registering calculator service...");
 
         // Template for each calculator.
         var Product = function (name, cmPrice, refillRequired) {
@@ -82,7 +81,6 @@
             // Controller will ask for a set of calculators determined by the type, 
             // these functions create the correct set of calculator forms.
             generateCalculators: function (type) {
-                console.log("Generating calculators for " + type);
                 switch (type) {
                     case "Bastidor":
                         return calculateFrame();

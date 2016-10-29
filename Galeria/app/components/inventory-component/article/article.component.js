@@ -4,7 +4,6 @@
 
     var module = angular.module("theGallery");
 
-    console.log("Creating article component...");
     module.component("articleComponent", {
         templateUrl: "/components/inventory-component/article/article.component.html",
         controllerAs: "model",
@@ -41,23 +40,28 @@
         };
 
         var loadArticle = function (id) {
-            model.title = "Editar Articulo";
 
             // Calls the inventory service for an article by id.
             inventoryService.get(id)
                 // This call is asynchronous so a callback must be used in the promise to process the data.
                 .$promise.then(function (result) {
 
-                    console.log(result.category);
-                    model.selectedCategory = lookupCategoryFromModel(result.category);
-                    model.selectedProvider = result.provider;
-                    model.code = result.code;
-                    model.description = result.description;
-                    model.stock = result.stock;
-                    model.price = result.price;
+                    model._id = result.results._id;
+                    model.selectedCategory = lookupCategoryFromModel(result.results.category);
+                    model.selectedProvider = result.results.provider;
+                    model.code = result.results.code;
+                    model.description = result.results.description;
+                    model.stock = result.results.stock;
+                    model.price = result.results.price;
 
                     //Disable the form when an existing article is loaded.
                     model.disableForm = true;
+
+                    // Enables the EDIT button.
+                    model.editingArticle = true;
+
+                    // Changes the page main title.
+                    model.title = "Detalles del Articulo";
                 });
         };
 
@@ -71,7 +75,6 @@
             }
 
             // Creates a blank form for a new article.
-            model.title = "Nuevo Articulo";
             model.selectedProvider = "";
             model.invoice = "";
             model.description = "";
@@ -80,6 +83,9 @@
 
             // Enables the form if no article is loaded.
             model.disableForm = false;
+
+            // Changes the page main title.
+            model.title = "Nuevo Articulo";
         };
 
         // Loads the categories into the selector. Returns a promise to be handled.
@@ -109,9 +115,10 @@
             return result[0];
         };
 
-        model.addNewArticle = function () {
+        model.saveArticle = function () {
             // Creates a new article to send to the service instead of the complete model.
             var article = {
+                _id: model._id,
                 category: model.selectedCategory._id,
                 provider: model.selectedProvider,
                 code: model.code,
@@ -120,15 +127,17 @@
                 price: model.price
             };
 
-            console.log("article.component: Saving article...");
             inventoryService.save(article);
 
-            // Programatically navigates to the inventory component.
-            model.$router.navigate(["Inventory"]);
+            popUp(true,
+                "Articulo guardado con exito!",
+                // Programatically navigates to the inventory component.
+                function () {
+                    model.$router.navigate(["Inventory"])
+                });
         };
 
         model.addNewCategory = function () {
-            console.log("saving new category...");
             model.editingCategory = false;
             var categoryPromise;
 
@@ -149,8 +158,31 @@
                             // Selects the newly added category.
                             model.selectedCategory = lookupCategoryFromModel(response.results._id);
                         });
+                    popUp(true,
+                        "Categoria guardada con exito!",
+                        // Sets the custom action to perform when a category is saved.
+                        function () {
+                            model.disableForm = false;
+                        });
                 })
-                .catch(function (response) { console.log("failure", response); });
+                .catch(function (response) {
+                    console.log("Error:", response);
+                    popUp(true,
+                        "Ha ocurrido un error.",
+                        // Sets the custom action to perform when saving a client.
+                        function () {
+                            // Programatically navigates to the ClientList component.
+                            model.$router.navigate(["Inventory"]);
+                        });
+                });
+        };
+
+        model.editArticle = function () {
+            // Enables the form in order for the user to update the article.
+            model.disableForm = false;
+
+            // Hides the EDIT button.
+            model.editingArticle = false;
         };
 
         // Category Panel handling
@@ -171,5 +203,21 @@
             model.editingCategory = false;
         };
 
+        model.cancel = function () {
+            popUp(true, "Esta seguro que desea cancelar? Perdera los cambios.",
+                // Sets the custom action to perform when canceling.
+                function () {
+                    model.$router.navigate(["Inventory"]);
+                });
+        };
+
+        // Pop up message component. The model.pop property allows the form to hide the buttons when displaying the popup. 
+        // This mechanism might not be required once styles are put in.
+        var popUp = function (pop, message, confirm) {
+            model.message = message;
+            model.pop = pop;
+            model.disableForm = true;
+            model.confirm = confirm;
+        };
     }
 } ());

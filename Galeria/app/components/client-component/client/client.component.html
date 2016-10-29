@@ -1,5 +1,5 @@
 <div>
-	<h1>Nuevo Cliente</h1>
+	<h1>{{model.title}}</h1>
 
 	<form name="clientForm">
 		<fieldset ng-disabled="model.disableForm">
@@ -18,10 +18,12 @@
 				<label for="created">Fecha de Ingreso</label>
 				<input type="date" id="created" ng-model="model.created">
 			</div>
-			<hr/>
-			<button type="submit" ng-click="model.addNewClient()">Guardar</button>
-			<button type="button" ng-link="['ClientList']">Cancelar</button>
 		</fieldset>
+		<div ng-show="!model.pop">
+			<button ng-if="!model.editingClient" type="submit" ng-click="model.saveClient()">Guardar</button>
+			<button type="button" ng-if="model.editingClient" ng-click="model.editClient()">Editar</button>
+			<button type="button" ng-click="model.cancel()">Cancelar</button>
+		</div>
 	</form>
-	<message message="'Error!'" confirm="model.confirm()"></message>
+	<message message="model.message" show="model.pop" confirm="model.confirm()"></message>
 </div>

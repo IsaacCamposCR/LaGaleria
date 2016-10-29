@@ -4,7 +4,6 @@
 
     var module = angular.module("theGallery");
 
-    console.log("Creating client-list component...");
     module.component("clientListComponent", {
         templateUrl: "/components/client-component/client-list/client-list.component.html",
         controllerAs: "model",
@@ -25,7 +24,6 @@
 
         // Searches for clients by name.
         model.findClient = function () {
-            console.log("Finding " + model.clientName);
             model.clients = clientService.find(model.clientName);
         };
     }

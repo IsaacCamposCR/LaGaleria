@@ -1,8 +1,7 @@
 // References the schema for articles
 var ArticleSchema = require("../schemas/article.schema.js");
 
-module.exports.save = function (req, res) {
-
+var newArticle = function (req, res) {
     // Creates an instance of the article schema with the data from the request body.
     var article = new ArticleSchema({
         category: req.body.category,
@@ -18,6 +17,35 @@ module.exports.save = function (req, res) {
         res.send({ results: results, errors: err });
         res.end();
     });
+};
+
+var updateArticle = function (req, res) {
+    var query = {
+        _id: req.body._id
+    };
+
+    var newData = {
+        category: req.body.category,
+        code: req.body.code,
+        description: req.body.description,
+        provider: req.body.provider,
+        stock: req.body.stock,
+        price: req.body.price
+    };
+
+    ArticleSchema.update(query, newData, { multi: false },
+        function (err, numAffected) {
+            res.send({ results: req.body, errors: err });
+            res.end();
+        });
+};
+
+module.exports.save = function (req, res) {
+    if (req.body._id) {
+        updateArticle(req, res);
+    } else {
+        newArticle(req, res);
+    }
 };
 
 module.exports.list = function (req, res) {

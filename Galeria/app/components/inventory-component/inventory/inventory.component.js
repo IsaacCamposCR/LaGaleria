@@ -3,7 +3,6 @@
 
     var module = angular.module("theGallery");
 
-    console.log("Creating inventory component");
     module.component("inventoryComponent", {
         templateUrl: "/components/inventory-component/inventory/inventory.component.html",
         controllerAs: "model",
@@ -66,6 +65,7 @@
 
         // Iterates every item from the promise results to calculate totals.
         var updateTotals = function () {
+            model.categories.sort();
 
             model.total = 0;
             model.uniqueArticles = 0;

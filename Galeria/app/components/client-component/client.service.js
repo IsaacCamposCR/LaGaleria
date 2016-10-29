@@ -5,7 +5,6 @@
     var module = angular.module("theGallery");
 
     module.factory("clientService", function ($resource) {
-        console.log("Registering client service...");
 
         var resource = $resource("/api/client/:id",
             { id: "@id" },
@@ -18,7 +17,6 @@
 
         // Function to validate a client before sending it to the client endpoint to be saved.
         var saveClient = function (client) {
-            console.log("client.service: Saving client...");
 
             // Validation: Remove empty phones from the phones array and then sorts.
             for (var i = 0; i <= client.phones.length; i++) {
@@ -34,7 +32,6 @@
 
         // Function to retrieve a single client by id to be used in the client page.
         var getClient = function (id) {
-            console.log("client.service: Getting single client by id...");
 
             // Returns the result from the endpoint, contains an asynchronous promise to be processed at the component.
             return resource.query({ id: id });
@@ -42,7 +39,6 @@
 
         // Function to retrieve an unfiltered list of all clients.
         var listClients = function () {
-            console.log("client.service: Retrieving clients...");
 
             // Returns the result from the endpoint, asynchronous.
             return resource.query();
@@ -50,7 +46,6 @@
 
         // Function to retrieve a list of all clients filtered by name.
         var listByClientName = function (clientName) {
-            console.log("client.service: Finding by client name...");
 
             // Returns a result from the endpoint, asynchronous.
             return resource.query({ name: clientName });

@@ -20,7 +20,7 @@ var newClient = function (req, res) {
 var updateClient = function (req, res) {
 
     var query = {
-        _id: req.body.id
+        _id: req.body._id
     };
 
     var newData = {
@@ -38,7 +38,7 @@ var updateClient = function (req, res) {
 
 // Creates a new client object in the database.
 module.exports.save = function (req, res) {
-    if (req.body.id) {
+    if (req.body._id) {
         updateClient(req, res);
     } else {
         newClient(req, res);

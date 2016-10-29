@@ -4,7 +4,6 @@
 
     var module = angular.module("theGallery");
 
-    console.log("Creating art-calculator component...");
     module.component("artCalculatorComponent", {
         templateUrl: "/components/art-calculator/art-calculator.component.html",
         controllerAs: "model",
