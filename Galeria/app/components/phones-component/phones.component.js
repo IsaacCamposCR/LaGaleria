@@ -1,18 +1,19 @@
 (function () {
+
     "use strict";
 
     var module = angular.module("theGallery");
 
-    module.component("phone", {
-        templateUrl: "/components/phone-component/phone.component.hmtl",
+    module.component("phones", {
+        templateUrl: "/components/phones-component/phones.component.html",
         controllerAs: "model",
-        controller: [phoneController],
+        controller: [phonesController],
         bindings: {
             "phones": "="
         }
     });
 
-    function phoneController() {
+    function phonesController() {
         var model = this;
 
         // Updates the value for a specific phone in the array.
@@ -24,10 +25,9 @@
         model.removeNewClientPhone = function (index) {
             if (model.phones.length === 1) {
                 popUp(true,
-                    "El cliente debe contener al menos un numero de telefono...",
+                    "Debe ingresar al menos un numero de telefono...",
                     // Sets the custom action to perform when deleting phone numbers.
                     function () {
-                        model.disableForm = false;
                     });
             }
             else {
@@ -39,6 +39,13 @@
         model.addNewClientPhone = function () {
             model.phones.push("");
         };
-    }
 
+        // Pop up message component. The model.pop property allows the form to hide the buttons when displaying the popup. 
+        // This mechanism might not be required once styles are put in.
+        var popUp = function (pop, message, confirm) {
+            model.message = message;
+            model.pop = pop;
+        };
+
+    }
 } ());

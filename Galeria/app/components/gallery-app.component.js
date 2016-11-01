@@ -9,6 +9,8 @@
         $routeConfig: [
             { path: "/error", component: "messageComponent", name: "Message" },
 
+            { path: "/phones", component: "phonesComponent", name: "Phones" },
+
             { path: "/calculadora", component: "artCalculatorComponent", name: "ArtCalculator" },
 
             { path: "/cliente", component: "clientComponent", name: "Client" },
@@ -18,6 +20,8 @@
             { path: "/articulo", component: "articleComponent", name: "Article" },
             { path: "/articulo/:id", component: "articleComponent", name: "EditArticle" },
             { path: "/inventario", component: "inventoryComponent", name: "Inventory" },
+
+            { path: "/proveedor", component: "providerComponent", name: "Provider" },
 
             { path: "/**", redirectTo: ["ArtCalculator"] }
         ]

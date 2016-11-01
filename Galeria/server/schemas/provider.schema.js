@@ -3,10 +3,12 @@ var Schema = mongoose.Schema;
 
 var providerSchema = new Schema({
     name: {
-        type: String
+        type: String,
+        unique: true
     },
-    phone: {
-        type: String
+    phones: {
+        type: Array,
+        unique: true
     },
     invoices: [{
         invoice: { type: String },

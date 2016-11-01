@@ -11,7 +11,7 @@ mongoose.connect("mongodb://camposi:123qweEE@ds057176.mlab.com:57176/gallerydb",
         console.log(err);
     }
     else {
-        console.log("Database initialized...")
+        console.log("Database initialized...");
     }
 });
 
@@ -31,6 +31,7 @@ app.use(express.static(rootPath + "/app"));
 var clients = require("./modules/client.server");
 var articles = require("./modules/article.server");
 var categories = require("./modules/category.server");
+var providers = require("./modules/provider.server");
 
 // Client endpoints
 // Creates a new client
@@ -53,6 +54,10 @@ app.post("/api/category/", categories.save);
 app.get("/api/category/", categories.list);
 // Gets a category
 app.get("/api/category/:category", categories.get);
+
+// Provider endpoints 
+// Creates a new Provider
+app.post("/api/provider/", providers.save);
 
 app.get("*", function (req, res) {
     res.sendFile(rootPath + "/app/index.html");

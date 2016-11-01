@@ -60,31 +60,6 @@
         model.$onInit = function () {
         };
 
-        // Adds a new empty string to the phones array in order to display a new input.
-        model.addNewClientPhone = function () {
-            model.phones.push("");
-        };
-
-        // Removes the selected phone from the array, the display is updated by removing an input.
-        model.removeNewClientPhone = function (index) {
-            if (model.phones.length === 1) {
-                popUp(true,
-                    "El cliente debe contener al menos un numero de telefono...",
-                    // Sets the custom action to perform when deleting phone numbers.
-                    function () {
-                        model.disableForm = false;
-                    });
-            }
-            else {
-                model.phones.splice(index, 1);
-            }
-        };
-
-        // Updates the value for a specific phone in the array.
-        model.savePhone = function (index, phone) {
-            model.phones[index] = phone;
-        };
-
         // Creates a new client and sends it as paramter for the save function.
         model.saveClient = function () {
             var client = {

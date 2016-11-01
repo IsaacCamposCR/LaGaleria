@@ -1,8 +1,16 @@
 <div>
+	<h1>{{model.title}}</h1>
+
 	<form name="providerForm">
-        <label for="name"></label>
-        <input type="text" id="name" ng-model="model.name">
-        <label for="phone"></label>
-        <input type="text" name="" value="">
+		<fieldset ng-disabled="model.disableForm">
+			<label for="name">Nombre: </label>
+			<input type="text" id="name" ng-model="model.name">
+			<phones phones="model.phones"></phones>
+		</fieldset>
+		<div ng-show="!model.pop">
+			<button type="submit" ng-click="model.saveProvider()">Guardar</button>
+			<button type="button" ng-click="model.cancel()">Cancelar</button>
+		</div>
 	</form>
+	<message show="model.pop" message="model.message" confirm="model.confirm()"></message>
 </div>
