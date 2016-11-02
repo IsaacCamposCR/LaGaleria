@@ -8,7 +8,8 @@
 			<phones phones="model.phones"></phones>
 		</fieldset>
 		<div ng-show="!model.pop">
-			<button type="submit" ng-click="model.saveProvider()">Guardar</button>
+			<button ng-if="!model.editingProvider" type="submit" ng-click="model.saveProvider()">Guardar</button>
+			<button ng-if="model.editingProvider" type="submit" ng-click="model.editProvider()">Editar</button>
 			<button type="button" ng-click="model.cancel()">Cancelar</button>
 		</div>
 	</form>

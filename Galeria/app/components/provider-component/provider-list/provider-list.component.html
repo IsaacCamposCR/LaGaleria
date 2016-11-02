@@ -1,0 +1,27 @@
+<div>
+	<h1>Proveedores</h1>
+	<div>
+		<input type="text" id="search" ng-model="model.providerName" placeholder="Busqueda de proveedores...">
+		<button type="button" ng-click="model.findProviders()">Buscar</button>
+	</div>
+	<div>
+		<table>
+			<thead>
+				<th>Nombre</th>
+				<th>Telefono</th>
+				<th>Saldo</th>
+				<th>
+					<button type="button" ng-link="['Provider']">Nuevo Proveedor</button>
+				</th>
+			</thead>
+			<tr ng-repeat="provider in model.providers">
+				<td><span>{{provider.name}}</span></td>
+				<td><span>{{provider.phones[0]}}</span></td>
+				<td></td>
+				<td>
+					<button type="button" ng-link="['EditProvider', {id: provider._id}]">Detalles</button>
+				</td>
+			</tr>
+		</table>
+	</div>
+</div>

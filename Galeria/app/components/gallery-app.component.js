@@ -22,6 +22,8 @@
             { path: "/inventario", component: "inventoryComponent", name: "Inventory" },
 
             { path: "/proveedor", component: "providerComponent", name: "Provider" },
+            { path: "/proveedor/:id", component: "providerComponent", name: "EditProvider" },
+            { path: "/proveedores", component: "providerListComponent", name: "ProviderList" },
 
             { path: "/**", redirectTo: ["ArtCalculator"] }
         ]

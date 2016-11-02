@@ -18,15 +18,18 @@ var newProvider = function (req, res) {
 };
 
 var updateProvider = function (req, res) {
+    // Query to select the appropriate provider by id.
     var query = {
         _id: req.body._id
     };
 
+    // New data to be updated.
     var newData = {
         name: req.body.name,
         phones: req.body.phones
     };
 
+    // Update executed according to query, new data, only one row.
     ProviderSchema.update(query, newData, { multi: false },
         function (err, numAffected) {
             res.send({ results: req.body, errors: err });
@@ -35,13 +38,15 @@ var updateProvider = function (req, res) {
 };
 
 module.exports.save = function (req, res) {
-    if (req.body.id) {
+    // If the id parameter exists in the body, call update, else create a new record.
+    if (req.body._id) {
         updateProvider(req, res);
     } else {
         newProvider(req, res);
     }
 };
 
+// Returns an object with an array of providers.
 module.exports.list = function (req, res) {
     var query;
 

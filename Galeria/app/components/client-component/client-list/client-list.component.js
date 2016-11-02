@@ -24,7 +24,9 @@
 
         // Searches for clients by name.
         model.findClient = function () {
-            model.clients = clientService.find(model.clientName);
+            clientService.find(model.clientName).$promise.then(function (result) {
+                model.clients = result.results;
+            });
         };
     }
 

@@ -22,7 +22,7 @@ var app = express();
 var rootPath = path.normalize(__dirname + "/../");
 var bodyParser = require("body-parser");
 
-//app.use(morgan("dev")); 
+//app.use(morgan("dev"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static(rootPath + "/app"));
@@ -58,6 +58,10 @@ app.get("/api/category/:category", categories.get);
 // Provider endpoints 
 // Creates a new Provider
 app.post("/api/provider/", providers.save);
+// Gets a list of all providers, can filtered by name.
+app.get("/api/provider/", providers.list);
+// Gets a provider by _id.
+app.get("/api/provider/:id", providers.get);
 
 app.get("*", function (req, res) {
     res.sendFile(rootPath + "/app/index.html");

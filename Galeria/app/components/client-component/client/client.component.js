@@ -80,7 +80,7 @@
                         });
                 })
                 .catch(function (response) {
-                    console.log("Error:", response);
+                    console.log("Error:", response.errors);
                     popUp(true,
                         "Ha ocurrido un error.",
                         // Sets the custom action to perform when saving a client.
