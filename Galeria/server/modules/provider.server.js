@@ -37,12 +37,35 @@ var updateProvider = function (req, res) {
         });
 };
 
+var addInvoice = function (req, res) {
+
+    var invoice = {
+        number: req.body[0].number,
+        amount: req.body[0].amount,
+        date: req.body[0].date,
+        due: req.body[0].due
+    };
+
+    ProviderSchema.findOneAndUpdate(
+        { _id: req.body[0]._id },
+        { $push: { invoices: invoice } },
+        function (err) {
+            res.send({ results: req.body, errors: err });
+            res.end();
+        });
+};
+
 module.exports.save = function (req, res) {
-    // If the id parameter exists in the body, call update, else create a new record.
-    if (req.body._id) {
-        updateProvider(req, res);
+    // If the number property is present it means the object is an invoice to be added.
+    if (req.body.length > 0) {
+        addInvoice(req, res);
     } else {
-        newProvider(req, res);
+        // If the id parameter exists in the body, call update, else create a new record.
+        if (req.body._id) {
+            updateProvider(req, res);
+        } else {
+            newProvider(req, res);
+        }
     }
 };
 
@@ -56,6 +79,10 @@ module.exports.list = function (req, res) {
     } else {
         // Creates a new query to find all providers and sort them ascendingly.
         query = ProviderSchema.find();
+    }
+
+    if (req.query.combo) {
+        query = ProviderSchema.find().select({ _id: 1, name: 1 });
     }
 
     query.sort({ name: "asc" });

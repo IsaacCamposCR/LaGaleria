@@ -10,8 +10,29 @@
 		<div ng-show="!model.pop">
 			<button ng-if="!model.editingProvider" type="submit" ng-click="model.saveProvider()">Guardar</button>
 			<button ng-if="model.editingProvider" type="submit" ng-click="model.editProvider()">Editar</button>
-			<button type="button" ng-click="model.cancel()">Cancelar</button>
+			<button type="button" ng-click="model.cancelEdit()">Cancelar</button>
 		</div>
 	</form>
-	<message show="model.pop" message="model.message" confirm="model.confirm()"></message>
+	<hr/>
+	<div>
+		<label for="type">Tipo de Factura</label>
+		<select id="type" ng-model="model.selectedInvoiceType" ng-options="invoiceType for invoiceType in model.invoiceTypes">
+		</select>
+		<br/>
+		<label for="invoiceNumber"># de Factura</label>
+		<input type="text" id="invoiceNumber" ng-model="model.invoiceNumber">
+		<br/>
+		<label for="amount">Monto</label>
+		<input type="number" id="amount" ng-model="model.invoiceAmount">
+		<br/>
+		<label for="date">Fecha de Emision</label>
+		<input type="date" id="date" ng-model="model.invoiceDate">
+		<br/>
+		<label for="dueDate">Fecha de Vencimiento</label>
+		<input type="date" id="dueDate" ng-model="model.invoiceDueDate">
+		<br/>
+		<button type="button" ng-click="model.addInvoice()">Agregar Factura</button>
+		<button type="button" ng-click="model.cancelInvoice()">Cancelar</button>
+	</div>
+	<message type="model.messageType" show="model.pop" message="model.message" confirm="model.confirm()" cancel="model.cancel()"></message>
 </div>

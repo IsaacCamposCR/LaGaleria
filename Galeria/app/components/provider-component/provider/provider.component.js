@@ -29,6 +29,10 @@
                     model.name = response.results.name;
                     model.phones = response.results.phones;
 
+                    // Creates the types array for invoices.
+                    model.invoiceTypes = ["Factura", "Receipt"];
+                    model.cancelInvoice();
+
                     //Disable the form when an existing provider is loaded.
                     model.disableForm = true;
 
@@ -61,7 +65,8 @@
 
             providerService.save(provider).$promise
                 .then(function (response) {
-                    popUp(true,
+                    popUp("success",
+                        true,
                         "Proveedor guardado con exito!",
                         // Sets the custom action to perform when saving a provider.
                         function () {
@@ -71,7 +76,8 @@
                 })
                 .catch(function (response) {
                     console.log(response.errors);
-                    popUp(true,
+                    popUp("error",
+                        true,
                         "Ha ocurrido un error...",
                         // Sets the custom action to perform when saving a provider.
                         function () {
@@ -81,30 +87,62 @@
                 });
         };
 
+        // Brings up the new invoice panel.
+        model.addInvoice = function () {
+
+            model.invoiceType = (model.selectedInvoiceType === model.invoiceTypes[0]) ? true : false;
+
+            var invoice = [{
+                _id: model.id,
+                number: model.invoiceNumber,
+                amount: model.invoiceAmount,
+                date: model.invoiceDate,
+                due: model.invoiceDueDate
+            }];
+
+            providerService.add(invoice);
+        };
+
+        model.cancelInvoice = function () {
+            model.selectedInvoiceType = model.invoiceTypes[0];
+            model.invoiceNumber = "";
+            model.invoiceAmount = "";
+            model.invoiceDate = new Date();
+            model.invoiceDueDate = new Date();
+        };
+
         model.editProvider = function () {
             // Enables the form in order for the user to update the provider.
             model.editingProvider = false;
-            
+
             // Hides the EDIT button.
             model.disableForm = false;
         };
 
-        model.cancel = function () {
-            popUp(true,
+        model.cancelEdit = function () {
+            popUp("confirm",
+                true,
                 "Esta seguro que desea cancelar? Perdera los cambios.",
                 // Sets the custom action to perform when canceling.
                 function () {
                     model.$router.navigate(["ProviderList"]);
+                },
+                function () {
+                    model.disableForm = model.editingProvider;
                 });
         };
 
         // Pop up message component. The model.pop property allows the form to hide the buttons when displaying the popup. 
         // This mechanism might not be required once styles are put in.
-        var popUp = function (pop, message, confirm) {
+        var popUp = function (type, pop, message, confirm, cancel) {
+            model.messageType = type;
             model.message = message;
             model.pop = pop;
             model.disableForm = true;
             model.confirm = confirm;
+            if (cancel) {
+                model.cancel = cancel;
+            }
         };
     }
 } ());

@@ -8,13 +8,13 @@
         templateUrl: "/components/inventory-component/article/article.component.html",
         controllerAs: "model",
         //The inventoryService must be added as a literal string in order to remain when the js is minified.
-        controller: ["inventoryService", "categoryService", articleController],
+        controller: ["inventoryService", "categoryService", "providerService", articleController],
         bindings: {
             "$router": "<"
         }
     });
 
-    function articleController(inventoryService, categoryService) {
+    function articleController(inventoryService, categoryService, providerService) {
 
         var model = this;
 
@@ -26,16 +26,15 @@
 
             //The Category and Provider array must be filled regardless of the origin page.
             loadCategories().then(function () {
-
-                model.providers = ["MADI", "Coca-Cola"];
-
-                // Takes the id from the parameters in the new url.
-                if (next.params.id) {
-                    loadArticle(next.params.id);
-                }
-                else {
-                    newArticle();
-                }
+                loadProviders().then(function () {
+                    // Takes the id from the parameters in the new url.
+                    if (next.params.id) {
+                        loadArticle(next.params.id);
+                    }
+                    else {
+                        newArticle();
+                    }
+                });
             });
         };
 
@@ -47,8 +46,8 @@
                 .$promise.then(function (result) {
 
                     model._id = result.results._id;
-                    model.selectedCategory = lookupCategoryFromModel(result.results.category);
-                    model.selectedProvider = result.results.provider;
+                    model.selectedCategory = lookupItemFromArray(result.results.category, model.categories);
+                    model.selectedProvider = lookupItemFromArray(result.results.provider, model.providers);
                     model.code = result.results.code;
                     model.description = result.results.description;
                     model.stock = result.results.stock;
@@ -75,14 +74,28 @@
             }
 
             // Creates a blank form for a new article.
-            model.selectedProvider = "";
+            if (model.providers.length > 0) {
+                model.selectedProvider = model.providers[0];
+
+                // Enables the form if no article is loaded.
+                model.disableForm = false;
+            } else {
+                model.disableForm = true;
+                popUp("warning",
+                    true,
+                    "No existen proveedores en la base de datos. Desea ingresar un nuevo proveedor?",
+                    function () {
+                        model.$router.navigate(["Provider"]);
+                    },
+                    function () {
+                        model.disableForm = false;
+                    });
+            }
             model.invoice = "";
             model.description = "";
             model.stock = 0;
             model.price = 0;
 
-            // Enables the form if no article is loaded.
-            model.disableForm = false;
 
             // Changes the page main title.
             model.title = "Nuevo Articulo";
@@ -99,17 +112,36 @@
                     result.results.forEach(function (item) {
                         model.categories.push(item);
                     });
-
+                    if(model.categories.length > 0){
                     model.selectedCategory = model.categories[0];
+                    }else{
+                        model.newCategory();
+                    }
                 });
 
             return categoriesPromise;
         };
 
-        // Looks up the mode.categories array to select the one with a certain id.
-        var lookupCategoryFromModel = function (id) {
+        var loadProviders = function () {
+            // Cleans the providers array before populating it again.
+            model.providers = [];
+
+            var providersPromise = providerService.combo().$promise
+                .then(function (result) {
+                    // Creates the new provider array.
+                    result.results.forEach(function (item) {
+                        model.providers.push(item);
+                    });
+                    model.selectedProvider = model.providers[0];
+                });
+
+            return providersPromise;
+        };
+
+        // Looks up the model.categories array to select the one with a certain id.
+        var lookupItemFromArray = function (id, array) {
             // The filter function is not supported on older browsers...
-            var result = model.categories.filter(function (category) {
+            var result = array.filter(function (category) {
                 return category._id == id;
             });
             return result[0];
@@ -129,7 +161,8 @@
 
             inventoryService.save(article);
 
-            popUp(true,
+            popUp("success",
+                true,
                 "Articulo guardado con exito!",
                 // Programatically navigates to the inventory component.
                 function () {
@@ -156,9 +189,10 @@
                     loadCategories()
                         .then(function () {
                             // Selects the newly added category.
-                            model.selectedCategory = lookupCategoryFromModel(response.results._id);
+                            model.selectedCategory = lookupItemFromArray(response.results._id, model.categories);
                         });
-                    popUp(true,
+                    popUp("success",
+                        true,
                         "Categoria guardada con exito!",
                         // Sets the custom action to perform when a category is saved.
                         function () {
@@ -167,7 +201,8 @@
                 })
                 .catch(function (response) {
                     console.log("Error:", response);
-                    popUp(true,
+                    popUp("error",
+                        true,
                         "Ha ocurrido un error.",
                         // Sets the custom action to perform when saving a client.
                         function () {
@@ -199,25 +234,34 @@
             model.editingCategory = true;
         };
 
-        model.cancelEdit = function () {
+        model.cancelEditCategory = function () {
             model.editingCategory = false;
         };
 
-        model.cancel = function () {
-            popUp(true, "Esta seguro que desea cancelar? Perdera los cambios.",
+        model.cancelEditArticle = function () {
+            popUp("confirm",
+                true,
+                "Esta seguro que desea cancelar? Perdera los cambios.",
                 // Sets the custom action to perform when canceling.
                 function () {
                     model.$router.navigate(["Inventory"]);
+                },
+                function () {
+                    model.disableForm = model.editingArticle;
                 });
         };
 
         // Pop up message component. The model.pop property allows the form to hide the buttons when displaying the popup. 
         // This mechanism might not be required once styles are put in.
-        var popUp = function (pop, message, confirm) {
+        var popUp = function (type, pop, message, confirm, cancel) {
+            model.messageType = type;
             model.message = message;
             model.pop = pop;
             model.disableForm = true;
             model.confirm = confirm;
+            if (cancel) {
+                model.cancel = cancel;
+            }
         };
     }
 } ());

@@ -71,7 +71,8 @@
 
             clientService.save(client).$promise
                 .then(function (response) {
-                    popUp(true,
+                    popUp("success",
+                        true,
                         "Cliente guardado con exito!",
                         // Sets the custom action to perform when saving a client.
                         function () {
@@ -81,7 +82,8 @@
                 })
                 .catch(function (response) {
                     console.log("Error:", response.errors);
-                    popUp(true,
+                    popUp("error",
+                        true,
                         "Ha ocurrido un error.",
                         // Sets the custom action to perform when saving a client.
                         function () {
@@ -99,22 +101,30 @@
             model.editingClient = false;
         };
 
-        model.cancel = function () {
-            popUp(true,
+        model.cancelEdit = function () {
+            popUp("confirm",
+                true,
                 "Esta seguro que desea cancelar? Perdera los cambios.",
                 // Sets the custom action to perform when canceling.
                 function () {
                     model.$router.navigate(["ClientList"]);
+                },
+                function () {
+                    model.disableForm = model.editingClient;
                 });
         };
 
         // Pop up message component. The model.pop property allows the form to hide the buttons when displaying the popup. 
         // This mechanism might not be required once styles are put in.
-        var popUp = function (pop, message, confirm) {
+        var popUp = function (type, pop, message, confirm, cancel) {
+            model.messageType = type;
             model.message = message;
             model.pop = pop;
             model.disableForm = true;
             model.confirm = confirm;
+            if (cancel) {
+                model.cancel = cancel;
+            }
         };
     }
 

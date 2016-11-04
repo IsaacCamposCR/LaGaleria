@@ -14,12 +14,17 @@
 				<label for="category">Category: </label>
 				<input type="text" name="category" ng-model="model.category">
 				<button type="button" ng-click="model.addNewCategory()">Guardar</button>
-				<button type="button" ng-click="model.cancelEdit()">Cancelar</button>
+				<button type="button" ng-click="model.cancelEditCategory()">Cancelar</button>
 			</div>
+			<br/>
+			<label for="provider">Provider</label>
+			<select id="provider" ng-model="model.selectedProvider" ng-options="provider.name for provider in model.providers track by provider._id">
+			</select>
+			<!--
 			<br/>
 			<label for="provider">Proveedor: </label>
 			<select id="provider" ng-model="model.selectedProvider" ng-options="provider for provider in model.providers">
-            </select>
+            </select>-->
 			<br/>
 			<label for="code">Codigo del Producto: </label>
 			<input id="code" type="text" ng-model="model.code">
@@ -36,8 +41,8 @@
 		<div ng-show="!model.pop">
 			<button ng-if="!model.editingArticle" type="submit" ng-click="model.saveArticle()">Guardar</button>
 			<button type="button" ng-if="model.editingArticle" ng-click="model.editArticle()">Editar</button>
-			<button type="button" ng-click="model.cancel()">Cancelar</button>
+			<button type="button" ng-click="model.cancelEditArticle()">Cancelar</button>
 		</div>
 	</form>
-	<message message="model.message" show="model.pop" confirm="model.confirm()"></message>
+	<message type="model.messageType" message="model.message" show="model.pop" confirm="model.confirm()" cancel="model.cancel()"></message>
 </div>

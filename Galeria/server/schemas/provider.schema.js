@@ -11,9 +11,13 @@ var providerSchema = new Schema({
         unique: true
     },
     invoices: [{
-        invoice: { type: String },
-        type: { type: String },
-        amount: { type: Number }
+        // Type can either be Invoice or Receipt.
+        // True: invoice, False: receipt.
+        type: { type: Boolean },
+        number: { type: String },
+        amount: { type: Number },
+        date: { type: Date, default: Date.now },
+        due: { type: Date }
     }]
 });
 
