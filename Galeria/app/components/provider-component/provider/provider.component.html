@@ -14,7 +14,8 @@
 		</div>
 	</form>
 	<hr/>
-	<div>
+	<span ng-show="model.editingProvider" ng-click="model.invoiceForm()">Insertar Nuevo Documento</span>
+	<div ng-show="model.newInvoice">
 		<label for="type">Tipo de Factura</label>
 		<select id="type" ng-model="model.selectedInvoiceType" ng-options="invoiceType for invoiceType in model.invoiceTypes">
 		</select>
@@ -33,6 +34,27 @@
 		<br/>
 		<button type="button" ng-click="model.addInvoice()">Agregar Factura</button>
 		<button type="button" ng-click="model.cancelInvoice()">Cancelar</button>
+	</div>
+	<hr/>
+	<div>
+		<table>
+			<thead>
+				<th># de Documento</th>
+				<th>Tipo de Documento</th>
+				<th>Monto</th>
+				<th>Fecha Emision</th>
+				<th>Fecha Vencimiento</th>
+				<th>Saldo</th>
+			</thead>
+			<tr ng-repeat="invoice in model.invoices">
+				<td>{{invoice.number}}</td>
+				<td>{{invoice.type}}</td>
+				<td>{{invoice.amount}}</td>
+				<td>{{invoice.date | date:"MM/dd/yyyy"}}</td>
+				<td>{{invoice.due | date:"MM/dd/yyyy"}}</td>
+				<td>{{invoice.balance}}</td>
+			</tr>
+		</table>
 	</div>
 	<message type="model.messageType" show="model.pop" message="model.message" confirm="model.confirm()" cancel="model.cancel()"></message>
 </div>

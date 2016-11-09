@@ -62,6 +62,8 @@ app.post("/api/provider/", providers.save);
 app.get("/api/provider/", providers.list);
 // Gets a provider by _id.
 app.get("/api/provider/:id", providers.get);
+// Gets the list of invoices from a provider by _id.
+app.get("/api/provider/:id/invoices", providers.invoices);
 
 app.get("*", function (req, res) {
     res.sendFile(rootPath + "/app/index.html");

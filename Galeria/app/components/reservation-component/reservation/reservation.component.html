@@ -1,0 +1,27 @@
+<h2>{{model.title}}</h2>
+<div>
+    <label for="invoice"># de Factura: </label>
+    <input id="invoice" type="text" ng-model="model.invoice">
+    <br/>
+    <label for="date">Fecha: </label>
+    <input id="date" type="date" ng-model="model.date">
+    <br/>
+    <label for="client">Cliente: </label>
+    <input id="client" type="text" ng-model="model.client" ng-keypress="model.beginClientSearch()">
+    <div ng-show="model.lookupClient" ng-repeat="client in model.clients" ng-click="model.selectClient(client.id)" ng-blur="model.endClientSearch()">
+        <span>{{client.name}} - {{client.phone}}</span>
+    </div>
+    <br/>
+
+
+
+
+    <!--
+    <label for="article">Articulo: </label>
+    <input id="article" type="text" ng-model="model.article">
+    <div ng-show="model.lookupArticle" ng-click="model.selectArticle(article.id)">
+        <span ng-repeat="article in model.articles">
+            {{article.category}}: {{article.name}} {{article.price}} - {{article.stock}} restantes.
+        </span>
+    </div>-->
+</div>

@@ -43,7 +43,8 @@ var addInvoice = function (req, res) {
         number: req.body[0].number,
         amount: req.body[0].amount,
         date: req.body[0].date,
-        due: req.body[0].due
+        due: req.body[0].due,
+        type: req.body[0].type
     };
 
     ProviderSchema.findOneAndUpdate(
@@ -101,6 +102,17 @@ module.exports.get = function (req, res) {
     // Executes the findById query.
     query.exec(function (err, results) {
         res.send({ results: results, errors: err });
+        res.end();
+    });
+};
+
+module.exports.invoices = function (req, res) {
+    //Creates a new query to find a single provider by _id taken from the request parameters.
+    var query = ProviderSchema.findById(req.params.id);
+
+    // Executes the findById query.
+    query.exec(function (err, results) {
+        res.send({ results: results.invoices, errors: err });
         res.end();
     });
 };

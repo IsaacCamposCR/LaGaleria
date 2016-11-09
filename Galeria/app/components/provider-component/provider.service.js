@@ -32,7 +32,7 @@
         var addInvoice = function (invoice) {
             // Saves the data to the endpoint, asynchronous.
             return resource.save(invoice);
-        }; 
+        };
 
         var getProvider = function (id) {
             // Returns the result from the endpoint, contains an asynchronous promise to be processed at the component.
@@ -56,13 +56,28 @@
             return resource.query({ combo: true });
         };
 
+        // Retrieves a list of all invoices in a provider by id.
+        var invoicesFromProvider = function (id) {
+            var resource = $resource("/api/provider/:id/invoices",
+                { id: "@id" },
+                {
+                    query: {
+                        method: "GET",
+                        isArray: false
+                    }
+                });
+
+            return resource.query({ id: id })
+        };
+
         return {
             save: saveProvider,
             get: getProvider,
             list: listProviders,
             combo: listForCombo,
             find: listByProviderName,
-            add: addInvoice
+            add: addInvoice,
+            invoice: invoicesFromProvider
         };
     });
 } ());
