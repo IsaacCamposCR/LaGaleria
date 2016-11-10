@@ -1,27 +1,42 @@
-<h2>{{model.title}}</h2>
 <div>
-    <label for="invoice"># de Factura: </label>
-    <input id="invoice" type="text" ng-model="model.invoice">
-    <br/>
-    <label for="date">Fecha: </label>
-    <input id="date" type="date" ng-model="model.date">
-    <br/>
-    <label for="client">Cliente: </label>
-    <input id="client" type="text" ng-model="model.client" ng-keypress="model.beginClientSearch()">
-    <div ng-show="model.lookupClient" ng-repeat="client in model.clients" ng-click="model.selectClient(client.id)" ng-blur="model.endClientSearch()">
-        <span>{{client.name}} - {{client.phone}}</span>
-    </div>
-    <br/>
+    <h1>{{model.title}}</h1>
 
-
-
-
-    <!--
-    <label for="article">Articulo: </label>
-    <input id="article" type="text" ng-model="model.article">
-    <div ng-show="model.lookupArticle" ng-click="model.selectArticle(article.id)">
-        <span ng-repeat="article in model.articles">
-            {{article.category}}: {{article.name}} {{article.price}} - {{article.stock}} restantes.
-        </span>
-    </div>-->
+    <form name="reservationForm">
+        <fieldset ng-disabled="model.disableForm">
+            <div ng-click="model.endArticleSearch();model.endClientSearch()">
+                <label for="invoice"># de Factura: </label>
+                <input id="invoice" type="text" ng-model="model.invoice">
+                <br/>
+                <label for="date">Fecha: </label>
+                <input id="date" type="date" ng-model="model.date">
+                <br/>
+                <label for="price">Precio: </label>
+                <input id="price" type="number" ng-model="model.price">
+            </div>
+            <div ng-click="model.endArticleSearch()">
+                <label for="client">Cliente: </label>
+                <input id="client" type="text" ng-model="model.client" ng-keyup="model.beginClientSearch()">
+                <div ng-show="model.lookupClient" ng-repeat="client in model.clients" ng-click="model.selectClient(client._id)">
+                    <span>
+                        {{client.name}} - {{client.phones[0]}}
+                    </span>
+                </div>
+            </div>
+            <div ng-click="model.endClientSearch()">
+                <label for="article">Articulo: </label>
+                <input id="article" type="text" ng-model="model.article" ng-keyup="model.beginArticleSearch()">
+                <div ng-show="model.lookupArticle" ng-click="model.selectArticle(article._id)" ng-repeat="article in model.articles">
+                    <span>
+                        {{article.description}}: {{article.price}} - {{article.stock}} restantes.
+                    </span>
+                </div>
+            </div>
+        </fieldset>
+        <div ng-show="!model.pop">
+            <button ng-if="!model.editingReservation" type="submit" ng-click="model.saveReservation()">Guardar</button>
+            <button type="button" ng-if="model.editingReservation" ng-click="model.editReservation()">Editar</button>
+            <button type="button" ng-click="model.cancelEditReservation()">Cancelar</button>
+        </div>
+    </form>
+    <message type="model.messageType" message="model.message" show="model.pop" confirm="model.confirm()" cancel="model.cancel()"></message>
 </div>

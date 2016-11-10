@@ -32,6 +32,7 @@ var clients = require("./modules/client.server");
 var articles = require("./modules/article.server");
 var categories = require("./modules/category.server");
 var providers = require("./modules/provider.server");
+var reservations = require("./modules/reservation.server");
 
 // Client endpoints
 // Creates a new client
@@ -64,6 +65,10 @@ app.get("/api/provider/", providers.list);
 app.get("/api/provider/:id", providers.get);
 // Gets the list of invoices from a provider by _id.
 app.get("/api/provider/:id/invoices", providers.invoices);
+
+// Reservation endpoints 
+// Creates a new reservation
+app.post("/api/reservation/", reservations.save);
 
 app.get("*", function (req, res) {
     res.sendFile(rootPath + "/app/index.html");

@@ -6,6 +6,7 @@ module.exports.save = function (req, res) {
         client: req.body.client,
         invoice: req.body.invoice,
         date: req.body.date,
+        price: req.body.price,
         article: req.body.article,
         advances: []
     });

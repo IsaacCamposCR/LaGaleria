@@ -15,6 +15,9 @@ var reservationSchema = new Schema({
     article: {
         type: String
     },
+    price: {
+        type: Number
+    },
     advances: [{
         date: { type: Date, default: Date.now },
         amount: { type: Number }
