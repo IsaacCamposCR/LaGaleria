@@ -26,6 +26,8 @@
             { path: "/proveedores", component: "providerListComponent", name: "ProviderList" },
 
             { path: "/apartado", component: "reservationComponent", name: "Reservation" },
+            { path: "/apartado/:id", component: "reservationComponent", name: "EditReservation" },
+            { path: "/apartados", component: "reservationListComponent", name: "ReservationList" },
 
             { path: "/**", redirectTo: ["ArtCalculator"] }
         ]

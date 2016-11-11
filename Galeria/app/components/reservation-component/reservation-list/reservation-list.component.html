@@ -1,0 +1,23 @@
+<div>
+    <h1>Apartados</h1>
+    <table>
+        <thead>
+            <th># de Apartado</th>
+            <th>Cliente</th>
+            <th>Articulos</th>
+            <th>Saldo</th>
+            <th>
+                <button type="button" ng-link="['Reservation']">Nuevo Apartado</button>
+            </th>
+        </thead>
+        <tr ng-repeat="reservation in model.reservations">
+            <td>{{reservation.invoice}}</td>
+            <td>{{reservation.client}}</td>
+            <td>{{reservation.article}}</td>
+            <td>{{reservation.price}}</td>
+            <td>
+                <button type="button" ng-link="['EditReservation', {id: reservation._id}]">Detalles</button>
+            </td>
+        </tr>
+    </table>
+</div>

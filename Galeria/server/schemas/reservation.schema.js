@@ -2,19 +2,19 @@ var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 
 var reservationSchema = new Schema({
-    client: { 
-        type: String 
+    client: {
+        type: String
     },
-    invoice: { 
-        type: String 
+    invoice: {
+        type: String
     },
     date: {
         type: Date,
-        default: Date.now 
+        default: Date.now
     },
-    article: {
-        type: String
-    },
+    articles: [{
+        article: { type: String }
+    }],
     price: {
         type: Number
     },

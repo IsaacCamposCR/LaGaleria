@@ -69,6 +69,8 @@ app.get("/api/provider/:id/invoices", providers.invoices);
 // Reservation endpoints 
 // Creates a new reservation
 app.post("/api/reservation/", reservations.save);
+// Gets a list of all reservations.
+app.get("/api/reservation/", reservations.list);
 
 app.get("*", function (req, res) {
     res.sendFile(rootPath + "/app/index.html");

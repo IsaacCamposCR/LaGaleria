@@ -3,32 +3,53 @@
 
     <form name="reservationForm">
         <fieldset ng-disabled="model.disableForm">
-            <div ng-click="model.endArticleSearch();model.endClientSearch()">
-                <label for="invoice"># de Factura: </label>
-                <input id="invoice" type="text" ng-model="model.invoice">
-                <br/>
-                <label for="date">Fecha: </label>
-                <input id="date" type="date" ng-model="model.date">
-                <br/>
-                <label for="price">Precio: </label>
-                <input id="price" type="number" ng-model="model.price">
-            </div>
             <div ng-click="model.endArticleSearch()">
-                <label for="client">Cliente: </label>
+                <label for="client">Buscar Cliente: </label>
                 <input id="client" type="text" ng-model="model.client" ng-keyup="model.beginClientSearch()">
-                <div ng-show="model.lookupClient" ng-repeat="client in model.clients" ng-click="model.selectClient(client._id)">
+                <div ng-show="model.lookupClient" ng-repeat="client in model.lookupClients" ng-click="model.selectClient(client._id)">
                     <span>
                         {{client.name}} - {{client.phones[0]}}
                     </span>
                 </div>
             </div>
             <div ng-click="model.endClientSearch()">
-                <label for="article">Articulo: </label>
+                <label for="article">Buscar Articulo: </label>
                 <input id="article" type="text" ng-model="model.article" ng-keyup="model.beginArticleSearch()">
-                <div ng-show="model.lookupArticle" ng-click="model.selectArticle(article._id)" ng-repeat="article in model.articles">
+                <div ng-show="model.lookupArticle" ng-click="model.selectArticle(article._id)" ng-repeat="article in model.lookupArticles">
                     <span>
                         {{article.description}}: {{article.price}} - {{article.stock}} restantes.
                     </span>
+                </div>
+            </div>
+            <hr/>
+            <div ng-click="model.endArticleSearch();model.endClientSearch()">
+                <label for="invoice"># de Apartado: </label>
+                <input id="invoice" type="text" ng-model="model.invoice">
+                <br/>
+                <label for="date">Fecha: </label>
+                <input id="date" type="date" ng-model="model.date">
+                <br/>
+                <label for="price">Precio Total: </label>
+                <input id="price" type="number" ng-model="model.price">
+                <div>
+                    <h3>Articulos:</h3>
+                    <ul>
+                        <li ng-repeat="article in model.articles">
+                            {{article.description}} - {{article.price | currency}}
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Abonos:</h3>
+                    <label for="advance">Nuevo Abono: </label>
+                    <input id="advance" type="number" ng-model="model.advanceAmount">
+                    <input type="date" ng-model="model.advanceDate">
+                    <button type="button" ng-click="model.addAdvance()">Agregar Abono</button>
+                    <ul>
+                        <li ng-repeat="advance in model.advances">
+                            {{advance.date | date:"MM/dd/yyyy"}} - {{advance.amount}}
+                        </li>
+                    </ul>
                 </div>
             </div>
         </fieldset>

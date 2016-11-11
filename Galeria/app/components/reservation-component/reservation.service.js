@@ -20,8 +20,15 @@
             return resource.save(reservation);
         };
 
+        var listReservations = function () {
+
+            // Returns a promise with a list of all reservations
+            return resource.query();
+        };
+
         return {
-            save: saveReservation
+            save: saveReservation,
+            list: listReservations
         };
     });
 } ());
