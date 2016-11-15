@@ -17,30 +17,32 @@
 
         // Cleans up the form for a new reservation.
         var newReservation = function () {
+            model.title = "Nuevo Apartado";
+
             // Form properties
             model.invoice = "";
             model.date = new Date();
-            model.price = "";
+            model.price = 0;
+            model.remaining = 0;
             model.client = "";
-            model.articles = [];
-
-            //Advances form properties
-            model.advanceAmount = "";
-            model.advanceDate = new Date();
-            model.advances = [];
-
-            // Lookup properties
-            model.lookupClients = [];
-            model.lookupArticles = [];
         };
 
         var loadReservation = function (id) {
+            model.title = "Detalles del Apartado";
+
+            //Disable the form when an existing provider is loaded.
+            model.disableForm = true;
+
+            // Enables the EDIT button.
+            model.editingProvider = true;
+
             // Calls the reservation service for a reservation by id.
             reservationService.get(id).$promise
                 .then(function (result) {
                     model.invoice = result.results.invoice;
-                    model.date = result.results.date;
+                    model.date = new Date(result.results.date);
                     model.price = result.results.price;
+                    model.advances = result.results.advances;
 
                     // Calls the client service for the client name.
                     model.clientId = result.results.client;
@@ -49,12 +51,43 @@
                             model.client = result.results.name;
                         });
 
-                    // TODO: Calls the article service
-                    ////////////////////////////
+                    // Calls the article service
+                    result.results.articles.forEach(function (item) {
+                        inventoryService.get(item.article).$promise
+                            .then(function (articleResult) {
+
+                                // If the article has been added before, increases the stock.
+                                if (lookupItemFromArray(articleResult.results._id, model.articles)) {
+                                    lookupItemFromArray(articleResult.results._id, model.articles).stock++;
+                                }
+                                else {
+                                    model.articles.push({
+                                        _id: articleResult.results._id,
+                                        description: articleResult.results.description,
+                                        price: articleResult.results.price,
+                                        stock: 1,
+                                        max: articleResult.results.stock
+                                    });
+                                }
+
+                                displayTotals();
+                            });
+                    });
                 });
         };
 
         model.$routerOnActivate = function (next) {
+            //Advances form properties
+            model.advanceAmount = 0;
+            model.advanceDate = new Date();
+
+            // Lookup properties
+            model.lookupClients = [];
+            model.lookupArticles = [];
+
+            model.articles = [];
+            model.advances = [];
+
             // Takes the id from the parameters in the new url.
             if (next.params.id) {
                 loadReservation(next.params.id);
@@ -93,7 +126,7 @@
         model.beginArticleSearch = function () {
             if (model.article !== "") {
                 // Queries the inventory service for matching articles by description.
-                inventoryService.filter(model.article).$promise
+                inventoryService.filter(model.article, true).$promise
                     .then(function (result) {
                         model.lookupArticles = result.results;
                     });
@@ -111,6 +144,7 @@
         // Disable search options for articles.
         model.endArticleSearch = function () {
             model.lookupArticle = false;
+            model.article = "";
         };
 
         // Asigns a client when an option is clicked on the autocomplete search options.
@@ -122,10 +156,59 @@
 
         // Asigns an article when an option is clicked on the autocomplete search options.
         model.selectArticle = function (id) {
+            // Gets the article from the lookupArray (taken from Mongo).
             var article = lookupItemFromArray(id, model.lookupArticles);
-            model.price = Number(model.price + article.price);
-            model.articles.push({ id: id, description: article.description, price: article.price });
+
+            // If the article has been added before, increases the stock.
+            if (lookupItemFromArray(id, model.articles)) {
+                lookupItemFromArray(id, model.articles).stock++;
+            }
+            // If it hasn't, add a new item to the articles array.
+            else {
+                model.articles.push({
+                    _id: id,
+                    description: article.description,
+                    price: article.price,
+                    stock: 1,
+                    max: article.stock
+                });
+            }
+
+            displayTotals();
             model.endArticleSearch();
+        };
+
+        // This function is invoked through the use of the + button on the model.articles html list.
+        model.addArticle = function (id) {
+            var article = lookupItemFromArray(id, model.articles);
+
+            // The stock cannot be higher than what's currently available in the inventory.
+            if (article.stock < article.max) {
+                article.stock++;
+            }
+            else {
+                popUp("error",
+                    true,
+                    "No existen mas articulos iguales en el inventario...",
+                    function () {
+                        model.disableForm = false;
+                    });
+            }
+
+            displayTotals();
+        };
+
+        // This function is invoked through the use of the - button on the model.articles html list.
+        model.removeArticle = function (id, index) {
+            var article = lookupItemFromArray(id, model.articles);
+            article.stock--;
+
+            // If the stock reaches 0, delete the row.
+            if (article.stock === 0) {
+                model.articles.splice(index, 1);
+            }
+
+            displayTotals();
         };
 
         // Looks up the model.categories array to select the one with a certain id.
@@ -137,20 +220,61 @@
             return result[0];
         };
 
+        // When an advance is added, push the item to the advances array, clean the form, and update totals.
         model.addAdvance = function () {
             model.advances.push({
                 amount: model.advanceAmount,
                 date: model.advanceDate
+            });
+
+            model.advanceAmount = "";
+            model.advanceDate = new Date();
+
+            displayTotals();
+        };
+
+        // Remove the advance from the array and update totals.
+        model.removeAdvance = function (index) {
+            model.advances.splice(index, 1);
+
+            displayTotals();
+        };
+
+        var displayTotals = function () {
+            // Initializes the price value to zero.
+            model.price = 0;
+            model.articles.forEach(function (item) {
+                for (var i = 0; i < item.stock; i++) {
+                    model.price += item.price;
+                }
+            });
+
+            // Matches the remaining to that of the total price before substracting every advance.
+            model.remaining = model.price;
+            model.advances.forEach(function (item) {
+                model.remaining -= item.amount;
             });
         };
 
         // Sends the new reservation to the service to be saved.
         model.saveReservation = function () {
             var articleIds = [];
+
+            // Creates an id array for articles to be saved into Mongo.
             model.articles.forEach(function (item) {
-                articleIds.push({ article: item.id });
+                for (var i = 0; i < item.stock; i++) {
+                    articleIds.push({ article: item._id });
+                }
+
+                inventoryService.get(item._id).$promise
+                    .then(function (result) {
+                        result.results.stock -= item.stock;
+
+                        inventoryService.save(result.results);
+                    });
             });
 
+            // Creates the reservation object.
             var reservation = {
                 client: model.clientId,
                 invoice: model.invoice,
@@ -160,6 +284,7 @@
                 advances: model.advances
             };
 
+            // Sends the save command to the reservationService.
             reservationService.save(reservation).$promise
                 .then(function (response) {
                     popUp("success",

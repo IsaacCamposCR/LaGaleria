@@ -58,6 +58,10 @@ module.exports.list = function (req, res) {
         // The reason this is the same as the bottom query is because the query.filter property differentiates
         // when a query requires being filterd by categories or not.
         query = ArticleSchema.find({ 'description': { "$regex": req.query.filter, "$options": "i" } });
+
+        if (req.query.stock) {
+            query.where('stock').gt(0);
+        }
     } else {
         // These search terms apply only to the INVENTORY component.
         if (req.query.description) {

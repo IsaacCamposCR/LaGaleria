@@ -71,6 +71,8 @@ app.get("/api/provider/:id/invoices", providers.invoices);
 app.post("/api/reservation/", reservations.save);
 // Gets a list of all reservations.
 app.get("/api/reservation/", reservations.list);
+// Gets a reservation by _id.
+app.get("/api/reservation/:id", reservations.get);
 
 app.get("*", function (req, res) {
     res.sendFile(rootPath + "/app/index.html");

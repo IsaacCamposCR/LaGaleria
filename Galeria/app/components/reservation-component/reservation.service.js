@@ -26,9 +26,16 @@
             return resource.query();
         };
 
+        var getReservation = function (id) {
+
+            // Returns a single reservation by id.
+            return resource.get({ id: id });
+        };
+
         return {
             save: saveReservation,
-            list: listReservations
+            list: listReservations,
+            get: getReservation
         };
     });
 } ());

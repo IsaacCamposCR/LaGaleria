@@ -36,10 +36,10 @@
             return resource.query({ description: description, category: category });
         };
 
-        var listUnfilteredArticles = function (filter) {
+        var listUnfilteredArticles = function (filter, stock) {
 
             // Returns a result from the endpoint, asynchronous.
-            return resource.query({ filter: filter });
+            return resource.query({ filter: filter, stock: stock });
         };
 
         var getArticle = function (id) {

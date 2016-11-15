@@ -31,11 +31,17 @@
                 <br/>
                 <label for="price">Precio Total: </label>
                 <input id="price" type="number" ng-model="model.price">
+                <label for="remaining">Saldo: </label>
+                <input id="remaining" type="number" ng-model="model.remaining">
                 <div>
                     <h3>Articulos:</h3>
                     <ul>
-                        <li ng-repeat="article in model.articles">
-                            {{article.description}} - {{article.price | currency}}
+                        <li ng-repeat="article in model.articles track by $index">
+                            <div ng-if="article.stock">
+                                {{article.description}} - {{article.price | currency}} X {{article.stock}}: {{(article.price * article.stock) | currency}}
+                                <button type="button" ng-click="model.addArticle(article._id)">+</button>
+                                <button type="button" ng-click="model.removeArticle(article._id, $index)">-</button>
+                            </div>
                         </li>
                     </ul>
                 </div>
@@ -46,8 +52,9 @@
                     <input type="date" ng-model="model.advanceDate">
                     <button type="button" ng-click="model.addAdvance()">Agregar Abono</button>
                     <ul>
-                        <li ng-repeat="advance in model.advances">
-                            {{advance.date | date:"MM/dd/yyyy"}} - {{advance.amount}}
+                        <li ng-repeat="advance in model.advances track by $index">
+                            {{advance.date | date:"MM/dd/yyyy"}} - {{advance.amount | currency}}
+                            <button type="button" ng-click="model.removeAdvance($index)">Eliminar</button>
                         </li>
                     </ul>
                 </div>
