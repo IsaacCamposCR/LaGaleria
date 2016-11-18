@@ -5,7 +5,7 @@
         <fieldset ng-disabled="model.disableForm">
             <div ng-click="model.endArticleSearch()">
                 <label for="client">Buscar Cliente: </label>
-                <input id="client" type="text" ng-model="model.client" ng-keyup="model.beginClientSearch()">
+                <input id="client" type="text" ng-model="model.client" ng-keyup="model.beginClientSearch()" autocomplete="off">
                 <div ng-show="model.lookupClient" ng-repeat="client in model.lookupClients" ng-click="model.selectClient(client._id)">
                     <span>
                         {{client.name}} - {{client.phones[0]}}
@@ -14,12 +14,16 @@
             </div>
             <div ng-click="model.endClientSearch()">
                 <label for="article">Buscar Articulo: </label>
-                <input id="article" type="text" ng-model="model.article" ng-keyup="model.beginArticleSearch()">
+                <input id="article" type="text" ng-model="model.article" ng-keyup="model.beginArticleSearch()" autocomplete="off">
                 <div ng-show="model.lookupArticle" ng-click="model.selectArticle(article._id)" ng-repeat="article in model.lookupArticles">
                     <span>
                         {{article.description}}: {{article.price}} - {{article.stock}} restantes.
                     </span>
                 </div>
+            </div>
+            <hr/>
+            <div>
+                <client-component clientid="model.clientId" $router="model.$router" />
             </div>
             <hr/>
             <div ng-click="model.endArticleSearch();model.endClientSearch()">
@@ -32,7 +36,8 @@
                 <label for="price">Precio Total: </label>
                 <input id="price" type="number" ng-model="model.price">
                 <label for="remaining">Saldo: </label>
-                <input id="remaining" type="number" ng-model="model.remaining">
+                <span id="remaining">{{model.remaining | currency}}</span>
+                <hr/>
                 <div>
                     <h3>Articulos:</h3>
                     <ul>
@@ -45,6 +50,7 @@
                         </li>
                     </ul>
                 </div>
+                <hr/>
                 <div>
                     <h3>Abonos:</h3>
                     <label for="advance">Nuevo Abono: </label>

@@ -30,15 +30,16 @@
         var loadReservation = function (id) {
             model.title = "Detalles del Apartado";
 
-            //Disable the form when an existing provider is loaded.
+            //Disable the form when an existing reservation is loaded.
             model.disableForm = true;
 
             // Enables the EDIT button.
-            model.editingProvider = true;
+            model.editingReservation = true;
 
             // Calls the reservation service for a reservation by id.
             reservationService.get(id).$promise
                 .then(function (result) {
+                    model.id = result.results._id;
                     model.invoice = result.results.invoice;
                     model.date = new Date(result.results.date);
                     model.price = result.results.price;
@@ -46,6 +47,7 @@
 
                     // Calls the client service for the client name.
                     model.clientId = result.results.client;
+
                     clientService.get(result.results.client).$promise
                         .then(function (result) {
                             model.client = result.results.name;
@@ -150,7 +152,7 @@
         // Asigns a client when an option is clicked on the autocomplete search options.
         model.selectClient = function (id) {
             model.clientId = id;
-            model.client = lookupItemFromArray(id, model.lookupClients).name;
+            model.client = "";
             model.endClientSearch();
         };
 
@@ -222,6 +224,27 @@
 
         // When an advance is added, push the item to the advances array, clean the form, and update totals.
         model.addAdvance = function () {
+
+            if (model.advanceAmount > model.remaining) {
+                popUp("error",
+                    true,
+                    "El monto no puede ser mayor al Saldo.",
+                    function () {
+                        model.disableForm = false;
+                    });
+                return;
+            }
+
+            if (model.advanceAmount <= 0) {
+                popUp("error",
+                    true,
+                    "El monto no puede ser menor o igual a 0",
+                    function () {
+                        model.disableForm = false;
+                    });
+                return;
+            }
+
             model.advances.push({
                 amount: model.advanceAmount,
                 date: model.advanceDate
@@ -276,6 +299,7 @@
 
             // Creates the reservation object.
             var reservation = {
+                _id: model.id,
                 client: model.clientId,
                 invoice: model.invoice,
                 date: model.date,
@@ -289,7 +313,7 @@
                 .then(function (response) {
                     popUp("success",
                         true,
-                        "El Apartado se ha creado con exito!",
+                        "El Apartado se ha guardado con exito!",
                         function () {
                             model.$router.navigate(["ReservationList"]);
                         });
@@ -303,6 +327,14 @@
                 });
         };
 
+        model.editReservation = function () {
+            // Hides the EDIT button.
+            model.editingReservation = false;
+
+            // Enables the form.
+            model.disableForm = false;
+        };
+
         model.cancelEditReservation = function () {
             popUp("confirm",
                 true,
@@ -312,7 +344,7 @@
                     model.$router.navigate(["ReservationList"]);
                 },
                 function () {
-                    model.disableForm = model.editingProvider;
+                    model.disableForm = model.editingReservation;
                 });
         };
 

@@ -1,5 +1,5 @@
 <div>
-	<h1>{{model.title}}</h1>
+	<h1 ng-if="model.showTitle">{{model.title}}</h1>
 
 	<form name="clientForm">
 		<fieldset ng-disabled="model.disableForm">
@@ -11,10 +11,12 @@
 				<input type="date" id="created" ng-model="model.created">
 			</div>
 		</fieldset>
-		<div ng-show="!model.pop">
-			<button ng-if="!model.editingClient" type="submit" ng-click="model.saveClient()">Guardar</button>
-			<button ng-if="model.editingClient" type="button" ng-click="model.editClient()">Editar</button>
-			<button type="button" ng-click="model.cancelEdit()">Cancelar</button>
+		<div>
+			<div ng-show="!model.pop">
+				<button ng-if="!model.editingClient" type="submit" ng-click="model.saveClient()">Guardar</button>
+				<button ng-if="model.editingClient" type="button" ng-click="model.editClient()">Editar</button>
+				<button type="button" ng-click="model.cancelEdit()">Cancelar</button>
+			</div>
 		</div>
 	</form>
 	<message type="model.messageType" message="model.message" show="model.pop" confirm="model.confirm()" cancel="model.cancel()"></message>

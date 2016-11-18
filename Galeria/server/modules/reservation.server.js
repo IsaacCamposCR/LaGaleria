@@ -1,8 +1,8 @@
 // References the schema for reservation
 var ReservationSchema = require("../schemas/reservation.schema.js");
 
-module.exports.save = function (req, res) {
-
+var newReservation = function (req, res) {
+    // Creates an instance of the reservation schema with the data from the request body.
     var reservation = new ReservationSchema({
         client: req.body.client,
         invoice: req.body.invoice,
@@ -12,10 +12,45 @@ module.exports.save = function (req, res) {
         advances: req.body.advances
     });
 
+    // Executes the save command to Mongo.
     reservation.save(function (err) {
         res.send({ results: req.body, errors: err });
         res.end();
     });
+};
+
+var updateReservation = function (req, res) {
+    // Query to select the appropriate provider by id.
+    var query = {
+        _id: req.body._id
+    };
+
+    // New data to be updated.
+    var newData = {
+        client: req.body.client,
+        invoice: req.body.invoice,
+        date: req.body.date,
+        price: req.body.price,
+        articles: req.body.articles,
+        advances: req.body.advances
+    };
+
+    // Update executed according to query, new data, only one row.
+    ReservationSchema.update(query, newData, { multi: false },
+        function (err, numAffected) {
+            res.send({ results: req.body, errors: err });
+            res.end();
+        });
+};
+
+
+module.exports.save = function (req, res) {
+    // If the id parameter exists in the body, call update, else create a new record.
+    if (req.body._id) {
+        updateReservation(req, res);
+    } else {
+        newReservation(req, res);
+    }
 };
 
 module.exports.list = function (req, res) {

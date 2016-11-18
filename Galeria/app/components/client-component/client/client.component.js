@@ -10,7 +10,8 @@
         //The clientService must be added as a literal string in order to remain when the js is minified.
         controller: ["clientService", clientController],
         bindings: {
-            "$router": "<"
+            "$router": "<",
+            "clientid": "<"
         }
     });
 
@@ -21,11 +22,29 @@
         // When the component is activated (From client-list).
         // Load the data from the client, or create a blank form for a new client.
         model.$routerOnActivate = function (next) {
-
             // Takes the id from the parameters in the new url.
-            if (next.params.id) {
+            loadClient(next.params.id);
+        };
+
+        model.$onInit = function () {
+        };
+
+        model.$onChanges = function () {
+            if (model.clientid) {
+                // Takes the id from the component that is invoking this component.
+                loadClient(model.clientid);
+                // Nulls this variable so that it won't be listened any longer.
+                model.clientid = null;
+                // Disables the title to remove some clutter from the reservation module.
+                model.showTitle = false;
+            }
+        };
+
+        var loadClient = function (id) {
+            // The id might or might not exists, depending if it is a new client or not.
+            if (id) {
                 // Calls the client service for a client by id.
-                clientService.get(next.params.id)
+                clientService.get(id)
                     // This call is asynchronous so a callback must be used in the promise to process the data.
                     .$promise.then(function (result) {
                         model.id = result.results._id;
@@ -55,9 +74,6 @@
                 // Changes the page main title.
                 model.title = "Nuevo Cliente";
             }
-        };
-
-        model.$onInit = function () {
         };
 
         // Creates a new client and sends it as paramter for the save function.
