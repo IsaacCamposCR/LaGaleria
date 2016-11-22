@@ -51,6 +51,9 @@
                     model.code = result.results.code;
                     model.description = result.results.description;
                     model.stock = result.results.stock;
+                    // This temp variable is used to store the original stock before it gets updated. 
+                    model.tempStock = result.results.stock;
+                    model.history = result.results.history;
                     model.price = result.results.price;
 
                     //Disable the form when an existing article is loaded.
@@ -112,9 +115,9 @@
                     result.results.forEach(function (item) {
                         model.categories.push(item);
                     });
-                    if(model.categories.length > 0){
-                    model.selectedCategory = model.categories[0];
-                    }else{
+                    if (model.categories.length > 0) {
+                        model.selectedCategory = model.categories[0];
+                    } else {
                         model.newCategory();
                     }
                 });
@@ -156,6 +159,8 @@
                 code: model.code,
                 description: model.description,
                 stock: model.stock,
+                // If the article is new, the history matches the stock, else it has to use a calculated one.
+                history: model._id ? (model.history + (model.stock - model.tempStock)) : model.stock,
                 price: model.price
             };
 

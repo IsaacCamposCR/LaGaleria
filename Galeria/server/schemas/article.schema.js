@@ -19,6 +19,9 @@ var articleSchema = new Schema({
     stock: {
         type: Number
     },
+    history: {
+        type: Number
+    },
     price: {
         type: Number
     }

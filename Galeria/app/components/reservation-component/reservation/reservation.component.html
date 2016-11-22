@@ -41,9 +41,9 @@
                 <div>
                     <h3>Articulos:</h3>
                     <ul>
-                        <li ng-repeat="article in model.articles track by $index">
-                            <div ng-if="article.stock">
-                                {{article.description}} - {{article.price | currency}} X {{article.stock}}: {{(article.price * article.stock) | currency}}
+                        <li ng-repeat="article in model.articles track by $index" ng-if="article.quantity">
+                            <div >
+                                {{article.description}} - {{article.price | currency}} X {{article.quantity}}: {{(article.price * article.quantity) | currency}}
                                 <button type="button" ng-click="model.addArticle(article._id)">+</button>
                                 <button type="button" ng-click="model.removeArticle(article._id, $index)">-</button>
                             </div>

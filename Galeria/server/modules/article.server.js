@@ -9,6 +9,7 @@ var newArticle = function (req, res) {
         description: req.body.description,
         provider: req.body.provider,
         stock: req.body.stock,
+        history: req.body.history,
         price: req.body.price
     });
 
@@ -30,6 +31,7 @@ var updateArticle = function (req, res) {
         description: req.body.description,
         provider: req.body.provider,
         stock: req.body.stock,
+        history: req.body.history,
         price: req.body.price
     };
 

@@ -13,7 +13,8 @@ var reservationSchema = new Schema({
         default: Date.now
     },
     articles: [{
-        article: { type: String }
+        article: { type: String },
+        quantity: { type: Number }
     }],
     price: {
         type: Number
