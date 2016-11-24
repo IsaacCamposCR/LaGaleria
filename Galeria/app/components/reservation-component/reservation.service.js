@@ -20,10 +20,11 @@
             return resource.save(reservation);
         };
 
-        var listReservations = function () {
+        var listReservations = function (id) {
+            console.log("service",id);
 
             // Returns a promise with a list of all reservations
-            return resource.query();
+            return resource.query({ _id: id });
         };
 
         var getReservation = function (id) {

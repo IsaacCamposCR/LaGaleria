@@ -6,13 +6,13 @@
     module.component("inventoryComponent", {
         templateUrl: "/components/inventory-component/inventory/inventory.component.html",
         controllerAs: "model",
-        controller: ["inventoryService", "categoryService", "providerService", inventoryController],
+        controller: ["inventoryService", "categoryService", "providerService", "arrayService", inventoryController],
         bindings: {
             "$router": "<"
         }
     });
 
-    function inventoryController(inventoryService, categoryService, providerService) {
+    function inventoryController(inventoryService, categoryService, providerService, arrayService) {
         var model = this;
 
         // When the component is initialized, loads all the articles.
@@ -63,7 +63,7 @@
                                         result.results.forEach(function (item) {
                                             // Before pushing the article to the array, it replaces the provider id with the provider name
                                             // by using the provider array and the lookup function.
-                                            item.provider = lookupProvider(item.provider);
+                                            item.provider = arrayService.lookup(item.provider, model.providers);
                                             articles.push(item);
                                         });
 
@@ -80,15 +80,6 @@
                             });
                         });
                 });
-        };
-
-        // Filters the providers array to get the name by id. Instead of querying the database per article.
-        var lookupProvider = function (id) {
-            // The filter function is not supported on older browsers...
-            var result = model.providers.filter(function (provider) {
-                return provider._id == id;
-            });
-            return result[0].name;
         };
 
         // Iterates every item from the promise results to calculate totals.

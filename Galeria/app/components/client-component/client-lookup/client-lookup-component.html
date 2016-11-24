@@ -1,0 +1,13 @@
+<div>
+    <label for="client">Buscar Cliente: </label>
+    <input id="client" type="text" ng-model="model.client" ng-keyup="model.beginClientSearch()" autocomplete="off">
+    <div ng-show="model.lookupClient" ng-repeat="client in model.lookupClients" ng-click="model.selectClient(client._id)">
+        <span>
+            {{client.name}} - {{client.phones[0]}}
+        </span>
+    </div>
+</div>
+<hr/>
+<div>
+    <client-component clientid="model.clientId" $router="model.$router" />
+</div>

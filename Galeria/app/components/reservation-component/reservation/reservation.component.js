@@ -6,13 +6,13 @@
     module.component("reservationComponent", {
         templateUrl: "/components/reservation-component/reservation/reservation.component.html",
         controllerAs: "model",
-        controller: ["clientService", "inventoryService", "reservationService", reservationController],
+        controller: ["clientService", "inventoryService", "reservationService", "arrayService", reservationController],
         bindings: {
             "$router": "<"
         }
     });
 
-    function reservationController(clientService, inventoryService, reservationService) {
+    function reservationController(clientService, inventoryService, reservationService, arrayService) {
         var model = this;
 
         // Cleans up the form for a new reservation.
@@ -62,13 +62,13 @@
                         inventoryService.get(result.results.articles[i].article).$promise
                             .then(function(articleResult) {
                                 // Adds missing data to already existing items in the article array.
-                                var arrayArticle = lookupItemFromArray(articleResult.results._id, model.articles)[0];
+                                var arrayArticle = arrayService.lookup(articleResult.results._id, model.articles)[0];
                                 arrayArticle.description = articleResult.results.description;
                                 arrayArticle.price = articleResult.results.price;
                                 arrayArticle.max = articleResult.results.stock + arrayArticle.quantity;
                                 arrayArticle.originalQuantity = arrayArticle.quantity;
 
-                                displayTotals();
+                                model.displayTotals();
                             });
                     }
 
@@ -78,9 +78,6 @@
         };
 
         model.$routerOnActivate = function(next) {
-            //Advances form properties
-            model.advanceAmount = 0;
-            model.advanceDate = new Date();
 
             // Lookup properties
             model.lookupClients = [];
@@ -159,11 +156,11 @@
         model.selectArticle = function(id) {
 
             // Gets the article from the lookupArray (taken from Mongo).
-            var article = lookupItemFromArray(id, model.lookupArticles)[0];
+            var article = arrayService.lookup(id, model.lookupArticles)[0];
 
             // If the article has been added before, increases the quantity.
-            if (lookupItemFromArray(id, model.articles)[0]) {
-                lookupItemFromArray(id, model.articles)[0].quantity++;
+            if (arrayService.lookup(id, model.articles)[0]) {
+                arrayService.lookup(id, model.articles)[0].quantity++;
             }
             // If it hasn't, add a new item to the articles array.
             else {
@@ -176,13 +173,13 @@
                 });
             }
 
-            displayTotals();
+            model.displayTotals();
             model.endArticleSearch();
         };
 
         // This function is invoked through the use of the + button on the model.articles html list.
         model.addArticle = function(id) {
-            var article = lookupItemFromArray(id, model.articles)[0];
+            var article = arrayService.lookup(id, model.articles)[0];
 
             // The quantity cannot be higher than what's currently available in the inventory.
             if (article.quantity < article.max) {
@@ -197,12 +194,12 @@
                     });
             }
 
-            displayTotals();
+            model.displayTotals();
         };
 
         // This function is invoked through the use of the - button on the model.articles html list.
         model.removeArticle = function(id, index) {
-            var article = lookupItemFromArray(id, model.articles)[0];
+            var article = arrayService.lookup(id, model.articles)[0];
             article.quantity--;
 
             // If the quantity reaches 0, delete the row.
@@ -210,60 +207,10 @@
                 //model.articles.splice(index, 1);
             }
 
-            displayTotals();
+            model.displayTotals();
         };
 
-        // Looks up the model.categories array to select the one with a certain id.
-        var lookupItemFromArray = function(id, array) {
-            // The filter function is not supported on older browsers...
-            var result = array.filter(function(item) {
-                return item._id == id;
-            });
-            return result;
-        };
-
-        // When an advance is added, push the item to the advances array, clean the form, and update totals.
-        model.addAdvance = function() {
-
-            if (model.advanceAmount > model.remaining) {
-                popUp("error",
-                    true,
-                    "El monto no puede ser mayor al Saldo.",
-                    function() {
-                        model.disableForm = false;
-                    });
-                return;
-            }
-
-            if (model.advanceAmount <= 0) {
-                popUp("error",
-                    true,
-                    "El monto no puede ser menor o igual a 0",
-                    function() {
-                        model.disableForm = false;
-                    });
-                return;
-            }
-
-            model.advances.push({
-                amount: model.advanceAmount,
-                date: model.advanceDate
-            });
-
-            model.advanceAmount = "";
-            model.advanceDate = new Date();
-
-            displayTotals();
-        };
-
-        // Remove the advance from the array and update totals.
-        model.removeAdvance = function(index) {
-            model.advances.splice(index, 1);
-
-            displayTotals();
-        };
-
-        var displayTotals = function() {
+        model.displayTotals = function() {
             // Initializes the price value to zero.
             model.price = 0;
             model.articles.forEach(function(item) {

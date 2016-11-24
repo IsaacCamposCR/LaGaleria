@@ -57,6 +57,11 @@ module.exports.list = function (req, res) {
     // Creates a new query to find all reservations and sort them ascendingly.
     var query = ReservationSchema.find().sort({ invoice: "asc" });
 
+    // If the reservations have to be filtered by client id.
+    if (req.query._id) {
+        query.where('client').equals(req.query._id);
+    }
+
     // Executes the find query.
     query.exec(function (err, results) {
         results.forEach(function (reservation) {

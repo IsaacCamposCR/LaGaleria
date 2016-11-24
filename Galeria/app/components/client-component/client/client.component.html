@@ -1,5 +1,5 @@
 <div>
-	<h1 ng-if="model.showTitle">{{model.title}}</h1>
+	<h1 ng-if="model.showReservations">{{model.title}}</h1>
 
 	<form name="clientForm">
 		<fieldset ng-disabled="model.disableForm">
@@ -20,4 +20,7 @@
 		</div>
 	</form>
 	<message type="model.messageType" message="model.message" show="model.pop" confirm="model.confirm()" cancel="model.cancel()"></message>
+	<div ng-if="model.showReservations">
+		<reservation-list-component client-reservations="model.id" $router="model.$router" />
+	</div>
 </div>

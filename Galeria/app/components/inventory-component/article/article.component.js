@@ -8,13 +8,13 @@
         templateUrl: "/components/inventory-component/article/article.component.html",
         controllerAs: "model",
         //The inventoryService must be added as a literal string in order to remain when the js is minified.
-        controller: ["inventoryService", "categoryService", "providerService", articleController],
+        controller: ["inventoryService", "categoryService", "providerService", "arrayService", articleController],
         bindings: {
             "$router": "<"
         }
     });
 
-    function articleController(inventoryService, categoryService, providerService) {
+    function articleController(inventoryService, categoryService, providerService, arrayService) {
 
         var model = this;
 
@@ -46,8 +46,8 @@
                 .$promise.then(function (result) {
 
                     model._id = result.results._id;
-                    model.selectedCategory = lookupItemFromArray(result.results.category, model.categories);
-                    model.selectedProvider = lookupItemFromArray(result.results.provider, model.providers);
+                    model.selectedCategory = arrayService.lookup(result.results.category, model.categories)[0];
+                    model.selectedProvider = arrayService.lookup(result.results.provider, model.providers)[0];
                     model.code = result.results.code;
                     model.description = result.results.description;
                     model.stock = result.results.stock;
@@ -140,16 +140,7 @@
 
             return providersPromise;
         };
-
-        // Looks up the model.categories array to select the one with a certain id.
-        var lookupItemFromArray = function (id, array) {
-            // The filter function is not supported on older browsers...
-            var result = array.filter(function (category) {
-                return category._id == id;
-            });
-            return result[0];
-        };
-
+        
         model.saveArticle = function () {
             // Creates a new article to send to the service instead of the complete model.
             var article = {
@@ -194,7 +185,7 @@
                     loadCategories()
                         .then(function () {
                             // Selects the newly added category.
-                            model.selectedCategory = lookupItemFromArray(response.results._id, model.categories);
+                            model.selectedCategory = arrayService.lookup(response.results._id, model.categories)[0];
                         });
                     popUp("success",
                         true,

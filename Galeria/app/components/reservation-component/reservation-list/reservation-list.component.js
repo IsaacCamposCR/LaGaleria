@@ -6,13 +6,14 @@
     module.component("reservationListComponent", {
         templateUrl: "/components/reservation-component/reservation-list/reservation-list.component.html",
         controllerAs: "model",
-        controller: ["clientService", "inventoryService", "reservationService", reservationListController],
+        controller: ["clientService", "inventoryService", "reservationService", "arrayService", reservationListController],
         bindings: {
-            "$router": "<"
+            "$router": "<",
+            "clientReservations": "<"
         }
     });
 
-    function reservationListController(clientService, inventoryService, reservationService) {
+    function reservationListController(clientService, inventoryService, reservationService, arrayService) {
         var model = this;
 
         model.$onInit = function() {
@@ -20,12 +21,14 @@
             model.reservations = [];
 
             // Queries the reservation service for all reservations.
-            reservationService.list().$promise
+            reservationService.list(model.clientReservations).$promise
                 .then(function(result) {
-                    // Iterates through every reservation to assign client names and article descriptions.
-                    result.results.forEach(function(reservation) {
-                        loadClientData(reservation);
-                    });
+                    if (result.results) {
+                        // Iterates through every reservation to assign client names and article descriptions.
+                        result.results.forEach(function(reservation) {
+                            loadClientData(reservation);
+                        });
+                    }
                 });
         };
 
@@ -45,7 +48,8 @@
             if (reservation.articles.length > 1) {
                 reservation.article = reservation.articles.length + " articulos";
                 // There aren't any more promised chained, so the reservation is pushed.
-                model.reservations.push(reservation);
+                arrayService.push(reservation, model.reservations);
+                //model.reservations.push(reservation);
             }
             // If the reservation contains only one article: print its name.
             else {
@@ -54,10 +58,17 @@
                     .then(function(articleResult) {
                         reservation.article = articleResult.results.description;
                         // Here ends the promise chain, so the reservation is pushed.
-                        model.reservations.push(reservation);
+                        arrayService.push(reservation, model.reservations);
+                        //model.reservations.push(reservation);
                     });
             }
 
+        };
+
+        model.$onChanges = function() {
+            if (model.clientReservations) {
+                model.$onInit();
+            }
         };
 
     }
