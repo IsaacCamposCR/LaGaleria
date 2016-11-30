@@ -21,7 +21,6 @@
         };
 
         var listReservations = function (id) {
-            console.log("service",id);
 
             // Returns a promise with a list of all reservations
             return resource.query({ _id: id });

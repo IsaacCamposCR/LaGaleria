@@ -1,5 +1,5 @@
 <div>
-    <h2>{{model.product.name}}</h2>
+    <h3>{{model.product.name}}</h3>
 
     <label for="rectangleBase">Ancho: </label>
     <input type="number" id="rectangleBase" ng-model="model.product.base" ng-keyup="model.product.calculate();model.totals()">
@@ -17,5 +17,7 @@
     <label for="cmPrice">Precio cm: </label>
     <input type="number" id="cmPrice" ng-model="model.product.cmPrice" ng-keyup="model.product.calculate();model.totals()">
 
-    <hr/> Total {{model.product.name}}: {{model.product.total | currency}}
+    <br/>
+    Total {{model.product.name}}: {{model.product.total | currency}}
+    <hr/>
 </div>

@@ -1,22 +1,27 @@
 <div>
-    <h1>Apartados</h1>
+    <h1>Encargos y Apartados</h1>
     <table>
         <thead>
-            <th># de Apartado</th>
+            <th># de Documento</th>
+            <th>Tipo de Entrada</th>
             <th>Cliente</th>
             <th>Articulos</th>
+            <th>Encargos</th>
             <th>Saldo</th>
             <th>
                 <button type="button" ng-link="['Reservation']">Nuevo Apartado</button>
+                <button type="button" ng-link="['ArtCalculator']">Nuevo Encargo</button>
             </th>
         </thead>
         <tr ng-repeat="reservation in model.reservations">
             <td>{{reservation.invoice}}</td>
+            <td>{{reservation.type}}</td>
             <td>{{reservation.client}}</td>
             <td>{{reservation.article}}</td>
-            <td>{{reservation.price}}</td>
+            <td>{{reservation.order}}</td>
+            <td>{{reservation.price | currency}}</td>
             <td>
-                <button type="button" ng-link="['EditReservation', {id: reservation._id}]">Detalles</button>
+                <button type="button" ng-click="model.redirect(reservation)">Detalles</button>
             </td>
         </tr>
     </table>

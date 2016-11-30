@@ -1,14 +1,47 @@
 <div>
-    <label for="selectArt">Tipo de Arte: </label>
-    <select id="selectArt" ng-model="model.selectedArt" ng-options="art for art in model.arts" ng-change="model.renderCalculators()">
-    </select>
-    <br/>
-    <div ng-repeat="product in model.products">
-        <calculator product="product" totals="model.totals()" />
-    </div>
-    <span>Subtotal: {{model.subtotal | currency}}</span>
-    <br/>
-    <span>Otros: {{model.others | currency}}</span>
-    <br/>
-    <span>Total: {{model.productTotal | currency}}</span>
+    <fieldset ng-disabled="model.disableForm">
+        <h1>{{model.title}}</h1>
+        <div>
+            <client-lookup-component client-id="model.clientId" />
+        </div>
+        <hr/>
+        <div ng-if="model.disableCalculators">
+            <label for="selectArt">Tipo de Arte: </label>
+            <select id="selectArt" ng-model="model.selectedArt" ng-options="art for art in model.arts" ng-change="model.renderCalculators()">
+            </select>
+            <br/>
+            <div ng-repeat="product in model.products">
+                <calculator product="product" totals="model.totals()" />
+            </div>
+            <span>Subtotal: {{model.subtotal | currency}}</span>
+            <br/>
+            <span>Otros: {{model.others | currency}}</span>
+            <br/>
+            <span>Total: {{model.productTotal | currency}}</span>
+            <hr/>
+            <button type="button" ng-click="model.addOrder()">Agregar Orden</button>
+        </div>
+        <div>
+            <h2>Encargos:</h2>
+            <ul>
+                <li ng-repeat="order in model.orders track by $index">
+                    {{order.type}}: {{order.amount | currency}}
+                    <button type="button" ng-click="model.deleteOrder($index)">Eliminar</button>
+                    <div>
+                        <textarea rows="5" cols="25">{{order.description}}</textarea>
+                    </div>
+                </li>
+            </ul>
+            <hr/>
+            <div>
+                <advance-component advances="model.advances" remaining="model.remaining" display-totals="model.orderTotals()" />
+            </div>
+            <span>Total Encargos: {{model.orderTotal | currency}}</span>
+            <br/>
+            <span>Saldo: {{model.remaining | currency}}</span>
+        </div>
+        <hr/>
+        <button type="button" ng-click="model.finish()">Completar Encargo</button>
+    </fieldset>
+    <message type="model.messageType" message="model.message" show="model.pop" confirm="model.confirm()" cancel="model.cancel()"></message>
 </div>

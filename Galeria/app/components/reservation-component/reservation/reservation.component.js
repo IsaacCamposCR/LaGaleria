@@ -6,13 +6,13 @@
     module.component("reservationComponent", {
         templateUrl: "/components/reservation-component/reservation/reservation.component.html",
         controllerAs: "model",
-        controller: ["clientService", "inventoryService", "reservationService", "arrayService", reservationController],
+        controller: ["inventoryService", "reservationService", "arrayService", reservationController],
         bindings: {
             "$router": "<"
         }
     });
 
-    function reservationController(clientService, inventoryService, reservationService, arrayService) {
+    function reservationController(inventoryService, reservationService, arrayService) {
         var model = this;
 
         // Cleans up the form for a new reservation.
@@ -94,31 +94,6 @@
             }
         };
 
-        // When the user starts typing in the Client field, 
-        // the search triggers to show matching results by name.
-        model.beginClientSearch = function() {
-            if (model.client !== "") {
-                // Queries the client service for matching clients by name.
-                clientService.find(model.client).$promise
-                    .then(function(result) {
-                        model.lookupClients = result.results;
-                    });
-
-                // Hides the search option for articles.
-                model.endArticleSearch();
-                // Shows the search option for clients.
-                model.lookupClient = true;
-            } else {
-                // If the search box is empty do not show any search options.
-                model.endClientSearch();
-            }
-        };
-
-        // Disable search options for clients.
-        model.endClientSearch = function() {
-            model.lookupClient = false;
-        };
-
         // When the user starts typing in the Article field, 
         // the search triggers to show matching results by name.
         model.beginArticleSearch = function() {
@@ -129,8 +104,6 @@
                         model.lookupArticles = result.results;
                     });
 
-                // Hides the search option for clients.
-                model.endClientSearch();
                 // Shows the search option for articles.
                 model.lookupArticle = true;
             } else {
@@ -143,13 +116,6 @@
         model.endArticleSearch = function() {
             model.lookupArticle = false;
             model.article = "";
-        };
-
-        // Asigns a client when an option is clicked on the autocomplete search options.
-        model.selectClient = function(id) {
-            model.clientId = id;
-            model.client = "";
-            model.endClientSearch();
         };
 
         // Asigns an article when an option is clicked on the autocomplete search options.
@@ -211,19 +177,39 @@
         };
 
         model.displayTotals = function() {
-            // Initializes the price value to zero.
-            model.price = 0;
-            model.articles.forEach(function(item) {
-                for (var i = 0; i < item.quantity; i++) {
-                    model.price += item.price;
-                }
-            });
+            // Initializes the price value to zero, only if a special price is not set.
+            if (!model.specialPrice) {
+                model.price = 0;
+                model.articles.forEach(function(item) {
+                    for (var i = 0; i < item.quantity; i++) {
+                        model.price += item.price;
+                    }
+                });
+            }
 
             // Matches the remaining to that of the total price before substracting every advance.
             model.remaining = model.price;
             model.advances.forEach(function(item) {
                 model.remaining -= item.amount;
             });
+        };
+
+        // When the user updates manually the price, automatic calculation will no longer be done.
+        model.updatePrice = function() {
+            model.specialPrice = true;
+
+            model.displayTotals();
+
+            if (model.remaining < 0) {
+                popUp("warning",
+                    true,
+                    "El monto no puede ser menor al saldo...",
+                    function() { });
+            }
+            else {
+                popUp("warning", false, "", function() { });
+            }
+            model.disableForm = false;
         };
 
         // Sends the new reservation to the service to be saved.

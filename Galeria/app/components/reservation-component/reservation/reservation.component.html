@@ -4,17 +4,7 @@
     <form name="reservationForm">
         <fieldset ng-disabled="model.disableForm">
             <div>
-                <label for="client">Buscar Cliente: </label>
-                <input id="client" type="text" ng-model="model.client" ng-keyup="model.beginClientSearch()" autocomplete="off">
-                <div ng-show="model.lookupClient" ng-repeat="client in model.lookupClients" ng-click="model.selectClient(client._id)">
-                    <span>
-                        {{client.name}} - {{client.phones[0]}}
-                    </span>
-                </div>
-            </div>
-            <hr/>
-            <div>
-                <client-component clientid="model.clientId" $router="model.$router" />
+                <client-lookup-component client-id="model.clientId" />
             </div>
             <hr/>
             <div>
@@ -25,7 +15,7 @@
                 <input id="date" type="date" ng-model="model.date">
                 <br/>
                 <label for="price">Precio Total: </label>
-                <input id="price" type="number" ng-model="model.price">
+                <input id="price" type="number" ng-model="model.price" ng-keyup="model.updatePrice()">
                 <label for="remaining">Saldo: </label>
                 <span id="remaining">{{model.remaining | currency}}</span>
                 <hr/>
@@ -35,9 +25,7 @@
                         <label for="article">Buscar Articulo: </label>
                         <input id="article" type="text" ng-model="model.article" ng-keyup="model.beginArticleSearch()" autocomplete="off">
                         <div ng-show="model.lookupArticle" ng-click="model.selectArticle(article._id)" ng-repeat="article in model.lookupArticles">
-                            <span>
-                        {{article.description}}: {{article.price}} - {{article.stock}} restantes.
-                    </span>
+                            <span>{{article.description}}: {{article.price}} - {{article.stock}} restantes.</span>
                         </div>
                     </div>
                     <ul>

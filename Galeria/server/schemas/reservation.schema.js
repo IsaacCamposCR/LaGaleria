@@ -12,21 +12,24 @@ var reservationSchema = new Schema({
         type: Date,
         default: Date.now
     },
-    articles: [{
-        article: { type: String },
-        quantity: { type: Number }
-    }],
     price: {
         type: Number
+    },
+    description: {
+        type: String
     },
     advances: [{
         date: { type: Date, default: Date.now },
         amount: { type: Number }
     }],
-    arts: [{
+    articles: [{
+        article: { type: String },
+        quantity: { type: Number }
+    }],
+    orders: [{
         type: { type: String },
         description: { type: String },
-        amount: { type: Date, default: Date.now },
+        amount: { type: Number },
         complete: { type: Boolean }
     }]
 });

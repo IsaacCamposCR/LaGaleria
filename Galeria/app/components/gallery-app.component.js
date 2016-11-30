@@ -7,9 +7,9 @@
         templateUrl: "/components/gallery-app.component.html",
         // Creates all the component routes.
         $routeConfig: [
-            { path: "/error", component: "messageComponent", name: "Message" },
+            //{ path: "/error", component: "messageComponent", name: "Message" },
 
-            { path: "/phones", component: "phonesComponent", name: "Phones" },
+            //{ path: "/phones", component: "phonesComponent", name: "Phones" },
 
             { path: "/calculadora", component: "artCalculatorComponent", name: "ArtCalculator" },
 

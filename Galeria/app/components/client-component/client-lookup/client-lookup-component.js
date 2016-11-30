@@ -4,15 +4,15 @@
     var module = angular.module("theGallery");
 
     module.component("clientLookupComponent", {
-        templateUrl: "/components/client-component/client-lookup/client-lookup-component.js",
+        templateUrl: "/components/client-component/client-lookup/client-lookup-component.html",
         controllerAs: "model",
-        controller: [clientLookupController],
+        controller: ["clientService", clientLookupController],
         bindings: {
-
+            "clientId": "="
         }
     });
 
-    function clientLookupController() {
+    function clientLookupController(clientService) {
 
         var model = this;
 
@@ -26,8 +26,6 @@
                         model.lookupClients = result.results;
                     });
 
-                // Hides the search option for articles.
-                model.endArticleSearch();
                 // Shows the search option for clients.
                 model.lookupClient = true;
             } else {
@@ -37,14 +35,14 @@
         };
 
         // Asigns a client when an option is clicked on the autocomplete search options.
-        model.selectClient = function(id) {
+        model.selectClient = function (id) {
             model.clientId = id;
             model.client = "";
             model.endClientSearch();
         };
 
         // Disable search options for clients.
-        model.endClientSearch = function() {
+        model.endClientSearch = function () {
             model.lookupClient = false;
         };
     }
