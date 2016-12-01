@@ -2,8 +2,6 @@
 var ReservationSchema = require("../schemas/reservation.schema.js");
 
 var newReservation = function(req, res) {
-    console.log(req.body.orders);
-    console.log(req.body.articles);
     // Creates an instance of the reservation schema with the data from the request body.
     var reservation = new ReservationSchema({
         client: req.body.client,
@@ -61,12 +59,14 @@ module.exports.save = function(req, res) {
 
 module.exports.list = function(req, res) {
     // Creates a new query to find all reservations and sort them ascendingly.
-    var query = ReservationSchema.find().sort({ invoice: "ascending" });
+    var query = ReservationSchema.find();
 
     // If the reservations have to be filtered by client id.
     if (req.query._id) {
         query.where('client').equals(req.query._id);
     }
+
+    query.sort({ date: "ascending"});
 
     // Executes the find query.
     query.exec(function(err, results) {

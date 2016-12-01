@@ -4,6 +4,7 @@
         <thead>
             <th># de Documento</th>
             <th>Tipo de Entrada</th>
+            <th>Fecha</th>
             <th>Cliente</th>
             <th>Articulos</th>
             <th>Encargos</th>
@@ -16,6 +17,7 @@
         <tr ng-repeat="reservation in model.reservations">
             <td>{{reservation.invoice}}</td>
             <td>{{reservation.type}}</td>
+            <td>{{reservation.date | date:"MM/dd/yyyy"}}</td>
             <td>{{reservation.client}}</td>
             <td>{{reservation.article}}</td>
             <td>{{reservation.order}}</td>

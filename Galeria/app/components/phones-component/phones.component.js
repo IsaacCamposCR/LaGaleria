@@ -37,7 +37,14 @@
 
         // Adds a new empty string to the phones array in order to display a new input.
         model.addNewClientPhone = function () {
-            model.phones.push("");
+            if (model.phones[model.phones.length - 1] === "") {
+                popUp(true,
+                    "Debe proveer primero el telefono anterior.",
+                    function () { });
+            }
+            else {
+                model.phones.push("");
+            }
         };
 
         // Pop up message component. The model.pop property allows the form to hide the buttons when displaying the popup. 

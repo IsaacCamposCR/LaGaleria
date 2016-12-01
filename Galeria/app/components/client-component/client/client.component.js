@@ -86,36 +86,38 @@
         };
 
         // Creates a new client and sends it as paramter for the save function.
-        model.saveClient = function () {
-            var client = {
-                _id: model.id,
-                name: model.name,
-                phones: model.phones,
-                created: model.created
-            };
+        model.saveClient = function (valid) {
+            if (valid) {
+                var client = {
+                    _id: model.id,
+                    name: model.name,
+                    phones: model.phones,
+                    created: model.created
+                };
 
-            clientService.save(client).$promise
-                .then(function (response) {
-                    popUp("success",
-                        true,
-                        "Cliente guardado con exito!",
-                        // Sets the custom action to perform when saving a client.
-                        function () {
-                            // Programatically navigates to the ClientList component.
-                            model.$router.navigate(["ClientList"]);
-                        });
-                })
-                .catch(function (response) {
-                    console.log("Error:", response.errors);
-                    popUp("error",
-                        true,
-                        "Ha ocurrido un error.",
-                        // Sets the custom action to perform when saving a client.
-                        function () {
-                            // Programatically navigates to the ClientList component.
-                            model.$router.navigate(["ClientList"]);
-                        });
-                });
+                clientService.save(client).$promise
+                    .then(function (response) {
+                        popUp("success",
+                            true,
+                            "Cliente guardado con exito!",
+                            // Sets the custom action to perform when saving a client.
+                            function () {
+                                // Programatically navigates to the ClientList component.
+                                model.$router.navigate(["ClientList"]);
+                            });
+                    })
+                    .catch(function (response) {
+                        console.log("Error:", response.errors);
+                        popUp("error",
+                            true,
+                            "Ha ocurrido un error.",
+                            // Sets the custom action to perform when saving a client.
+                            function () {
+                                // Programatically navigates to the ClientList component.
+                                model.$router.navigate(["ClientList"]);
+                            });
+                    });
+            }
         };
 
         model.editClient = function () {

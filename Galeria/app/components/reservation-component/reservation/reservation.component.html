@@ -8,8 +8,9 @@
             </div>
             <hr/>
             <div>
-                <label for="invoice"># de Apartado: </label>
+                <label for="invoice"># de Documento: </label>
                 <input id="invoice" type="text" ng-model="model.invoice">
+                <input type="checkbox" ng-model="model.isReservation">Apartado
                 <br/>
                 <label for="date">Fecha: </label>
                 <input id="date" type="date" ng-model="model.date">
@@ -39,7 +40,7 @@
                     </ul>
                 </div>
                 <hr/>
-                <div>
+                <div ng-if="model.isReservation">
                     <advance-component advances="model.advances" remaining="model.remaining" display-totals="model.displayTotals()" />
                 </div>
             </div>

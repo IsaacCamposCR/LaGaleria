@@ -136,9 +136,9 @@
 
             // Cleans up every calculator data so that it can be reused.
             model.products.forEach(function(product) {
-                product.base = 0;
-                product.height = 0;
-                product.refill = 0;
+                product.base = "";
+                product.height = "";
+                product.refill = "";
             });
 
             model.orderTotals();

@@ -1,23 +1,18 @@
 <div>
     <h3>{{model.product.name}}</h3>
-
     <label for="rectangleBase">Ancho: </label>
-    <input type="number" id="rectangleBase" ng-model="model.product.base" ng-keyup="model.product.calculate();model.totals()">
-
+    <input type="number" id="rectangleBase" ng-model="model.product.base" ng-keydown="model.validateKeys($event)" ng-keyup="model.validateInput()">
     <br/>
     <label for="rectangleHeight">Largo: </label>
-    <input type="number" id="rectangleHeight" ng-model="model.product.height" ng-keyup="model.product.calculate();model.totals()">
-
+    <input type="number" id="rectangleHeight" ng-model="model.product.height" ng-keydown="model.validateKeys($event)" ng-keyup="model.validateInput()">
     <br/>
     <div ng-show="model.product.required">
         <label for="rectangleRefill">Refil: </label>
-        <input type="number" id="rectangleRefil" ng-model="model.product.refill" ng-keyup="model.product.calculate();model.totals()">
+        <input type="number" id="rectangleRefil" ng-model="model.product.refill" ng-keydown="model.validateKeys($event)" ng-keyup="model.validateInput()">
     </div>
-
     <label for="cmPrice">Precio cm: </label>
-    <input type="number" id="cmPrice" ng-model="model.product.cmPrice" ng-keyup="model.product.calculate();model.totals()">
-
-    <br/>
+    <input type="number" id="cmPrice" ng-model="model.product.cmPrice" ng-keydown="model.validateKeys($event)" ng-keyup="model.validateInput()">
+    <br/> 
     Total {{model.product.name}}: {{model.product.total | currency}}
     <hr/>
 </div>

@@ -6,14 +6,14 @@
 			<div>
 				<label for="name">Nombre: </label>
 				<input type="text" id="name" ng-model="model.name">
-				<phones phones="model.phones"></phones>
+				<phones phones="model.phones" submitted="model.submitted"></phones>
 				<label for="created">Fecha de Ingreso</label>
 				<input type="date" id="created" ng-model="model.created">
 			</div>
 		</fieldset>
 		<div>
 			<div ng-show="!model.pop">
-				<button ng-if="!model.editingClient" type="submit" ng-click="model.saveClient()">Guardar</button>
+				<button ng-if="!model.editingClient" type="submit" ng-click="model.saveClient(clientForm.$valid)">Guardar</button>
 				<button ng-if="model.editingClient" type="button" ng-click="model.editClient()">Editar</button>
 				<button type="button" ng-click="model.cancelEdit()">Cancelar</button>
 			</div>

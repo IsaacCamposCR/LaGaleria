@@ -40,7 +40,7 @@
                     // This is an async call, so the data has to be created as promises 
                     // are executed before populating the reservations array.
                     if (reservation.articles && reservation.articles.length > 0) {
-                        reservation.type = "Apartado";
+                        reservation.type = "Venta";
                         loadArticleData(reservation);
                     }
                     if (reservation.orders && reservation.orders.length > 0) {
@@ -93,7 +93,7 @@
                 model.$router.navigate(['ArtCalculator', { id: reservation._id }]);
             }
             
-            if (reservation.type === "Apartado") {
+            if (reservation.type === "Venta") {
                 model.$router.navigate(['EditReservation', { id: reservation._id }]);
             }
             
