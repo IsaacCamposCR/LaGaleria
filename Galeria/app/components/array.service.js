@@ -27,9 +27,19 @@
             }
         };
 
+        var sortArrayItems = function (orderBy, column) {
+            if (orderBy.includes("+" + column)) {
+                return "-" + column;
+            }
+            else {
+                return "+" + column;
+            }
+        };
+
         return {
             lookup: lookupItemFromArray,
-            push: pushItemIntoArray
+            push: pushItemIntoArray,
+            sort: sortArrayItems
         };
     });
 

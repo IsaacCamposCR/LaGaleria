@@ -1,13 +1,12 @@
 <div>
-	<label for="phoneInput">Telefono(s): </label>
+	<label>Telefono(s): </label>
 	<button type="button" ng-click="model.addNewClientPhone()">+</button>
 	<br/>
 	<div ng-repeat="phone in model.phones track by $index">
-		<label for="phoneInput">Telefono #{{$index + 1}}:</label>
-		<input type="number" id="phoneInput" ng-model="phone" required ng-change="model.savePhone($index, phone)">
-		{{phoneInput.$error}}
-		<span ng-show="	phoneInput.$error.required">Required</span>
+		<label for="phoneinput">Telefono #{{$index + 1}}:</label>
+		<input type="number" name="phoneinput" ng-model="phone" required ng-change="model.savePhone($index, phone)">
 		<button type="button" ng-click="model.removeNewClientPhone($index)">X</button>
 	</div>
+	<span ng-show="model.form.phoneinput.$invalid">El # de telefono es requerido.</span>
 	<message message="model.message" show="model.pop" confirm="model.confirm()"></message>
 </div>

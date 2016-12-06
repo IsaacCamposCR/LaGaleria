@@ -7,17 +7,23 @@
 	<div>
 		<table>
 			<thead>
-				<th>Nombre</th>
-				<th>Telefono</th>
-				<th>Saldo</th>
+				<th>
+					<div ng-click="model.sort('name')">Nombre</div>
+				</th>
+				<th>
+					<div ng-click="model.sort('phones')">Telefono</div>
+				</th>
+				<th>
+					<div ng-click="model.sort('remaining')">Saldo</div>
+				</th>
 				<th>
 					<button type="button" ng-link="['Provider']">Nuevo Proveedor</button>
 				</th>
 			</thead>
-			<tr ng-repeat="provider in model.providers">
+			<tr ng-repeat="provider in model.providers | filter:model.providerName | orderBy: model.orderBy">
 				<td><span>{{provider.name}}</span></td>
 				<td><span>{{provider.phones[0]}}</span></td>
-				<td></td>
+				<td>{{provider.remaining}}</td>
 				<td>
 					<button type="button" ng-link="['EditProvider', {id: provider._id}]">Detalles</button>
 				</td>

@@ -12,6 +12,10 @@ var reservationSchema = new Schema({
         type: Date,
         default: Date.now
     },
+    delivery: {
+        type: Date,
+        default: null
+    },
     price: {
         type: Number
     },

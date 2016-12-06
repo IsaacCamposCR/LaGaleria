@@ -17,6 +17,7 @@
 
         // When the component is initialized, loads all the articles.
         model.$onInit = function () {
+            model.orderBy = "+description";
             // The false parameter indicates it is not a find command.
             populateArticles(false);
         };
@@ -63,7 +64,7 @@
                                         result.results.forEach(function (item) {
                                             // Before pushing the article to the array, it replaces the provider id with the provider name
                                             // by using the provider array and the lookup function.
-                                            item.provider = arrayService.lookup(item.provider, model.providers);
+                                            item.provider = arrayService.lookup(item.provider, model.providers)[0].name;
                                             articles.push(item);
                                         });
 
@@ -102,8 +103,11 @@
                     }
                 }
             }
-
         };
+
+        model.sort = function (column) {
+            model.orderBy = arrayService.sort(model.orderBy, column);
+        }
 
     }
 } ());

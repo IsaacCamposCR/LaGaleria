@@ -5,10 +5,12 @@
 		<fieldset ng-disabled="model.disableForm">
 			<div>
 				<label for="name">Nombre: </label>
-				<input type="text" id="name" ng-model="model.name">
-				<phones phones="model.phones" submitted="model.submitted"></phones>
+				<input type="text" name="name" ng-model="model.name" required>
+				<span ng-show="clientForm.name.$invalid">El nombre del cliente es requerido.</span>
+				<phones phones="model.phones" form="clientForm"></phones>
 				<label for="created">Fecha de Ingreso</label>
-				<input type="date" id="created" ng-model="model.created">
+				<input type="date" name="created" ng-model="model.created">
+				<span ng-show="clientForm.created.$invalid">La fecha de ingreso del cliente no es valida.</span>
 			</div>
 		</fieldset>
 		<div>

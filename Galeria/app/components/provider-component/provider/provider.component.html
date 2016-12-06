@@ -46,7 +46,7 @@
 				<th>Fecha Vencimiento</th>
 				<th>Saldo</th>
 			</thead>
-			<tr ng-repeat="invoice in model.invoices">
+			<tr ng-repeat="invoice in model.invoices | orderBy:'-date'">
 				<td>{{invoice.number}}</td>
 				<td>{{invoice.type}}</td>
 				<td>{{invoice.amount}}</td>

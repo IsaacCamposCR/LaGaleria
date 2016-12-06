@@ -1,23 +1,44 @@
 <div>
     <h1>Encargos y Apartados</h1>
+    <div>
+        <input type="text" id="search" ng-model="model.reservationName" placeholder="Busqueda de venta...">
+    </div>
     <table>
         <thead>
-            <th># de Documento</th>
-            <th>Tipo de Entrada</th>
-            <th>Fecha</th>
-            <th>Cliente</th>
-            <th>Articulos</th>
-            <th>Encargos</th>
-            <th>Saldo</th>
+            <th>
+                <div ng-click="model.sort('invoice')"># de Documento</div>
+            </th>
+            <th>
+                <div ng-click="model.sort('type')">Tipo de Entrada</div>
+            </th>
+            <th>
+                <div ng-click="model.sort('date')">Fecha de Encargo</div>
+            </th>
+            <th>
+                <div ng-click="model.sort('date')">Fecha de Entrega</div>
+            </th>
+            <th>
+                <div ng-click="model.sort('client')">Cliente</div>
+            </th>
+            <th>
+                <div ng-click="model.sort('article')">Articulos</div>
+            </th>
+            <th>
+                <div ng-click="model.sort('order')">Encargos</div>
+            </th>
+            <th>
+                <div ng-click="model.sort('price')">Saldo</div>
+            </th>
             <th>
                 <button type="button" ng-link="['Reservation']">Nuevo Apartado</button>
                 <button type="button" ng-link="['ArtCalculator']">Nuevo Encargo</button>
             </th>
         </thead>
-        <tr ng-repeat="reservation in model.reservations">
+        <tr ng-repeat="reservation in model.reservations | filter:model.reservationName | orderBy:model.orderBy">
             <td>{{reservation.invoice}}</td>
             <td>{{reservation.type}}</td>
             <td>{{reservation.date | date:"MM/dd/yyyy"}}</td>
+            <td></td>
             <td>{{reservation.client}}</td>
             <td>{{reservation.article}}</td>
             <td>{{reservation.order}}</td>

@@ -9,7 +9,8 @@
         controllerAs: "model",
         controller: [phonesController],
         bindings: {
-            "phones": "="
+            "phones": "=",
+            "form": "="
         }
     });
 

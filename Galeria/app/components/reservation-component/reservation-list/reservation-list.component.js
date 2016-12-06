@@ -17,6 +17,7 @@
         var model = this;
 
         model.$onInit = function () {
+            model.orderBy = "+date";
             // Initiates the reservation array as empty.
             model.reservations = [];
 
@@ -92,11 +93,14 @@
             if (reservation.type === "Encargo") {
                 model.$router.navigate(['ArtCalculator', { id: reservation._id }]);
             }
-            
+
             if (reservation.type === "Venta") {
                 model.$router.navigate(['EditReservation', { id: reservation._id }]);
             }
-            
+        };
+
+        model.sort = function (column) {
+            model.orderBy = arrayService.sort(model.orderBy, column);
         };
 
     }
