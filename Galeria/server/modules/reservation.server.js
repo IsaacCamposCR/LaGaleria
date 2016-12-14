@@ -1,7 +1,8 @@
 // References the schema for reservation
 var ReservationSchema = require("../schemas/reservation.schema.js");
 
-var newReservation = function(req, res) {
+var newReservation = function (req, res) {
+    console.log(req.body);
     // Creates an instance of the reservation schema with the data from the request body.
     var reservation = new ReservationSchema({
         client: req.body.client,
@@ -14,15 +15,16 @@ var newReservation = function(req, res) {
         orders: req.body.orders,
         description: req.body.description
     });
+    console.log(reservation);
 
     // Executes the save command to Mongo.
-    reservation.save(function(err) {
+    reservation.save(function (err) {
         res.send({ results: req.body, errors: err });
         res.end();
     });
 };
 
-var updateReservation = function(req, res) {
+var updateReservation = function (req, res) {
     // Query to select the appropriate provider by id.
     var query = {
         _id: req.body._id
@@ -43,14 +45,14 @@ var updateReservation = function(req, res) {
 
     // Update executed according to query, new data, only one row.
     ReservationSchema.update(query, newData, { multi: false },
-        function(err, numAffected) {
+        function (err, numAffected) {
             res.send({ results: req.body, errors: err });
             res.end();
         });
 };
 
 
-module.exports.save = function(req, res) {
+module.exports.save = function (req, res) {
     // If the id parameter exists in the body, call update, else create a new record.
     if (req.body._id) {
         updateReservation(req, res);
@@ -59,7 +61,7 @@ module.exports.save = function(req, res) {
     }
 };
 
-module.exports.list = function(req, res) {
+module.exports.list = function (req, res) {
     // Creates a new query to find all reservations and sort them ascendingly.
     var query = ReservationSchema.find();
 
@@ -68,12 +70,12 @@ module.exports.list = function(req, res) {
         query.where('client').equals(req.query._id);
     }
 
-    query.sort({ date: "ascending"});
+    query.sort({ date: "ascending" });
 
     // Executes the find query.
-    query.exec(function(err, results) {
-        results.forEach(function(reservation) {
-            reservation.advances.forEach(function(advance) {
+    query.exec(function (err, results) {
+        results.forEach(function (reservation) {
+            reservation.advances.forEach(function (advance) {
                 reservation.price -= advance.amount;
             });
             reservation.price = reservation.price.toFixed(2);
@@ -83,12 +85,12 @@ module.exports.list = function(req, res) {
     });
 };
 
-module.exports.get = function(req, res) {
+module.exports.get = function (req, res) {
     //Creates a new query to find a single reservation by _id taken from the request parameters.
     var query = ReservationSchema.findById(req.params.id);
 
     // Executes the findById query.
-    query.exec(function(err, results) {
+    query.exec(function (err, results) {
         res.send({ results: results, errors: err });
         res.end();
     });

@@ -24,7 +24,8 @@
 		<input type="text" id="invoiceNumber" ng-model="model.invoiceNumber">
 		<br/>
 		<label for="amount">Monto</label>
-		<input type="number" id="amount" ng-model="model.invoiceAmount">
+		<money-input text="model.invoiceAmount"></money-input>
+		<!--<input type="number" id="amount" ng-model="model.invoiceAmount">-->
 		<br/>
 		<label for="date">Fecha de Emision</label>
 		<input type="date" id="date" ng-model="model.invoiceDate">
@@ -49,10 +50,10 @@
 			<tr ng-repeat="invoice in model.invoices | orderBy:'-date'">
 				<td>{{invoice.number}}</td>
 				<td>{{invoice.type}}</td>
-				<td>{{invoice.amount}}</td>
+				<td>{{invoice.amount | currency}}</td>
 				<td>{{invoice.date | date:"MM/dd/yyyy"}}</td>
 				<td>{{invoice.due | date:"MM/dd/yyyy"}}</td>
-				<td>{{invoice.balance}}</td>
+				<td>{{invoice.balance | currency}}</td>
 			</tr>
 		</table>
 	</div>

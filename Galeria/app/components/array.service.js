@@ -36,10 +36,16 @@
             }
         };
 
+        var formatStringIntoNumber = function (formattedNumber) {
+            var unformattedNumber = String(formattedNumber).split(",").join("");
+            return Number(unformattedNumber);
+        };
+
         return {
             lookup: lookupItemFromArray,
             push: pushItemIntoArray,
-            sort: sortArrayItems
+            sort: sortArrayItems,
+            unformat: formatStringIntoNumber
         };
     });
 

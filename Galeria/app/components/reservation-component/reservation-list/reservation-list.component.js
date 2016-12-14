@@ -41,7 +41,13 @@
                     // This is an async call, so the data has to be created as promises 
                     // are executed before populating the reservations array.
                     if (reservation.articles && reservation.articles.length > 0) {
-                        reservation.type = "Venta";
+                        if (reservation.advances && reservation.advances.length > 0) {
+                            reservation.type = "Apartado";
+                        }
+                        else {
+                            reservation.type = "Venta";
+                            reservation.price = 0;
+                        }
                         loadArticleData(reservation);
                     }
                     if (reservation.orders && reservation.orders.length > 0) {

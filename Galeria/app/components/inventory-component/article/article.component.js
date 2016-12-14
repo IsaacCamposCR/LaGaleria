@@ -24,6 +24,8 @@
             // This array must be initialized as empty before populating it from database.
             model.categories = [];
 
+            model.price = "";
+
             //The Category and Provider array must be filled regardless of the origin page.
             loadCategories().then(function () {
                 loadProviders().then(function () {
@@ -140,7 +142,7 @@
 
             return providersPromise;
         };
-        
+
         model.saveArticle = function () {
             // Creates a new article to send to the service instead of the complete model.
             var article = {
@@ -152,7 +154,7 @@
                 stock: model.stock,
                 // If the article is new, the history matches the stock, else it has to use a calculated one.
                 history: model._id ? (model.history + (model.stock - model.tempStock)) : model.stock,
-                price: model.price
+                price: arrayService.unformat(model.price)
             };
 
             inventoryService.save(article);

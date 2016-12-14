@@ -12,10 +12,10 @@
                 <div ng-click="model.sort('type')">Tipo de Entrada</div>
             </th>
             <th>
-                <div ng-click="model.sort('date')">Fecha de Encargo</div>
+                <div ng-click="model.sort('date')">Fecha de Ingreso</div>
             </th>
             <th>
-                <div ng-click="model.sort('date')">Fecha de Entrega</div>
+                <div ng-click="model.sort('delivery')">Fecha de Entrega</div>
             </th>
             <th>
                 <div ng-click="model.sort('client')">Cliente</div>
@@ -38,7 +38,7 @@
             <td>{{reservation.invoice}}</td>
             <td>{{reservation.type}}</td>
             <td>{{reservation.date | date:"MM/dd/yyyy"}}</td>
-            <td></td>
+            <td>{{reservation.delivery | date:"MM/dd/yyyy"}}</td>
             <td>{{reservation.client}}</td>
             <td>{{reservation.article}}</td>
             <td>{{reservation.order}}</td>

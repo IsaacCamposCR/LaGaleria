@@ -23,7 +23,7 @@
 			<tr ng-repeat="provider in model.providers | filter:model.providerName | orderBy: model.orderBy">
 				<td><span>{{provider.name}}</span></td>
 				<td><span>{{provider.phones[0]}}</span></td>
-				<td>{{provider.remaining}}</td>
+				<td>{{provider.remaining | currency}}</td>
 				<td>
 					<button type="button" ng-link="['EditProvider', {id: provider._id}]">Detalles</button>
 				</td>

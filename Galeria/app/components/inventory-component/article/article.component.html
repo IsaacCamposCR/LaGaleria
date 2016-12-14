@@ -20,11 +20,6 @@
 			<label for="provider">Provider</label>
 			<select id="provider" ng-model="model.selectedProvider" ng-options="provider.name for provider in model.providers track by provider._id">
 			</select>
-			<!--
-			<br/>
-			<label for="provider">Proveedor: </label>
-			<select id="provider" ng-model="model.selectedProvider" ng-options="provider for provider in model.providers">
-            </select>-->
 			<br/>
 			<label for="code">Codigo del Producto: </label>
 			<input id="code" type="text" ng-model="model.code">
@@ -34,10 +29,10 @@
 			<br/>
 			<label for="stock">Cantidad Disponible: </label>
 			<input id="stock" type="number" ng-model="model.stock">
-			<label for="history">Historico: {{model.history}}</label>
+			<label for="history" ng-if="model.editingArticle">Historico: {{model.history}}</label>
 			<br/>
 			<label for="price">Precio: </label>
-			<input id="price" type="number" ng-model="model.price">
+			<money-input text="model.price"></money-input>
 		</fieldset>
 		<div ng-show="!model.pop">
 			<button ng-if="!model.editingArticle" type="submit" ng-click="model.saveArticle()">Guardar</button>

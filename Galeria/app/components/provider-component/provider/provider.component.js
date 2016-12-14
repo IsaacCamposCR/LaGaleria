@@ -1,4 +1,4 @@
-(function() {
+(function () {
 
     "use strict";
 
@@ -8,18 +8,18 @@
         templateUrl: "/components/provider-component/provider/provider.component.html",
         controllerAs: "model",
         //The providerService must be added as a literal string in order to remain when the js is minified.
-        controller: ["providerService", providerController],
+        controller: ["providerService", "arrayService", providerController],
         bindings: {
             "$router": "<"
         }
     });
 
-    function providerController(providerService) {
+    function providerController(providerService, arrayService) {
         var model = this;
 
         // When the component is activated (From provider-list).
         // Load the data from the provider, or create a blank form for a new provider.
-        model.$routerOnActivate = function(next) {
+        model.$routerOnActivate = function (next) {
 
             // Takes the id from the parameters in the new url.
             if (next.params.id) {
@@ -29,9 +29,9 @@
             }
         };
 
-        var loadProvider = function(id) {
+        var loadProvider = function (id) {
             // Calls the provider service for a provider by id.
-            providerService.get(id).$promise.then(function(response) {
+            providerService.get(id).$promise.then(function (response) {
                 model.id = response.results._id;
                 model.name = response.results.name;
                 model.phones = response.results.phones;
@@ -57,7 +57,7 @@
             });
         };
 
-        var newProvider = function() {
+        var newProvider = function () {
             // Creates a blank form for a new provider.
             model.name = "";
             model.phones = [];
@@ -69,14 +69,14 @@
             model.title = "Nuevo Proveedor";
         };
 
-        var loadInvoices = function(id) {
+        var loadInvoices = function (id) {
             var balance = 0;
             model.invoices = [];
 
             providerService.invoice(id).$promise
-                .then(function(result) {
+                .then(function (result) {
 
-                    result.results.forEach(function(item) {
+                    result.results.forEach(function (item) {
                         if (item.type) {
                             // If the document is an invoice sums the amount to the balance.
                             balance += item.amount;
@@ -94,7 +94,7 @@
         };
 
         // Creates a new provider and sends it as paramter for the save function.
-        model.saveProvider = function() {
+        model.saveProvider = function () {
             // Creates a provider object.
             var provider = {
                 _id: model.id,
@@ -104,22 +104,22 @@
 
             // Calls the provider service to save the provider.
             providerService.save(provider).$promise
-                .then(function(response) {
+                .then(function (response) {
                     popUp("success",
                         true,
                         "Proveedor guardado con exito!",
                         // Sets the custom action to perform when saving a provider.
-                        function() {
+                        function () {
                             // Programatically navigates to the ProviderList component.
                             model.$router.navigate(["ProviderList"]);
                         });
                 })
-                .catch(function(response) {
+                .catch(function (response) {
                     popUp("error",
                         true,
                         "Ha ocurrido un error...",
                         // Sets the custom action to perform when saving a provider.
-                        function() {
+                        function () {
                             // Programatically navigates to the ProviderList component.
                             model.$router.navigate(["ProviderList"]);
                         });
@@ -127,12 +127,12 @@
         };
 
         // Displays the invoice form to insert a new one.
-        model.invoiceForm = function() {
+        model.invoiceForm = function () {
             model.newInvoice = !model.newInvoice;
         };
 
         // Brings up the new invoice panel.
-        model.addInvoice = function() {
+        model.addInvoice = function () {
 
             // Sets the invoice type to bool before saving.
             model.invoiceType = (model.selectedInvoiceType === model.invoiceTypes[0]) ? true : false;
@@ -141,7 +141,7 @@
             var invoice = [{
                 _id: model.id,
                 number: model.invoiceNumber,
-                amount: model.invoiceAmount,
+                amount: arrayService.unformat(model.invoiceAmount),
                 date: model.invoiceDate,
                 due: model.invoiceDueDate,
                 type: model.invoiceType
@@ -150,7 +150,7 @@
             // Pushes the invoice to the existing provider.
             // This is actually an UPDATE procedure.
             providerService.add(invoice).$promise
-                .then(function(response) {
+                .then(function (response) {
                     // Message to display a successful invoice push.
                     popUp("success",
                         true,
@@ -158,22 +158,22 @@
                             "La Factura ha sido agregada" :
                             "El Recibo ha sido agregado") +
                         " con exito!",
-                        function() {
+                        function () {
                             model.cancelInvoice();
                         });
                     // Reloads the invoices from Mongo.
                     loadInvoices(model.id);
                 })
-                .catch(function(response) {
+                .catch(function (response) {
                     console.log(response.errors);
                     popUp("error",
                         true,
                         "Ha ocurrido un error...",
-                        function() { });
+                        function () { });
                 });
         };
 
-        model.cancelInvoice = function() {
+        model.cancelInvoice = function () {
             // Clean the invoice form.
             model.selectedInvoiceType = model.invoiceTypes[0];
             model.invoiceNumber = "";
@@ -182,7 +182,7 @@
             model.invoiceDueDate = new Date();
         };
 
-        model.editProvider = function() {
+        model.editProvider = function () {
             // Enables the form in order for the user to update the provider.
             model.editingProvider = false;
 
@@ -190,22 +190,22 @@
             model.disableForm = false;
         };
 
-        model.cancelEdit = function() {
+        model.cancelEdit = function () {
             popUp("confirm",
                 true,
                 "Esta seguro que desea cancelar? Perdera los cambios.",
                 // Sets the custom action to perform when canceling.
-                function() {
+                function () {
                     model.$router.navigate(["ProviderList"]);
                 },
-                function() {
+                function () {
                     model.disableForm = model.editingProvider;
                 });
         };
 
         // Pop up message component. The model.pop property allows the form to hide the buttons when displaying the popup. 
         // This mechanism might not be required once styles are put in.
-        var popUp = function(type, pop, message, confirm, cancel) {
+        var popUp = function (type, pop, message, confirm, cancel) {
             model.messageType = type;
             model.message = message;
             model.pop = pop;

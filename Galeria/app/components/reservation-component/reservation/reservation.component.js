@@ -192,13 +192,13 @@
                 model.price = 0;
                 model.articles.forEach(function (item) {
                     for (var i = 0; i < item.quantity; i++) {
-                        model.price += item.price;
+                        model.price += arrayService.unformat(item.price);
                     }
                 });
             }
 
             // Matches the remaining to that of the total price before substracting every advance.
-            model.remaining = model.price;
+            model.remaining = arrayService.unformat(model.price);
             model.advances.forEach(function (item) {
                 model.remaining -= item.amount;
             });
@@ -220,6 +220,11 @@
                 popUp("warning", false, "", function () { });
             }
             model.disableForm = false;
+        };
+
+        model.resetPrice = function () {
+            model.specialPrice = false;
+            model.displayTotals();
         };
 
         // Sends the new reservation to the service to be saved.
@@ -249,7 +254,7 @@
                 invoice: model.invoice,
                 date: model.date,
                 articles: articleIds,
-                price: model.price,
+                price: arrayService.unformat(model.price),
                 advances: model.advances
             };
 

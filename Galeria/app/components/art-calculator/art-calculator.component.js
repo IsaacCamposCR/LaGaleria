@@ -1,4 +1,4 @@
-(function() {
+(function () {
 
     "use strict";
 
@@ -8,17 +8,17 @@
         templateUrl: "/components/art-calculator/art-calculator.component.html",
         controllerAs: "model",
         //The calculatorService must be added as a literal string in order to remain when the js is minified.
-        controller: ["calculatorService", "reservationService", artCalculatorController],
+        controller: ["calculatorService", "reservationService", "arrayService", artCalculatorController],
         bindings: {
             "$router": "<"
         }
     });
 
-    function artCalculatorController(calculatorService, reservationService) {
+    function artCalculatorController(calculatorService, reservationService, arrayService) {
 
         var model = this;
 
-        var newOrder = function() {
+        var newOrder = function () {
             model.title = "Nuevo Encargo";
 
             // Enables the calculators.
@@ -39,7 +39,7 @@
             model.products = calculatorService.generateCalculators(model.selectedArt);
         };
 
-        var loadOrder = function(id) {
+        var loadOrder = function (id) {
             model.title = "Detalles del Encargo";
 
             //Disable the form when an existing reservation is loaded.
@@ -50,7 +50,7 @@
 
             // Calls the reservation service for a reservation by id.
             reservationService.get(id).$promise
-                .then(function(result) {
+                .then(function (result) {
                     model.id = result.results._id;
                     //model.invoice = result.results.invoice;
                     model.date = new Date(result.results.date);
@@ -65,13 +65,16 @@
                 });
         };
 
-        model.$routerOnActivate = function(next) {
+        model.$routerOnActivate = function (next) {
 
             // Initiates an empty order array.
             model.orders = [];
             model.orderTotal = 0;
+            model.finalPrice = 0;
             model.advances = [];
             model.remaining = 0;
+            model.details = "";
+            model.date = new Date();
 
             if (next.params.id) {
                 loadOrder(next.params.id);
@@ -82,105 +85,120 @@
         };
 
         // Whenever a new type is selected the calculator set must be refreshed.
-        model.renderCalculators = function() {
+        model.renderCalculators = function () {
             model.products = calculatorService.generateCalculators(model.selectedArt);
         };
 
-        model.totals = function() {
+        model.totals = function () {
             model.subtotal = 0;
             model.others = 0;
             model.productTotal = 0;
 
-            model.products.forEach(function(product) {
+            model.products.forEach(function (product) {
                 model.subtotal += product.total;
                 model.others = model.subtotal * 0.1;
                 model.productTotal = model.subtotal + model.others;
             });
         };
 
-        model.orderTotals = function() {
+        model.orderTotals = function () {
             model.orderTotal = 0;
 
-            model.orders.forEach(function(order) {
+            model.orders.forEach(function (order) {
                 model.orderTotal += order.amount;
             });
 
-            // Matches the remaining to that of the total price before substracting every advance.
-            model.remaining = model.orderTotal;
+            if (!model.specialPrice) {
+                model.finalPrice = model.orderTotal;
+            }
 
-            model.advances.forEach(function(order) {
+            // Matches the remaining to that of the total price before substracting every advance.
+            model.remaining = (model.specialPrice) ? model.finalPrice : model.orderTotal;
+
+            model.advances.forEach(function (order) {
                 model.remaining -= order.amount;
             });
         };
 
-        model.addOrder = function() {
+        model.updatePrice = function () {
+            model.specialPrice = true;
+        };
+
+        model.resetPrice = function () {
+            model.specialPrice = false;
+            model.finalPrice = model.orderTotal;
+        };
+
+        model.addOrder = function () {
             // Builds up a description string containing the order details.
-            var description = "";
-            model.products.forEach(function(product) {
-                description +=
-                    product.name +
-                    ":\nAncho:" + product.base +
-                    "\nAlto:" + product.height +
-                    "\nRefill:" + product.refill +
+            //var description = "";
+            model.products.forEach(function (product) {
+                model.details +=
+                    "\n" + product.name +
+                    ((product.base) ? ":\nAncho:" + product.base : "") +
+                    ((product.height) ? "\nAlto:" + product.height : "") +
+                    ((product.refill) ? "\nRefill:" + product.refill : "") +
                     "\n\n";
             });
-            model.description = description;
 
             // Adds a new order with data from the calculators.
             model.orders.push({
                 type: model.selectedArt,
-                description: model.description,
+                description: model.details,
                 amount: model.productTotal,
                 complete: false
             });
 
             // Cleans up every calculator data so that it can be reused.
-            model.products.forEach(function(product) {
+            model.products.forEach(function (product) {
                 product.base = "";
                 product.height = "";
                 product.refill = "";
             });
 
+            model.details = "";
+
             model.orderTotals();
         };
 
-        model.deleteOrder = function(index) {
+        model.deleteOrder = function (index) {
             model.orders.splice(index, 1);
 
             model.orderTotals();
         };
 
-        model.finish = function() {
+        model.finish = function () {
             var reservation = {
                 client: model.clientId,
-                date: new Date(),
-                price: model.orderTotal,
-                description: model.description,
+                date: model.date,
+                delivery: model.delivery,
+                price: arrayService.unformat(((model.specialPrice) ? model.finalPrice : model.orderTotal)),
+                description: model.details,
                 advances: model.advances,
                 orders: model.orders
             };
 
             reservationService.save(reservation).$promise
-                .then(function(response) {
+                .then(function (response) {
                     popUp("success",
                         true,
                         "El encargo se ha guardado con exito!",
-                        function() {
+                        function () {
                             model.$router.navigate(["ReservationList"]);
                         });
                 })
-                .catch(function(response) {
+                .catch(function (response) {
                     console.log(response.errors);
                     popUp("error",
                         true,
                         "Ha ocurrido un error...",
-                        function() { });
+                        function () { });
                 });
         };
 
         // Pop up message component. The model.pop property allows the form to hide the buttons when displaying the popup. 
         // This mechanism might not be required once styles are put in.
-        var popUp = function(type, pop, message, confirm, cancel) {
+        var popUp = function (type, pop, message, confirm, cancel) {
             model.messageType = type;
             model.message = message;
             model.pop = pop;

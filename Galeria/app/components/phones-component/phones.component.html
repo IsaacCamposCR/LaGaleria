@@ -4,7 +4,7 @@
 	<br/>
 	<div ng-repeat="phone in model.phones track by $index">
 		<label for="phoneinput">Telefono #{{$index + 1}}:</label>
-		<input type="number" name="phoneinput" ng-model="phone" required ng-change="model.savePhone($index, phone)">
+		<input type="text" name="phoneinput" ng-model="phone" ng-keydown="model.supressKeys($event, $index)" required ng-keyup="model.format($index)" ng-change="model.savePhone($index, phone)">
 		<button type="button" ng-click="model.removeNewClientPhone($index)">X</button>
 	</div>
 	<span ng-show="model.form.phoneinput.$invalid">El # de telefono es requerido.</span>
