@@ -19,6 +19,8 @@
         var model = this;
 
         var newOrder = function () {
+            model.editingOrder = false;
+
             model.title = "Nuevo Encargo";
 
             // Enables the calculators.
@@ -40,7 +42,11 @@
         };
 
         var loadOrder = function (id) {
+            model.editingOrder = true;
+
             model.title = "Detalles del Encargo";
+
+            model.specialPrice = true;
 
             //Disable the form when an existing reservation is loaded.
             model.disableForm = true;
@@ -70,7 +76,8 @@
             // Initiates an empty order array.
             model.orders = [];
             model.orderTotal = 0;
-            model.finalPrice = 0;
+            model.price = 0;
+            model.orderTotal = 0;
             model.advances = [];
             model.remaining = 0;
             model.details = "";
@@ -101,6 +108,30 @@
             });
         };
 
+        // This function calculates all the totals depending on the orders.
+        model.CalculateTotals = function () {
+
+            model.price = model.orderTotal;
+
+            // Matches the remaining to that of the total price before substracting every advance.
+            model.remaining = model.orderTotal;
+
+            model.advances.forEach(function (order) {
+                model.remaining -= order.amount;
+            });
+        };
+
+        // This function calculates all the totals depending on the modified Final Price for the order.
+        model.SpecialTotals = function () {
+
+            // Matches the remaining to that of the total price before substracting every advance.
+            model.remaining = arrayService.unformat(model.price);
+
+            model.advances.forEach(function (advance) {
+                model.remaining -= advance.amount;
+            });
+        };
+
         model.orderTotals = function () {
             model.orderTotal = 0;
 
@@ -108,16 +139,12 @@
                 model.orderTotal += order.amount;
             });
 
-            if (!model.specialPrice) {
-                model.finalPrice = model.orderTotal;
+            if (model.specialPrice) {
+                model.SpecialTotals();
             }
-
-            // Matches the remaining to that of the total price before substracting every advance.
-            model.remaining = (model.specialPrice) ? model.finalPrice : model.orderTotal;
-
-            model.advances.forEach(function (order) {
-                model.remaining -= order.amount;
-            });
+            else {
+                model.CalculateTotals();
+            }
         };
 
         model.updatePrice = function () {
@@ -126,7 +153,7 @@
 
         model.resetPrice = function () {
             model.specialPrice = false;
-            model.finalPrice = model.orderTotal;
+            model.price = model.orderTotal;
         };
 
         model.addOrder = function () {
@@ -168,31 +195,61 @@
         };
 
         model.finish = function () {
-            var reservation = {
-                client: model.clientId,
-                date: model.date,
-                delivery: model.delivery,
-                price: arrayService.unformat(((model.specialPrice) ? model.finalPrice : model.orderTotal)),
-                description: model.details,
-                advances: model.advances,
-                orders: model.orders
-            };
+            if (model.clientId) {
+                var reservation = {
+                    _id: model.id,
+                    client: model.clientId,
+                    date: model.date,
+                    delivery: model.delivery,
+                    price: arrayService.unformat(((model.specialPrice) ? model.price : model.orderTotal)),
+                    description: model.details,
+                    advances: model.advances,
+                    orders: model.orders
+                };
 
-            reservationService.save(reservation).$promise
-                .then(function (response) {
-                    popUp("success",
-                        true,
-                        "El encargo se ha guardado con exito!",
-                        function () {
-                            model.$router.navigate(["ReservationList"]);
-                        });
-                })
-                .catch(function (response) {
-                    console.log(response.errors);
-                    popUp("error",
-                        true,
-                        "Ha ocurrido un error...",
-                        function () { });
+                reservationService.save(reservation).$promise
+                    .then(function (response) {
+                        popUp("success",
+                            true,
+                            "El encargo se ha guardado con exito!",
+                            function () {
+                                model.$router.navigate(["ReservationList"]);
+                            });
+                    })
+                    .catch(function (response) {
+                        console.log(response.errors);
+                        popUp("error",
+                            true,
+                            "Ha ocurrido un error...",
+                            function () { });
+                    });
+            }
+            else {
+                popUp("error",
+                    true,
+                    "No se ha seleccionado un cliente...",
+                    function () { });
+            }
+        };
+
+        model.editOrder = function () {
+            // Hides the EDIT button.
+            model.editingOrder = false;
+
+            // Enables the form.
+            model.disableForm = false;
+        };
+
+        model.cancelOrder = function () {
+            popUp("confirm",
+                true,
+                "Esta seguro que desea cancelar? Perdera los cambios.",
+                // Sets the custom action to perform when canceling.
+                function () {
+                    model.$router.navigate(["ReservationList"]);
+                },
+                function () {
+                    model.disableForm = model.editingReservation;
                 });
         };
 

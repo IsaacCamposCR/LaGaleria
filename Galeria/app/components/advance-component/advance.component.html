@@ -2,7 +2,7 @@
     <fieldset ng-disabled="model.disableForm">
         <h3>Abonos:</h3>
         <label for="advance">Nuevo Abono: </label>
-        <input id="advance" type="number" ng-model="model.advanceAmount">
+        <money-input id="advance" text="model.advanceAmount"></money-input>
         <input type="date" ng-model="model.advanceDate">
         <button type="button" ng-click="model.addAdvance()">Agregar Abono</button>
         <ul>

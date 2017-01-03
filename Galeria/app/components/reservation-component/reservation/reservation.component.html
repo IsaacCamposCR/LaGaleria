@@ -1,7 +1,7 @@
 <div>
     <h1>{{model.title}}</h1>
 
-    <form name="reservationForm">
+    <ng-form name="reservationForm">
         <fieldset ng-disabled="model.disableForm">
             <div>
                 <client-lookup-component client-id="model.clientId" />
@@ -10,14 +10,15 @@
             <div>
                 <label for="invoice"># de Documento: </label>
                 <input id="invoice" type="text" ng-model="model.invoice">
-                <input type="checkbox" ng-model="model.isReservation">Apartado
+                <input type="checkbox" ng-model="model.isReservation" ng-change="model.makeReservation()">Apartado
                 <br/>
                 <label for="date">Fecha: </label>
-                <input id="date" type="date" ng-model="model.date">
+                <input name="date" type="date" ng-model="model.date" required>
+                <p ng-show="reservationForm.date.$invalid">La fecha de ingreso del cliente no es valida.</p>
                 <br/>
                 <div>
                     <label for="price">Precio Total: </label>
-                    <money-input text="model.price" ng-keyup="model.updatePrice()"></money-input>
+                    <money-input id="price" text="model.price" ng-keyup="model.updatePrice()"></money-input>
                     <button type="button" ng-click="model.resetPrice()">Reestablecer</button>
                 </div>
                 <label for="remaining">Saldo: </label>
@@ -29,7 +30,7 @@
                         <label for="article">Buscar Articulo: </label>
                         <input id="article" type="text" ng-model="model.article" ng-keyup="model.beginArticleSearch()" autocomplete="off">
                         <div ng-show="model.lookupArticle" ng-click="model.selectArticle(article._id)" ng-repeat="article in model.lookupArticles">
-                            <span>{{article.description}}: {{article.price}} - {{article.stock}} restantes.</span>
+                            <span>{{article.description}}: {{article.price | currency}} - {{article.stock}} restantes.</span>
                         </div>
                     </div>
                     <ul>
@@ -49,10 +50,10 @@
             </div>
         </fieldset>
         <div ng-show="!model.pop">
-            <button ng-if="!model.editingReservation" type="submit" ng-click="model.saveReservation()">Guardar</button>
+            <button ng-disabled="!reservationForm.$valid" ng-if="!model.editingReservation" type="submit" ng-click="model.saveReservation()">Guardar</button>
             <button type="button" ng-if="model.editingReservation" ng-click="model.editReservation()">Editar</button>
             <button type="button" ng-click="model.cancelEditReservation()">Cancelar</button>
         </div>
-    </form>
+    </ng-form>
     <message type="model.messageType" message="model.message" show="model.pop" confirm="model.confirm()" cancel="model.cancel()"></message>
 </div>

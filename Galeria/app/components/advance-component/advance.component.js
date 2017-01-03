@@ -6,7 +6,7 @@
     module.component("advanceComponent", {
         templateUrl: "/components/advance-component/advance.component.html",
         controllerAs: "model",
-        controller: [advanceController],
+        controller: ["arrayService", advanceController],
         bindings: {
             "advances": "=",
             "remaining": "<",
@@ -14,7 +14,7 @@
         }
     });
 
-    function advanceController() {
+    function advanceController(arrayService) {
 
         var model = this;
 
@@ -28,7 +28,7 @@
         // When an advance is added, push the item to the advances array, clean the form, and update totals.
         model.addAdvance = function () {
 
-            if (model.advanceAmount > model.remaining) {
+            if (arrayService.unformat(model.advanceAmount) > arrayService.unformat(model.remaining)) {
                 popUp("error",
                     true,
                     "El monto no puede ser mayor al Saldo.",
@@ -38,7 +38,7 @@
                 return;
             }
 
-            if (model.advanceAmount <= 0) {
+            if (arrayService.unformat(model.advanceAmount) <= 0) {
                 popUp("error",
                     true,
                     "El monto no puede ser menor o igual a 0",
@@ -49,7 +49,7 @@
             }
 
             model.advances.push({
-                amount: model.advanceAmount,
+                amount: arrayService.unformat(model.advanceAmount),
                 date: model.advanceDate
             });
 

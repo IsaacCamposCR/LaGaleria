@@ -16,6 +16,10 @@
 
         var model = this;
 
+        model.$onInit = function () {  
+            model.clientFound = false;
+        };
+
         // When the user starts typing in the Client field, 
         // the search triggers to show matching results by name.
         model.beginClientSearch = function () {
@@ -38,6 +42,7 @@
         model.selectClient = function (id) {
             model.clientId = id;
             model.client = "";
+            model.clientFound = true;
             model.endClientSearch();
         };
 

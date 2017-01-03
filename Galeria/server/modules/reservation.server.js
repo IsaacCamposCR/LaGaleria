@@ -2,7 +2,7 @@
 var ReservationSchema = require("../schemas/reservation.schema.js");
 
 var newReservation = function (req, res) {
-    console.log(req.body);
+    
     // Creates an instance of the reservation schema with the data from the request body.
     var reservation = new ReservationSchema({
         client: req.body.client,
@@ -15,7 +15,6 @@ var newReservation = function (req, res) {
         orders: req.body.orders,
         description: req.body.description
     });
-    console.log(reservation);
 
     // Executes the save command to Mongo.
     reservation.save(function (err) {

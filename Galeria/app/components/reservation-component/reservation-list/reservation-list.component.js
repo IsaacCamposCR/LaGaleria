@@ -99,8 +99,7 @@
             if (reservation.type === "Encargo") {
                 model.$router.navigate(['ArtCalculator', { id: reservation._id }]);
             }
-
-            if (reservation.type === "Venta") {
+            else {
                 model.$router.navigate(['EditReservation', { id: reservation._id }]);
             }
         };

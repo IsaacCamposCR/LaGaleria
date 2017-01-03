@@ -95,6 +95,7 @@
 
             model.articles = [];
             model.advances = [];
+            model.displayTotals();
 
             // Takes the id from the parameters in the new url.
             if (next.params.id) {
@@ -190,6 +191,7 @@
             // Initializes the price value to zero, only if a special price is not set.
             if (!model.specialPrice) {
                 model.price = 0;
+                
                 model.articles.forEach(function (item) {
                     for (var i = 0; i < item.quantity; i++) {
                         model.price += arrayService.unformat(item.price);
@@ -227,8 +229,36 @@
             model.displayTotals();
         };
 
+        model.makeReservation = function () {
+            if (!model.isReservation) {
+                model.advances = [];
+            }
+            model.displayTotals();
+        };
+
+
         // Sends the new reservation to the service to be saved.
         model.saveReservation = function () {
+            if (model.articles.length <= 0) {
+                popUp("error",
+                    true,
+                    "No se ha agregado ningun articulo...",
+                    function () {
+                        model.disableForm = false;
+                    });
+                return;
+            }
+
+            if (!model.clientId) {
+                popUp("error",
+                    true,
+                    "No se ha seleccionado un cliente...",
+                    function () {
+                        model.disableForm = false;
+                    });
+                return;
+            }
+
             var articleIds = [];
 
             // Creates an id array for articles to be saved into Mongo.
@@ -269,7 +299,6 @@
                         });
                 })
                 .catch(function (response) {
-                    console.log(response.errors);
                     popUp("error",
                         true,
                         "Ha ocurrido un error...",

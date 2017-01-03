@@ -1,16 +1,16 @@
 <div>
 	<h1 ng-if="model.showReservations">{{model.title}}</h1>
 
-	<form name="clientForm">
+	<ng-form name="clientForm">
 		<fieldset ng-disabled="model.disableForm">
 			<div>
 				<label for="name">Nombre: </label>
 				<input type="text" name="name" ng-model="model.name" required>
-				<span ng-show="clientForm.name.$invalid">El nombre del cliente es requerido.</span>
-				<phones phones="model.phones" form="clientForm"></phones>
+				<p ng-show="clientForm.name.$invalid">El nombre del cliente es requerido.</p>
+				<phones phones="model.phones"></phones>
 				<label for="created">Fecha de Ingreso</label>
-				<input type="date" name="created" ng-model="model.created">
-				<span ng-show="clientForm.created.$invalid">La fecha de ingreso del cliente no es valida.</span>
+				<input type="date" name="created" ng-model="model.created" required>
+				<p ng-show="clientForm.created.$invalid">La fecha de ingreso del cliente no es valida.</p>
 			</div>
 		</fieldset>
 		<div>
@@ -20,7 +20,7 @@
 				<button type="button" ng-click="model.cancelEdit()">Cancelar</button>
 			</div>
 		</div>
-	</form>
+	</ng-form>
 	<message type="model.messageType" message="model.message" show="model.pop" confirm="model.confirm()" cancel="model.cancel()"></message>
 	<div ng-if="model.showReservations">
 		<reservation-list-component client-reservations="model.id" $router="model.$router" />

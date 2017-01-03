@@ -165,7 +165,7 @@
                     loadInvoices(model.id);
                 })
                 .catch(function (response) {
-                    console.log(response.errors);
+                    console.log("Error", response.errors);
                     popUp("error",
                         true,
                         "Ha ocurrido un error...",

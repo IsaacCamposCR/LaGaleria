@@ -8,7 +8,8 @@
         controllerAs: "model",
         controller: ["arrayService", moneyInputController],
         bindings: {
-            text: "="
+            text: "=",
+            blur: "&"
         }
     });
 
@@ -16,7 +17,7 @@
         var model = this;
 
         model.$onInit = function () {
-            model.text = "";
+            model.text = "0";
         };
 
         model.$onChanges = function (changesObj) {
@@ -27,7 +28,7 @@
 
         model.format = function () {
             model.text = arrayService.unformat(model.text);
-            
+
             // Gets the absolute value in order to remove leading zeros.
             model.text = !model.text ? '' : Math.abs(model.text);
 

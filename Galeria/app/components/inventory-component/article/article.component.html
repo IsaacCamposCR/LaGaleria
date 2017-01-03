@@ -1,7 +1,7 @@
 <div>
 	<h1>{{model.title}}</h1>
 
-	<form name="articleForm">
+	<ng-form name="articleForm">
 		<fieldset ng-disabled="model.disableForm">
 			<div ng-if="!model.editingCategory">
 				<label for="category">Category: </label>
@@ -22,10 +22,12 @@
 			</select>
 			<br/>
 			<label for="code">Codigo del Producto: </label>
-			<input id="code" type="text" ng-model="model.code">
+			<input name="code" type="text" ng-model="model.code" required>
+			<p ng-show="articleForm.code.$invalid">El codigo del producto es requerido.</p>
 			<br/>
 			<label for="description">Descripcion: </label>
-			<input id="description" type="text" ng-model="model.description">
+			<input name="description" type="text" ng-model="model.description" required>
+			<p ng-show="articleForm.description.$invalid">La descripcion del producto es requerida.</p>
 			<br/>
 			<label for="stock">Cantidad Disponible: </label>
 			<input id="stock" type="number" ng-model="model.stock">
@@ -35,10 +37,10 @@
 			<money-input text="model.price"></money-input>
 		</fieldset>
 		<div ng-show="!model.pop">
-			<button ng-if="!model.editingArticle" type="submit" ng-click="model.saveArticle()">Guardar</button>
+			<button ng-disabled="!articleForm.$valid" ng-if="!model.editingArticle" type="submit" ng-click="model.saveArticle()">Guardar</button>
 			<button type="button" ng-if="model.editingArticle" ng-click="model.editArticle()">Editar</button>
 			<button type="button" ng-click="model.cancelEditArticle()">Cancelar</button>
 		</div>
-	</form>
+	</ng-form>
 	<message type="model.messageType" message="model.message" show="model.pop" confirm="model.confirm()" cancel="model.cancel()"></message>
 </div>
