@@ -58,7 +58,7 @@
             reservationService.get(id).$promise
                 .then(function (result) {
                     // Checks for errors
-                    if (!arrayService.errors(result, popUp, "ReservationList", model.$router)) {
+                    if (!arrayService.errors(model, result, "ReservationList")) {
 
                         model.id = result.results._id;
                         //model.invoice = result.results.invoice;
@@ -181,9 +181,9 @@
 
             // Cleans up every calculator data so that it can be reused.
             model.products.forEach(function (product) {
-                product.base = "";
-                product.height = "";
-                product.refill = "";
+                product.base = "0";
+                product.height = "0";
+                product.refill = "0";
             });
 
             model.details = "";
@@ -199,43 +199,67 @@
 
         model.finish = function () {
             if (model.clientId) {
-                var reservation = {
-                    _id: model.id,
-                    client: model.clientId,
-                    date: model.date,
-                    delivery: model.delivery,
-                    price: arrayService.unformat(((model.specialPrice) ? model.price : model.orderTotal)),
-                    description: model.details,
-                    advances: model.advances,
-                    orders: model.orders
-                };
 
-                reservationService.save(reservation).$promise
-                    .then(function (response) {
-                        // Checks for errors...
-                        if (!arrayService.errors(response, popUp, "ReservationList", model.$router)) {
+                if (model.orders.length > 0) {
 
-                            popUp("success",
+                    var reservation = {
+                        _id: model.id,
+                        client: model.clientId,
+                        date: model.date,
+                        delivery: model.delivery,
+                        price: arrayService.unformat(((model.specialPrice) ? model.price : model.orderTotal)),
+                        description: model.details,
+                        advances: model.advances,
+                        orders: model.orders
+                    };
+
+                    reservationService.save(reservation).$promise
+                        .then(function (response) {
+                            // Checks for errors...
+                            if (!arrayService.errors(model, response, "ReservationList")) {
+
+                                arrayService.pop("success",
+                                    true,
+                                    "El encargo se ha guardado con exito!",
+                                    function () {
+                                        model.$router.navigate(["ReservationList"]);
+                                    },
+                                    function () { },
+                                    model);
+                            }
+                        })
+                        .catch(function (response) {
+                            console.log(response.errors);
+                            arrayService.pop("error",
                                 true,
-                                "El encargo se ha guardado con exito!",
+                                "Ha ocurrido un error...",
                                 function () {
                                     model.$router.navigate(["ReservationList"]);
-                                });
-                        }
-                    })
-                    .catch(function (response) {
-                        console.log(response.errors);
-                        popUp("error",
-                            true,
-                            "Ha ocurrido un error...",
-                            function () { });
-                    });
+                                },
+                                function () { },
+                                model);
+                        });
+                }
+                else {
+                    arrayService.pop("error",
+                        true,
+                        "Debe ingresar al menos una orden...",
+                        function () {
+                            model.disableForm = false;
+                        },
+                        function () { },
+                        model);
+                }
             }
             else {
-                popUp("error",
+                arrayService.pop("error",
                     true,
                     "No se ha seleccionado un cliente...",
-                    function () { });
+                    function () {
+                        model.disableForm = false;
+                    },
+                    function () { },
+                    model);
             }
         };
 
@@ -248,7 +272,7 @@
         };
 
         model.cancelOrder = function () {
-            popUp("confirm",
+            arrayService.pop("confirm",
                 true,
                 "Esta seguro que desea cancelar? Perdera los cambios.",
                 // Sets the custom action to perform when canceling.
@@ -257,20 +281,8 @@
                 },
                 function () {
                     model.disableForm = model.editingReservation;
-                });
-        };
-
-        // Pop up message component. The model.pop property allows the form to hide the buttons when displaying the popup. 
-        // This mechanism might not be required once styles are put in.
-        var popUp = function (type, pop, message, confirm, cancel) {
-            model.messageType = type;
-            model.message = message;
-            model.pop = pop;
-            model.disableForm = true;
-            model.confirm = confirm;
-            if (cancel) {
-                model.cancel = cancel;
-            }
+                },
+                model);
         };
     }
 

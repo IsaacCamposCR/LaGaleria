@@ -40,50 +40,58 @@
             // Calls the reservation service for a reservation by id.
             reservationService.get(id).$promise
                 .then(function (result) {
-                    model.id = result.results._id;
-                    model.invoice = result.results.invoice;
-                    model.date = new Date(result.results.date);
-                    model.price = result.results.price;
-                    model.advances = result.results.advances;
+                    // Checks for errors...
+                    if (!arrayService.errors(model, result, "ReservationList")) {
 
-                    // If there are advances then it is a reservation instead of a straight sell.
-                    if (model.advances.length > 0) {
-                        model.isReservation = true;
-                    }
+                        model.id = result.results._id;
+                        model.invoice = result.results.invoice;
+                        model.date = new Date(result.results.date);
+                        model.price = result.results.price;
+                        model.advances = result.results.advances;
 
-                    // Calls the article service
-                    for (var i = 0; i < result.results.articles.length; i++) {
-
-                        // Because the client component is nested, angular is running initialization twice.
-                        // This validation ensures the array will get created once per article.
-                        if (model.articles.length < result.results.articles.length) {
-                            // Creates the article array before querying mongo.
-                            model.articles.push({
-                                _id: result.results.articles[i].article,
-                                quantity: result.results.articles[i].quantity
-                            });
+                        // If there are advances then it is a reservation instead of a straight sell.
+                        if (model.advances.length > 0) {
+                            model.isReservation = true;
                         }
 
-                        // Per each article from the reservation, query the inventory service to get the remaining data.
-                        inventoryService.get(result.results.articles[i].article).$promise
-                            .then(function (articleResult) {
-                                // Adds missing data to already existing items in the article array.
-                                var arrayArticle = arrayService.lookup(articleResult.results._id, model.articles)[0];
-                                arrayArticle.description = articleResult.results.description;
-                                arrayArticle.price = articleResult.results.price;
-                                arrayArticle.max = articleResult.results.stock + arrayArticle.quantity;
-                                arrayArticle.originalQuantity = arrayArticle.quantity;
+                        // Calls the article service
+                        for (var i = 0; i < result.results.articles.length; i++) {
 
-                                // This flag switching allows the price to be taken straight from Mongo instead of being calculated.
-                                // The flag is then switched off in case the user wants to add new articles.
-                                model.specialPrice = true;
-                                model.displayTotals();
-                                model.specialPrice = false;
-                            });
+                            // Because the client component is nested, angular is running initialization twice.
+                            // This validation ensures the array will get created once per article.
+                            if (model.articles.length < result.results.articles.length) {
+                                // Creates the article array before querying mongo.
+                                model.articles.push({
+                                    _id: result.results.articles[i].article,
+                                    quantity: result.results.articles[i].quantity
+                                });
+                            }
+
+                            // Per each article from the reservation, query the inventory service to get the remaining data.
+                            inventoryService.get(result.results.articles[i].article).$promise
+                                .then(function (articleResult) {
+                                    // Checks for errors...
+                                    if (!arrayService.errors(model, articleResult, "ReservationList")) {
+
+                                        // Adds missing data to already existing items in the article array.
+                                        var arrayArticle = arrayService.lookup(articleResult.results._id, model.articles)[0];
+                                        arrayArticle.description = articleResult.results.description;
+                                        arrayArticle.price = articleResult.results.price;
+                                        arrayArticle.max = articleResult.results.stock + arrayArticle.quantity;
+                                        arrayArticle.originalQuantity = arrayArticle.quantity;
+
+                                        // This flag switching allows the price to be taken straight from Mongo instead of being calculated.
+                                        // The flag is then switched off in case the user wants to add new articles.
+                                        model.specialPrice = true;
+                                        model.displayTotals();
+                                        model.specialPrice = false;
+                                    }
+                                });
+                        }
+
+                        // Calls the client service for the client name.
+                        model.clientId = result.results.client;
                     }
-
-                    // Calls the client service for the client name.
-                    model.clientId = result.results.client;
                 });
         };
 
@@ -112,7 +120,10 @@
                 // Queries the inventory service for matching articles by description.
                 inventoryService.filter(model.article, true).$promise
                     .then(function (result) {
-                        model.lookupArticles = result.results;
+                        // Checks for errors...
+                        if (!arrayService.errors(model, result, "ReservationList")) {
+                            model.lookupArticles = result.results;
+                        }
                     });
 
                 // Shows the search option for articles.
@@ -163,12 +174,14 @@
                 article.quantity++;
             }
             else {
-                popUp("error",
+                arrayService.pop("error",
                     true,
                     "No existen mas articulos iguales en el inventario...",
                     function () {
                         model.disableForm = false;
-                    });
+                    },
+                    function () { },
+                    model);
             }
 
             model.displayTotals();
@@ -191,7 +204,7 @@
             // Initializes the price value to zero, only if a special price is not set.
             if (!model.specialPrice) {
                 model.price = 0;
-                
+
                 model.articles.forEach(function (item) {
                     for (var i = 0; i < item.quantity; i++) {
                         model.price += arrayService.unformat(item.price);
@@ -213,13 +226,15 @@
             model.displayTotals();
 
             if (model.remaining < 0) {
-                popUp("warning",
+                arrayService.pop("warning",
                     true,
                     "El monto no puede ser menor al saldo...",
-                    function () { });
+                    function () { },
+                    function () { },
+                    model);
             }
             else {
-                popUp("warning", false, "", function () { });
+                arrayService.pop("warning", false, "", function () { }, function () { }, model);
             }
             model.disableForm = false;
         };
@@ -240,22 +255,26 @@
         // Sends the new reservation to the service to be saved.
         model.saveReservation = function () {
             if (model.articles.length <= 0) {
-                popUp("error",
+                arrayService.pop("error",
                     true,
                     "No se ha agregado ningun articulo...",
                     function () {
                         model.disableForm = false;
-                    });
+                    },
+                    function () { },
+                    model);
                 return;
             }
 
             if (!model.clientId) {
-                popUp("error",
+                arrayService.pop("error",
                     true,
                     "No se ha seleccionado un cliente...",
                     function () {
                         model.disableForm = false;
-                    });
+                    },
+                    function () { },
+                    model);
                 return;
             }
 
@@ -291,18 +310,25 @@
             // Sends the save command to the reservationService.
             reservationService.save(reservation).$promise
                 .then(function (response) {
-                    popUp("success",
-                        true,
-                        "El Apartado se ha guardado con exito!",
-                        function () {
-                            model.$router.navigate(["ReservationList"]);
-                        });
+                    // Checks for errors...
+                    if (!arrayService.errors(model, response, "ReservationList")) {
+                        arrayService.pop("success",
+                            true,
+                            "El Apartado se ha guardado con exito!",
+                            function () {
+                                model.$router.navigate(["ReservationList"]);
+                            },
+                            function () { },
+                            model);
+                    }
                 })
                 .catch(function (response) {
-                    popUp("error",
+                    arrayService.pop("error",
                         true,
                         "Ha ocurrido un error...",
-                        function () { });
+                        function () { },
+                        function () { },
+                        model);
                 });
         };
 
@@ -315,7 +341,7 @@
         };
 
         model.cancelEditReservation = function () {
-            popUp("confirm",
+            arrayService.pop("confirm",
                 true,
                 "Esta seguro que desea cancelar? Perdera los cambios.",
                 // Sets the custom action to perform when canceling.
@@ -324,20 +350,8 @@
                 },
                 function () {
                     model.disableForm = model.editingReservation;
-                });
-        };
-
-        // Pop up message component. The model.pop property allows the form to hide the buttons when displaying the popup. 
-        // This mechanism might not be required once styles are put in.
-        var popUp = function (type, pop, message, confirm, cancel) {
-            model.messageType = type;
-            model.message = message;
-            model.pop = pop;
-            model.disableForm = true;
-            model.confirm = confirm;
-            if (cancel) {
-                model.cancel = cancel;
-            }
+                },
+                model);
         };
     }
 

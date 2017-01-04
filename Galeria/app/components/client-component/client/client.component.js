@@ -52,7 +52,7 @@
                     // This call is asynchronous so a callback must be used in the promise to process the data.
                     .$promise.then(function (result) {
                         // Checks for errors...
-                        if (!arrayService.errors(result, popUp, "ClientList", model.$router)) {
+                        if (!arrayService.errors(model, result, "ClientList")) {
                             model.name = result.results.name;
                             model.phones = result.results.phones;
                             model.created = new Date(result.results.created);
@@ -99,29 +99,33 @@
                     // Success (can still contain schema errors and such).
                     .then(function (response) {
                         // Checks for errors...
-                        if (!arrayService.errors(response, popUp, "ClientList", model.$router)) {
+                        if (!arrayService.errors(model, response, "ClientList")) {
 
-                            popUp("success",
+                            arrayService.pop("success",
                                 true,
                                 "Cliente guardado con exito!",
                                 // Sets the custom action to perform when saving a client.
                                 function () {
                                     // Programatically navigates to the ClientList component.
                                     model.$router.navigate(["ClientList"]);
-                                });
+                                },
+                                function () { },
+                                model);
                         }
                     })
                     // Unexpected errors.
                     .catch(function (response) {
                         console.log("Error:", response.errors);
-                        popUp("error",
+                        arrayService.pop("error",
                             true,
                             "Ha ocurrido un error.",
                             // Sets the custom action to perform when saving a client.
                             function () {
                                 // Programatically navigates to the ClientList component.
                                 model.$router.navigate(["ClientList"]);
-                            });
+                            },
+                            function () { },
+                            model);
                     });
             }
         };
@@ -135,7 +139,7 @@
         };
 
         model.cancelEdit = function () {
-            popUp("confirm",
+            arrayService.pop("confirm",
                 true,
                 "Esta seguro que desea cancelar? Perdera los cambios.",
                 // Sets the custom action to perform when canceling.
@@ -144,20 +148,8 @@
                 },
                 function () {
                     model.disableForm = model.editingClient;
-                });
-        };
-
-        // Pop up message component. The model.pop property allows the form to hide the buttons when displaying the popup. 
-        // This mechanism might not be required once styles are put in.
-        var popUp = function (type, pop, message, confirm, cancel) {
-            model.messageType = type;
-            model.message = message;
-            model.pop = pop;
-            model.disableForm = true;
-            model.confirm = confirm;
-            if (cancel) {
-                model.cancel = cancel;
-            }
+                },
+                model);
         };
     }
 

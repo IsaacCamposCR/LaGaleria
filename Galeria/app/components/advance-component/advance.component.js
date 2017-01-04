@@ -29,22 +29,24 @@
         model.addAdvance = function () {
 
             if (arrayService.unformat(model.advanceAmount) > arrayService.unformat(model.remaining)) {
-                popUp("error",
+                arrayService.pop("error",
                     true,
                     "El monto no puede ser mayor al Saldo.",
                     function () {
                         model.disableForm = false;
-                    });
+                    },
+                    model);
                 return;
             }
 
             if (arrayService.unformat(model.advanceAmount) <= 0) {
-                popUp("error",
+                arrayService.pop("error",
                     true,
                     "El monto no puede ser menor o igual a 0",
                     function () {
                         model.disableForm = false;
-                    });
+                    },
+                    model);
                 return;
             }
 
@@ -65,19 +67,6 @@
             model.advances.splice(index, 1);
             
             model.displayTotals();
-        };
-
-        // Pop up message component. The model.pop property allows the form to hide the buttons when displaying the popup. 
-        // This mechanism might not be required once styles are put in.
-        var popUp = function (type, pop, message, confirm, cancel) {
-            model.messageType = type;
-            model.message = message;
-            model.pop = pop;
-            model.disableForm = true;
-            model.confirm = confirm;
-            if (cancel) {
-                model.cancel = cancel;
-            }
         };
     }
 

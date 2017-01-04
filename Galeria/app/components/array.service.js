@@ -44,7 +44,7 @@
         // Wrapper function to determine if a certain response contains any errors, 
         // if it does, it displays the error, logs it and then stops execution.
         // If there are no errors, execution continues as normal.
-         var responseHasErrors = function (response, popUp, redirect, router) {
+        var responseHasErrors = function (model, response, redirect) {
             if (response.errors) {
                 console.log("Error:", response.errors);
                 var errorMessage = response.errors.code == 11000 ? "Esta ingresando un registro duplicado..." : response.errors.errmsg;
@@ -54,12 +54,26 @@
                     // Sets the custom action to perform when saving a client.
                     function () {
                         // Programatically navigates to the ClientList component.
-                        router.navigate([redirect]);
-                    });
+                        model.$router.navigate([redirect]);
+                    },
+                    model);
                 return true;
             }
             else {
                 return false;
+            }
+        };
+
+        // Pop up message component. The model.pop property allows the form to hide the buttons when displaying the popup. 
+        // This mechanism might not be required once styles are put in.
+        var popUp = function (type, pop, message, confirm, cancel, model) {
+            model.messageType = type;
+            model.message = message;
+            model.pop = pop;
+            model.disableForm = true;
+            model.confirm = confirm;
+            if (cancel) {
+                model.cancel = cancel;
             }
         };
 
@@ -68,7 +82,8 @@
             push: pushItemIntoArray,
             sort: sortArrayItems,
             unformat: formatStringIntoNumber,
-            errors: responseHasErrors
+            errors: responseHasErrors,
+            pop: popUp
         };
     });
 

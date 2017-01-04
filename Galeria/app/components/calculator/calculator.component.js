@@ -19,7 +19,8 @@
 
         var model = this;
 
-        model.$onInit = function () { };
+        model.$onInit = function () {
+        };
 
         // Everytime an input changes in the calculator, the total function bound is executed.
         model.$onChanges = function () {

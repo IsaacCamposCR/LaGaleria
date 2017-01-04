@@ -3,7 +3,7 @@
         <h3>{{model.product.name}}</h3>
         <label for="rectangleBase">Ancho: </label>
         <input type="number" name="rectangleBase" ng-model="model.product.base" ng-keydown="model.validateKeys($event)" ng-keyup="model.validateInput()"
-            required>
+            required ng-focus="model.focus(model.product.base)">
         <p ng-show="calculatorForm.rectangleBase.$invalid">El Ancho es requerido...</p>
         <br/>
         <label for="rectangleHeight">Largo: </label>

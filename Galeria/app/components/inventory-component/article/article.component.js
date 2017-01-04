@@ -47,7 +47,7 @@
                 // This call is asynchronous so a callback must be used in the promise to process the data.
                 .$promise.then(function (result) {
                     // Checks for errors...
-                    if (arrayService.errors(result, popUp, "Inventory", model.$router)) {
+                    if (arrayService.errors(model, result, "Inventory")) {
 
                         model._id = result.results._id;
                         model.selectedCategory = arrayService.lookup(result.results.category, model.categories)[0];
@@ -89,7 +89,7 @@
                 model.disableForm = false;
             } else {
                 model.disableForm = true;
-                popUp("warning",
+                arrayService.pop("warning",
                     true,
                     "No existen proveedores en la base de datos. Desea ingresar un nuevo proveedor?",
                     function () {
@@ -97,7 +97,8 @@
                     },
                     function () {
                         model.disableForm = false;
-                    });
+                    },
+                    model);
             }
             model.invoice = "";
             model.description = "";
@@ -117,7 +118,7 @@
             var categoriesPromise = categoryService.list().$promise
                 .then(function (result) {
                     // Checks for errors...
-                    if (!arrayService.errors(result, popUp, "Inventory", model.$router)) {
+                    if (!arrayService.errors(model, result, "Inventory")) {
 
                         // Creates the new updated category array.
                         result.results.forEach(function (item) {
@@ -140,11 +141,14 @@
 
             var providersPromise = providerService.combo().$promise
                 .then(function (result) {
-                    // Creates the new provider array.
-                    result.results.forEach(function (item) {
-                        model.providers.push(item);
-                    });
-                    model.selectedProvider = model.providers[0];
+                    // Checks for errors...
+                    if (!arrayService.errors(model, result, "Inventory")) {
+                        // Creates the new provider array.
+                        result.results.forEach(function (item) {
+                            model.providers.push(item);
+                        });
+                        model.selectedProvider = model.providers[0];
+                    }
                 });
 
             return providersPromise;
@@ -164,14 +168,33 @@
                 price: arrayService.unformat(model.price)
             };
 
-            inventoryService.save(article);
+            inventoryService.save(article).$promise
+                .then(function (response) {
+                    // Checks for errors...
+                    if (!arrayService.errors(model, response, "Inventory")) {
 
-            popUp("success",
-                true,
-                "Articulo guardado con exito!",
-                // Programatically navigates to the inventory component.
-                function () {
-                    model.$router.navigate(["Inventory"])
+                        arrayService.pop("success",
+                            true,
+                            "Articulo guardado con exito!",
+                            // Programatically navigates to the inventory component.
+                            function () {
+                                model.$router.navigate(["Inventory"])
+                            },
+                            function () { },
+                            model);
+                    }
+                })
+                .catch(function (response) {
+                    arrayService.pop("error",
+                        true,
+                        "Ha ocurrido un error...",
+                        // Sets the custom action to perform when saving a provider.
+                        function () {
+                            // Programatically navigates to the ProviderList component.
+                            model.$router.navigate(["Inventory"]);
+                        },
+                        function () { },
+                        model);
                 });
         };
 
@@ -191,29 +214,37 @@
 
             categoryPromise
                 .then(function (response) {
-                    loadCategories()
-                        .then(function () {
-                            // Selects the newly added category.
-                            model.selectedCategory = arrayService.lookup(response.results._id, model.categories)[0];
-                        });
-                    popUp("success",
-                        true,
-                        "Categoria guardada con exito!",
-                        // Sets the custom action to perform when a category is saved.
-                        function () {
-                            model.disableForm = false;
-                        });
+                    // Checks for errors...
+                    if (!arrayService.errors(model, response, "Inventory")) {
+
+                        loadCategories()
+                            .then(function () {
+                                // Selects the newly added category.
+                                model.selectedCategory = arrayService.lookup(response.results._id, model.categories)[0];
+                            });
+                        arrayService.pop("success",
+                            true,
+                            "Categoria guardada con exito!",
+                            // Sets the custom action to perform when a category is saved.
+                            function () {
+                                model.disableForm = false;
+                            },
+                            function () { },
+                            model);
+                    }
                 })
                 .catch(function (response) {
                     console.log("Error:", response);
-                    popUp("error",
+                    arrayService.pop("error",
                         true,
                         "Ha ocurrido un error.",
                         // Sets the custom action to perform when saving a client.
                         function () {
                             // Programatically navigates to the ClientList component.
                             model.$router.navigate(["Inventory"]);
-                        });
+                        },
+                        function () { },
+                        model);
                 });
         };
 
@@ -244,7 +275,7 @@
         };
 
         model.cancelEditArticle = function () {
-            popUp("confirm",
+            arrayService.pop("confirm",
                 true,
                 "Esta seguro que desea cancelar? Perdera los cambios.",
                 // Sets the custom action to perform when canceling.
@@ -253,36 +284,8 @@
                 },
                 function () {
                     model.disableForm = model.editingArticle;
-                });
-        };
-
-        // Wrapper function that determines if a certain response has any errors. 
-        // If it does, it displays a popup, if not it continues execution.
-        model.hasErrors = function (response) {
-            if (response.errors) {
-                console.log("Error:", response.errors);
-                popUp("error",
-                    true,
-                    ("Ha ocurrido un error: " + response.errors),
-                    // Sets the custom action to perform when saving a client.
-                    function () {
-                        // Programatically navigates to the ClientList component.
-                        model.$router.navigate(["Inventory"]);
-                    });
-            }
-        };
-
-        // Pop up message component. The model.pop property allows the form to hide the buttons when displaying the popup. 
-        // This mechanism might not be required once styles are put in.
-        var popUp = function (type, pop, message, confirm, cancel) {
-            model.messageType = type;
-            model.message = message;
-            model.pop = pop;
-            model.disableForm = true;
-            model.confirm = confirm;
-            if (cancel) {
-                model.cancel = cancel;
-            }
+                },
+                model);
         };
     }
 } ());

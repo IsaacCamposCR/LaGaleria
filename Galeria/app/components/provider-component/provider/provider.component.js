@@ -33,7 +33,7 @@
             // Calls the provider service for a provider by id.
             providerService.get(id).$promise.then(function (response) {
                 //Checks for errors...
-                if (!arrayService.errors(response, popUp, "ProviderList", model.$router)) {
+                if (!arrayService.errors(model, response, "ProviderList")) {
 
                     model.id = response.results._id;
                     model.name = response.results.name;
@@ -79,7 +79,7 @@
             providerService.invoice(id).$promise
                 .then(function (result) {
                     // Checks for errors...
-                    if (!arrayService.errors(result, popUp, "ProviderList", model.$router)) {
+                    if (!arrayService.errors(model, result, "ProviderList")) {
 
                         result.results.forEach(function (item) {
                             if (item.type) {
@@ -112,27 +112,30 @@
             providerService.save(provider).$promise
                 .then(function (response) {
                     // Checks for errors...
-                    if (!arrayService.errors(response, popUp, "ProviderList", model.$router)) {
+                    if (!arrayService.errors(model, response, "ProviderList")) {
 
-                        popUp("success",
+                        arrayService.pop("success",
                             true,
                             "Proveedor guardado con exito!",
                             // Sets the custom action to perform when saving a provider.
                             function () {
-                                // Programatically navigates to the ProviderList component.
                                 model.$router.navigate(["ProviderList"]);
-                            });
+                            },
+                            function () { },
+                            model);
                     }
                 })
                 .catch(function (response) {
-                    popUp("error",
+                    arrayService.pop("error",
                         true,
                         "Ha ocurrido un error...",
                         // Sets the custom action to perform when saving a provider.
                         function () {
                             // Programatically navigates to the ProviderList component.
                             model.$router.navigate(["ProviderList"]);
-                        });
+                        },
+                        function () { },
+                        model);
                 });
         };
 
@@ -162,10 +165,10 @@
             providerService.add(invoice).$promise
                 .then(function (response) {
                     // Checks for errors...
-                    if (!arrayService.errors(response, popUp, "ProviderList", model.$router)) {
+                    if (!arrayService.errors(model, response, "ProviderList")) {
 
                         // Message to display a successful invoice push.
-                        popUp("success",
+                        arrayService.pop("success",
                             true,
                             ((model.invoiceType) ?
                                 "La Factura ha sido agregada" :
@@ -173,17 +176,21 @@
                             " con exito!",
                             function () {
                                 model.cancelInvoice();
-                            });
+                            },
+                            function () { },
+                            model);
                         // Reloads the invoices from Mongo.
                         loadInvoices(model.id);
                     }
                 })
                 .catch(function (response) {
                     console.log("Error", response.errors);
-                    popUp("error",
+                    arrayService.pop("error",
                         true,
                         "Ha ocurrido un error...",
-                        function () { });
+                        function () { },
+                        function () { },
+                        model);
                 });
         };
 
@@ -205,7 +212,7 @@
         };
 
         model.cancelEdit = function () {
-            popUp("confirm",
+            arrayService.pop("confirm",
                 true,
                 "Esta seguro que desea cancelar? Perdera los cambios.",
                 // Sets the custom action to perform when canceling.
@@ -214,20 +221,8 @@
                 },
                 function () {
                     model.disableForm = model.editingProvider;
-                });
-        };
-
-        // Pop up message component. The model.pop property allows the form to hide the buttons when displaying the popup. 
-        // This mechanism might not be required once styles are put in.
-        var popUp = function (type, pop, message, confirm, cancel) {
-            model.messageType = type;
-            model.message = message;
-            model.pop = pop;
-            model.disableForm = true;
-            model.confirm = confirm;
-            if (cancel) {
-                model.cancel = cancel;
-            }
+                },
+                model);
         };
     }
 } ());
