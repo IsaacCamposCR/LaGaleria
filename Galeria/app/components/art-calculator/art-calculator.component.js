@@ -57,17 +57,21 @@
             // Calls the reservation service for a reservation by id.
             reservationService.get(id).$promise
                 .then(function (result) {
-                    model.id = result.results._id;
-                    //model.invoice = result.results.invoice;
-                    model.date = new Date(result.results.date);
-                    model.price = result.results.price;
-                    model.advances = result.results.advances;
-                    model.orders = result.results.orders;
+                    // Checks for errors
+                    if (!arrayService.errors(result, popUp, "ReservationList", model.$router)) {
 
-                    // Loads the client component.
-                    model.clientId = result.results.client;
+                        model.id = result.results._id;
+                        //model.invoice = result.results.invoice;
+                        model.date = new Date(result.results.date);
+                        model.price = result.results.price;
+                        model.advances = result.results.advances;
+                        model.orders = result.results.orders;
 
-                    model.orderTotals();
+                        // Loads the client component.
+                        model.clientId = result.results.client;
+
+                        model.orderTotals();
+                    }
                 });
         };
 
@@ -158,7 +162,6 @@
 
         model.addOrder = function () {
             // Builds up a description string containing the order details.
-            //var description = "";
             model.products.forEach(function (product) {
                 model.details +=
                     "\n" + product.name +
@@ -209,12 +212,16 @@
 
                 reservationService.save(reservation).$promise
                     .then(function (response) {
-                        popUp("success",
-                            true,
-                            "El encargo se ha guardado con exito!",
-                            function () {
-                                model.$router.navigate(["ReservationList"]);
-                            });
+                        // Checks for errors...
+                        if (!arrayService.errors(response, popUp, "ReservationList", model.$router)) {
+
+                            popUp("success",
+                                true,
+                                "El encargo se ha guardado con exito!",
+                                function () {
+                                    model.$router.navigate(["ReservationList"]);
+                                });
+                        }
                     })
                     .catch(function (response) {
                         console.log(response.errors);

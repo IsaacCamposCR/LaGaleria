@@ -32,28 +32,31 @@
         var loadProvider = function (id) {
             // Calls the provider service for a provider by id.
             providerService.get(id).$promise.then(function (response) {
-                model.id = response.results._id;
-                model.name = response.results.name;
-                model.phones = response.results.phones;
+                //Checks for errors...
+                if (!arrayService.errors(response, popUp, "ProviderList", model.$router)) {
 
-                // Creates the types array for invoices.
-                model.invoiceTypes = ["Factura", "Recibo"];
-                model.cancelInvoice();
+                    model.id = response.results._id;
+                    model.name = response.results.name;
+                    model.phones = response.results.phones;
 
-                //Disable the form when an existing provider is loaded.
-                model.disableForm = true;
+                    // Creates the types array for invoices.
+                    model.invoiceTypes = ["Factura", "Recibo"];
+                    model.cancelInvoice();
 
-                // Enables the EDIT button.
-                model.editingProvider = true;
+                    //Disable the form when an existing provider is loaded.
+                    model.disableForm = true;
 
-                // Changes the page main title.
-                model.title = "Detalles del Proveedor";
+                    // Enables the EDIT button.
+                    model.editingProvider = true;
 
-                //Hides the new invoice form
-                model.newInvoice = false;
+                    // Changes the page main title.
+                    model.title = "Detalles del Proveedor";
 
-                loadInvoices(id);
+                    //Hides the new invoice form
+                    model.newInvoice = false;
 
+                    loadInvoices(id);
+                }
             });
         };
 
@@ -75,21 +78,24 @@
 
             providerService.invoice(id).$promise
                 .then(function (result) {
+                    // Checks for errors...
+                    if (!arrayService.errors(result, popUp, "ProviderList", model.$router)) {
 
-                    result.results.forEach(function (item) {
-                        if (item.type) {
-                            // If the document is an invoice sums the amount to the balance.
-                            balance += item.amount;
-                            item.type = "Factura";
-                        } else {
-                            // If the document is a receipt substract the amout from the balance.
-                            balance -= item.amount;
-                            item.type = "Recibo";
-                        }
-                        item.balance = balance;
+                        result.results.forEach(function (item) {
+                            if (item.type) {
+                                // If the document is an invoice sums the amount to the balance.
+                                balance += item.amount;
+                                item.type = "Factura";
+                            } else {
+                                // If the document is a receipt substract the amout from the balance.
+                                balance -= item.amount;
+                                item.type = "Recibo";
+                            }
+                            item.balance = balance;
 
-                        model.invoices.push(item);
-                    });
+                            model.invoices.push(item);
+                        });
+                    }
                 });
         };
 
@@ -105,14 +111,18 @@
             // Calls the provider service to save the provider.
             providerService.save(provider).$promise
                 .then(function (response) {
-                    popUp("success",
-                        true,
-                        "Proveedor guardado con exito!",
-                        // Sets the custom action to perform when saving a provider.
-                        function () {
-                            // Programatically navigates to the ProviderList component.
-                            model.$router.navigate(["ProviderList"]);
-                        });
+                    // Checks for errors...
+                    if (!arrayService.errors(response, popUp, "ProviderList", model.$router)) {
+
+                        popUp("success",
+                            true,
+                            "Proveedor guardado con exito!",
+                            // Sets the custom action to perform when saving a provider.
+                            function () {
+                                // Programatically navigates to the ProviderList component.
+                                model.$router.navigate(["ProviderList"]);
+                            });
+                    }
                 })
                 .catch(function (response) {
                     popUp("error",
@@ -151,18 +161,22 @@
             // This is actually an UPDATE procedure.
             providerService.add(invoice).$promise
                 .then(function (response) {
-                    // Message to display a successful invoice push.
-                    popUp("success",
-                        true,
-                        ((model.invoiceType) ?
-                            "La Factura ha sido agregada" :
-                            "El Recibo ha sido agregado") +
-                        " con exito!",
-                        function () {
-                            model.cancelInvoice();
-                        });
-                    // Reloads the invoices from Mongo.
-                    loadInvoices(model.id);
+                    // Checks for errors...
+                    if (!arrayService.errors(response, popUp, "ProviderList", model.$router)) {
+
+                        // Message to display a successful invoice push.
+                        popUp("success",
+                            true,
+                            ((model.invoiceType) ?
+                                "La Factura ha sido agregada" :
+                                "El Recibo ha sido agregado") +
+                            " con exito!",
+                            function () {
+                                model.cancelInvoice();
+                            });
+                        // Reloads the invoices from Mongo.
+                        loadInvoices(model.id);
+                    }
                 })
                 .catch(function (response) {
                     console.log("Error", response.errors);

@@ -46,26 +46,29 @@
             inventoryService.get(id)
                 // This call is asynchronous so a callback must be used in the promise to process the data.
                 .$promise.then(function (result) {
+                    // Checks for errors...
+                    if (arrayService.errors(result, popUp, "Inventory", model.$router)) {
 
-                    model._id = result.results._id;
-                    model.selectedCategory = arrayService.lookup(result.results.category, model.categories)[0];
-                    model.selectedProvider = arrayService.lookup(result.results.provider, model.providers)[0];
-                    model.code = result.results.code;
-                    model.description = result.results.description;
-                    model.stock = result.results.stock;
-                    // This temp variable is used to store the original stock before it gets updated. 
-                    model.tempStock = result.results.stock;
-                    model.history = result.results.history;
-                    model.price = result.results.price;
+                        model._id = result.results._id;
+                        model.selectedCategory = arrayService.lookup(result.results.category, model.categories)[0];
+                        model.selectedProvider = arrayService.lookup(result.results.provider, model.providers)[0];
+                        model.code = result.results.code;
+                        model.description = result.results.description;
+                        model.stock = result.results.stock;
+                        // This temp variable is used to store the original stock before it gets updated. 
+                        model.tempStock = result.results.stock;
+                        model.history = result.results.history;
+                        model.price = result.results.price;
 
-                    //Disable the form when an existing article is loaded.
-                    model.disableForm = true;
+                        //Disable the form when an existing article is loaded.
+                        model.disableForm = true;
 
-                    // Enables the EDIT button.
-                    model.editingArticle = true;
+                        // Enables the EDIT button.
+                        model.editingArticle = true;
 
-                    // Changes the page main title.
-                    model.title = "Detalles del Articulo";
+                        // Changes the page main title.
+                        model.title = "Detalles del Articulo";
+                    }
                 });
         };
 
@@ -113,14 +116,18 @@
 
             var categoriesPromise = categoryService.list().$promise
                 .then(function (result) {
-                    // Creates the new updated category array.
-                    result.results.forEach(function (item) {
-                        model.categories.push(item);
-                    });
-                    if (model.categories.length > 0) {
-                        model.selectedCategory = model.categories[0];
-                    } else {
-                        model.newCategory();
+                    // Checks for errors...
+                    if (!arrayService.errors(result, popUp, "Inventory", model.$router)) {
+
+                        // Creates the new updated category array.
+                        result.results.forEach(function (item) {
+                            model.categories.push(item);
+                        });
+                        if (model.categories.length > 0) {
+                            model.selectedCategory = model.categories[0];
+                        } else {
+                            model.newCategory();
+                        }
                     }
                 });
 
@@ -247,6 +254,22 @@
                 function () {
                     model.disableForm = model.editingArticle;
                 });
+        };
+
+        // Wrapper function that determines if a certain response has any errors. 
+        // If it does, it displays a popup, if not it continues execution.
+        model.hasErrors = function (response) {
+            if (response.errors) {
+                console.log("Error:", response.errors);
+                popUp("error",
+                    true,
+                    ("Ha ocurrido un error: " + response.errors),
+                    // Sets the custom action to perform when saving a client.
+                    function () {
+                        // Programatically navigates to the ClientList component.
+                        model.$router.navigate(["Inventory"]);
+                    });
+            }
         };
 
         // Pop up message component. The model.pop property allows the form to hide the buttons when displaying the popup. 

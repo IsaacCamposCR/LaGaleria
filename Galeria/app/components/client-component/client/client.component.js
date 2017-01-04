@@ -8,14 +8,14 @@
         templateUrl: "/components/client-component/client/client.component.html",
         controllerAs: "model",
         //The clientService must be added as a literal string in order to remain when the js is minified.
-        controller: ["clientService", clientController],
+        controller: ["clientService", "arrayService", clientController],
         bindings: {
             "$router": "<",
             "clientid": "<"
         }
     });
 
-    function clientController(clientService) {
+    function clientController(clientService, arrayService) {
 
         var model = this;
 
@@ -24,9 +24,6 @@
         model.$routerOnActivate = function (next) {
             // Takes the id from the parameters in the new url.
             loadClient(next.params.id);
-        };
-
-        model.$onInit = function () {
         };
 
         model.$onChanges = function () {
@@ -54,18 +51,21 @@
                 clientService.get(id)
                     // This call is asynchronous so a callback must be used in the promise to process the data.
                     .$promise.then(function (result) {
-                        model.name = result.results.name;
-                        model.phones = result.results.phones;
-                        model.created = new Date(result.results.created);
+                        // Checks for errors...
+                        if (!arrayService.errors(result, popUp, "ClientList", model.$router)) {
+                            model.name = result.results.name;
+                            model.phones = result.results.phones;
+                            model.created = new Date(result.results.created);
 
-                        //Disable the form when an existing client is loaded.
-                        model.disableForm = true;
+                            //Disable the form when an existing client is loaded.
+                            model.disableForm = true;
 
-                        // Enables the EDIT button.
-                        model.editingClient = true;
+                            // Enables the EDIT button.
+                            model.editingClient = true;
 
-                        // Changes the page main title.
-                        model.title = "Detalles del Cliente";
+                            // Changes the page main title.
+                            model.title = "Detalles del Cliente";
+                        }
                     });
             }
             else {
@@ -96,16 +96,22 @@
                 };
 
                 clientService.save(client).$promise
+                    // Success (can still contain schema errors and such).
                     .then(function (response) {
-                        popUp("success",
-                            true,
-                            "Cliente guardado con exito!",
-                            // Sets the custom action to perform when saving a client.
-                            function () {
-                                // Programatically navigates to the ClientList component.
-                                model.$router.navigate(["ClientList"]);
-                            });
+                        // Checks for errors...
+                        if (!arrayService.errors(response, popUp, "ClientList", model.$router)) {
+
+                            popUp("success",
+                                true,
+                                "Cliente guardado con exito!",
+                                // Sets the custom action to perform when saving a client.
+                                function () {
+                                    // Programatically navigates to the ClientList component.
+                                    model.$router.navigate(["ClientList"]);
+                                });
+                        }
                     })
+                    // Unexpected errors.
                     .catch(function (response) {
                         console.log("Error:", response.errors);
                         popUp("error",

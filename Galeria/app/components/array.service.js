@@ -41,11 +41,34 @@
             return Number(unformattedNumber);
         };
 
+        // Wrapper function to determine if a certain response contains any errors, 
+        // if it does, it displays the error, logs it and then stops execution.
+        // If there are no errors, execution continues as normal.
+         var responseHasErrors = function (response, popUp, redirect, router) {
+            if (response.errors) {
+                console.log("Error:", response.errors);
+                var errorMessage = response.errors.code == 11000 ? "Esta ingresando un registro duplicado..." : response.errors.errmsg;
+                popUp("error",
+                    true,
+                    ("Ha ocurrido un error: " + errorMessage),
+                    // Sets the custom action to perform when saving a client.
+                    function () {
+                        // Programatically navigates to the ClientList component.
+                        router.navigate([redirect]);
+                    });
+                return true;
+            }
+            else {
+                return false;
+            }
+        };
+
         return {
             lookup: lookupItemFromArray,
             push: pushItemIntoArray,
             sort: sortArrayItems,
-            unformat: formatStringIntoNumber
+            unformat: formatStringIntoNumber,
+            errors: responseHasErrors
         };
     });
 
