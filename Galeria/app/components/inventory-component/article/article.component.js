@@ -47,7 +47,7 @@
                 // This call is asynchronous so a callback must be used in the promise to process the data.
                 .$promise.then(function (result) {
                     // Checks for errors...
-                    if (arrayService.errors(model, result, "Inventory")) {
+                    if (!arrayService.errors(model, result, "Inventory")) {
 
                         model._id = result.results._id;
                         model.selectedCategory = arrayService.lookup(result.results.category, model.categories)[0];

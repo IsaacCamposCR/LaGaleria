@@ -2,7 +2,7 @@
 var ReservationSchema = require("../schemas/reservation.schema.js");
 
 var newReservation = function (req, res) {
-    
+
     // Creates an instance of the reservation schema with the data from the request body.
     var reservation = new ReservationSchema({
         client: req.body.client,
@@ -60,7 +60,64 @@ module.exports.save = function (req, res) {
     }
 };
 
-module.exports.list = function (req, res) {
+var nextOrders = function (req, res) {
+    // Creates a new query to find all reservations and sort them ascendingly.
+    // The $not operator selects the opposite of the following expression. 
+    // The $size operator applies to the array length.
+    var query = ReservationSchema.find({
+        orders: { $ne: null, $not: { $size: 0 } }
+    });
+
+    query.sort({ delivery: "ascending" });
+
+    // Executes the find query.
+    query.exec(function (err, results) {
+
+        var filteredResults = [];
+        results.forEach(function (reservation) {
+            reservation.advances.forEach(function (advance) {
+                reservation.price -= advance.amount;
+            });
+
+            if (reservation.price > 0) {
+                reservation.price = reservation.price.toFixed(2);
+                filteredResults.push(reservation);
+            }
+        });
+        res.send({ results: filteredResults, errors: err });
+        res.end();
+    });
+};
+
+var pendingRemaining = function (req, res) {
+    // Creates a new query to find all reservations and sort them ascendingly.
+    // The $not operator selects the opposite of the following expression. 
+    // The $size operator applies to the array length.
+    var query = ReservationSchema.find();
+
+    query.sort({ date: "ascending" });
+
+    // Executes the find query.
+    query.exec(function (err, results) {
+
+        var filteredResults = [];
+        results.forEach(function (reservation) {
+            reservation.advances.forEach(function (advance) {
+                reservation.price -= advance.amount;
+            });
+
+            if (reservation.price > 0) {
+                reservation.price = reservation.price.toFixed(2);
+                filteredResults.push(reservation);
+            }
+        });
+        res.send({ results: filteredResults, errors: err });
+        res.end();
+    });
+
+};
+
+var list = function (req, res) {
     // Creates a new query to find all reservations and sort them ascendingly.
     var query = ReservationSchema.find();
 
@@ -82,6 +139,18 @@ module.exports.list = function (req, res) {
         res.send({ results: results, errors: err });
         res.end();
     });
+};
+
+module.exports.list = function (req, res) {
+    if (req.query.remaining) {
+        pendingRemaining(req, res);
+    }
+
+    if (req.query.next) {
+        nextOrders(req, res);
+    }
+
+    list(req, res);
 };
 
 module.exports.get = function (req, res) {

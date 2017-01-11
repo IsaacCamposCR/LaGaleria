@@ -22,8 +22,14 @@
 
         var listReservations = function (id) {
 
-            // Returns a promise with a list of all reservations
+            // Returns a promise with a list of all reservations.
             return resource.query({ _id: id });
+        };
+
+        var nextReservations = function () {
+
+            // Returns a promise with a list of all order reservations with pending remaining.
+            return resource.query({ next: true });
         };
 
         var getReservation = function (id) {
@@ -35,6 +41,7 @@
         return {
             save: saveReservation,
             list: listReservations,
+            next: nextReservations,
             get: getReservation
         };
     });

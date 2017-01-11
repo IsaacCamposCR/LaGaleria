@@ -67,7 +67,7 @@
                     }
                 });
 
-            return resource.query({ id: id })
+            return resource.query({ id: id });
         };
 
         return {

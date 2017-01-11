@@ -1,0 +1,24 @@
+<div>
+    <h1>Proximas Entregas</h1>
+
+    <table>
+        <thead>
+            <th> Cliente </th>
+            <th> Fecha de Entrega </th>
+            <th> Saldo </th>
+            <th></th>
+        </thead>
+        <tr ng-repeat="order in model.nextOrders">
+            <td>{{order.client}}</td>
+            <td>{{order.delivery | date:"MM/dd/yyyy"}}</td>
+            <td>{{order.price | currency}}</td>
+            <td>
+                <button type="button" ng-click="model.redirect(order)">Detalles</button>
+            </td>
+        </tr>
+    </table>
+
+    <h1>Saldos Pendientes</h1>
+
+
+</div>

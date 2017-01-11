@@ -158,6 +158,7 @@
         model.resetPrice = function () {
             model.specialPrice = false;
             model.price = model.orderTotal;
+            model.orderTotals();
         };
 
         model.addOrder = function () {
@@ -181,9 +182,9 @@
 
             // Cleans up every calculator data so that it can be reused.
             model.products.forEach(function (product) {
-                product.base = "0";
-                product.height = "0";
-                product.refill = "0";
+                product.base = "";
+                product.height = "";
+                product.refill = "";
             });
 
             model.details = "";
@@ -192,6 +193,8 @@
         };
 
         model.deleteOrder = function (index) {
+            model.specialPrice = false;
+
             model.orders.splice(index, 1);
 
             model.orderTotals();
