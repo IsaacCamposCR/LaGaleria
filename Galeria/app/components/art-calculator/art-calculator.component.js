@@ -36,6 +36,8 @@
             model.others = 0;
             model.productTotal = 0;
 
+            model.complete = false;
+
             // Updates the products array with the necessary calculators from the service, 
             // this will in turn, update the UI with multiple calculators.
             model.products = calculatorService.generateCalculators(model.selectedArt);
@@ -61,11 +63,12 @@
                     if (!arrayService.errors(model, result, "ReservationList")) {
 
                         model.id = result.results._id;
-                        //model.invoice = result.results.invoice;
                         model.date = new Date(result.results.date);
+                        model.delivery = new Date(result.results.delivery);
                         model.price = result.results.price;
                         model.advances = result.results.advances;
                         model.orders = result.results.orders;
+                        model.complete = result.results.complete;
 
                         // Loads the client component.
                         model.clientId = result.results.client;
@@ -212,6 +215,7 @@
                         delivery: model.delivery,
                         price: arrayService.unformat(((model.specialPrice) ? model.price : model.orderTotal)),
                         description: model.details,
+                        complete: model.complete,
                         advances: model.advances,
                         orders: model.orders
                     };

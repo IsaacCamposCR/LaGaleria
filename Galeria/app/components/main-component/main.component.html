@@ -20,5 +20,23 @@
 
     <h1>Saldos Pendientes</h1>
 
+    <table>
+        <thead>
+            <th> Cliente </th>
+            <th> Tipo de Entrada </th>
+            <th> Fecha de Entrega </th>
+            <th> Saldo </th>
+            <th></th>
+        </thead>
+        <tr ng-repeat="reservation in model.pendingRemaining">
+            <td>{{reservation.client}}</td>
+            <td>{{reservation.type}}</td>
+            <td>{{reservation.delivery | date:"MM/dd/yyyy"}}</td>
+            <td>{{reservation.price | currency}}</td>
+            <td>
+                <button type="button" ng-click="model.redirect(reservation)">Detalles</button>
+            </td>
+        </tr>
+    </table>
 
 </div>

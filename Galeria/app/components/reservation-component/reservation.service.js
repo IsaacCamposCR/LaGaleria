@@ -32,6 +32,12 @@
             return resource.query({ next: true });
         };
 
+        var remainingReservations = function () { 
+
+            // Returns a promise with a list of all order reservations with pending remaining.
+            return resource.query({ remaining: true });
+         };
+
         var getReservation = function (id) {
 
             // Returns a single reservation by id.
@@ -42,6 +48,7 @@
             save: saveReservation,
             list: listReservations,
             next: nextReservations,
+            remaining: remainingReservations,
             get: getReservation
         };
     });

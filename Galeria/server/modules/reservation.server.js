@@ -13,7 +13,8 @@ var newReservation = function (req, res) {
         articles: req.body.articles,
         advances: req.body.advances,
         orders: req.body.orders,
-        description: req.body.description
+        description: req.body.description,
+        complete: req.body.complete
     });
 
     // Executes the save command to Mongo.
@@ -37,6 +38,7 @@ var updateReservation = function (req, res) {
         delivery: req.body.delivery,
         price: req.body.price,
         description: req.body.description,
+        complete: req.body.complete,
         articles: req.body.articles,
         advances: req.body.advances,
         orders: req.body.orders
@@ -91,8 +93,6 @@ var nextOrders = function (req, res) {
 
 var pendingRemaining = function (req, res) {
     // Creates a new query to find all reservations and sort them ascendingly.
-    // The $not operator selects the opposite of the following expression. 
-    // The $size operator applies to the array length.
     var query = ReservationSchema.find();
 
     query.sort({ date: "ascending" });
@@ -102,13 +102,17 @@ var pendingRemaining = function (req, res) {
 
         var filteredResults = [];
         results.forEach(function (reservation) {
-            reservation.advances.forEach(function (advance) {
-                reservation.price -= advance.amount;
-            });
+            // Filters out reservations without advances, but this will also filter out orders, 
+            // and orders might not have advances and still have remaining.
+            if ((reservation.advances && reservation.advances.length > 0) || (reservation.orders && reservation.orders.length > 0)) {
+                reservation.advances.forEach(function (advance) {
+                    reservation.price -= advance.amount;
+                });
 
-            if (reservation.price > 0) {
-                reservation.price = reservation.price.toFixed(2);
-                filteredResults.push(reservation);
+                if (reservation.price > 0) {
+                    reservation.price = reservation.price.toFixed(2);
+                    filteredResults.push(reservation);
+                }
             }
         });
         res.send({ results: filteredResults, errors: err });
@@ -144,10 +148,12 @@ var list = function (req, res) {
 module.exports.list = function (req, res) {
     if (req.query.remaining) {
         pendingRemaining(req, res);
+        return;
     }
 
     if (req.query.next) {
         nextOrders(req, res);
+        return;
     }
 
     list(req, res);

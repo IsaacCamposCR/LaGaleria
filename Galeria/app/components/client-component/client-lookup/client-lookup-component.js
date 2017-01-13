@@ -17,7 +17,7 @@
         var model = this;
 
         model.$onInit = function () {  
-            model.clientFound = false;
+            //model.clientFound = false;
         };
 
         // When the user starts typing in the Client field, 
@@ -42,7 +42,7 @@
         model.selectClient = function (id) {
             model.clientId = id;
             model.client = "";
-            model.clientFound = true;
+            //model.clientFound = true;
             model.endClientSearch();
         };
 
