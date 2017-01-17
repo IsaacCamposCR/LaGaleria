@@ -2,22 +2,42 @@ var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 
 var reservationSchema = new Schema({
-    client: { 
-        type: String 
+    client: {
+        type: String
     },
-    invoice: { 
-        type: String 
+    invoice: {
+        type: String
     },
     date: {
         type: Date,
-        default: Date.now 
+        default: Date.now
     },
-    article: {
+    delivery: {
+        type: Date,
+        default: null
+    },
+    price: {
+        type: Number
+    },
+    description: {
         type: String
+    },
+    complete: {
+        type: Boolean
     },
     advances: [{
         date: { type: Date, default: Date.now },
         amount: { type: Number }
+    }],
+    articles: [{
+        article: { type: String },
+        quantity: { type: Number }
+    }],
+    orders: [{
+        type: { type: String },
+        description: { type: String },
+        amount: { type: Number },
+        complete: { type: Boolean }
     }]
 });
 

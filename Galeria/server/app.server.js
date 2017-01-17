@@ -11,7 +11,7 @@ mongoose.connect("mongodb://camposi:123qweEE@ds057176.mlab.com:57176/gallerydb",
         console.log(err);
     }
     else {
-        console.log("Database initialized...")
+        console.log("Database initialized...");
     }
 });
 
@@ -22,7 +22,7 @@ var app = express();
 var rootPath = path.normalize(__dirname + "/../");
 var bodyParser = require("body-parser");
 
-//app.use(morgan("dev")); 
+//app.use(morgan("dev"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static(rootPath + "/app"));
@@ -31,6 +31,8 @@ app.use(express.static(rootPath + "/app"));
 var clients = require("./modules/client.server");
 var articles = require("./modules/article.server");
 var categories = require("./modules/category.server");
+var providers = require("./modules/provider.server");
+var reservations = require("./modules/reservation.server");
 
 // Client endpoints
 // Creates a new client
@@ -53,6 +55,24 @@ app.post("/api/category/", categories.save);
 app.get("/api/category/", categories.list);
 // Gets a category
 app.get("/api/category/:category", categories.get);
+
+// Provider endpoints 
+// Creates a new Provider
+app.post("/api/provider/", providers.save);
+// Gets a list of all providers, can filtered by name.
+app.get("/api/provider/", providers.list);
+// Gets a provider by _id.
+app.get("/api/provider/:id", providers.get);
+// Gets the list of invoices from a provider by _id.
+app.get("/api/provider/:id/invoices", providers.invoices);
+
+// Reservation endpoints 
+// Creates a new reservation
+app.post("/api/reservation/", reservations.save);
+// Gets a list of all reservations.
+app.get("/api/reservation/", reservations.list);
+// Gets a reservation by _id.
+app.get("/api/reservation/:id", reservations.get);
 
 app.get("*", function (req, res) {
     res.sendFile(rootPath + "/app/index.html");

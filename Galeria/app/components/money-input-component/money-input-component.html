@@ -1,0 +1,5 @@
+<ng-form name="moneyForm">
+    <input name="price" type="text" ng-model="model.text" step="0.01" ng-keydown="model.supressKeys($event)" ng-keyup="model.format()"
+        ng-blur="model.blur()" required>
+    <p ng-show="moneyForm.price.$invalid">El monto es requerido.</p>
+</ng-form>

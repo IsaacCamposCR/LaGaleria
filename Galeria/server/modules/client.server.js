@@ -1,8 +1,8 @@
 // References the schema for clients
 var ClientSchema = require("../schemas/client.schema.js");
 
+// Creates a new client object in the database.
 var newClient = function (req, res) {
-
     // Creates an instance of the client schema with the data from the request body.
     var client = new ClientSchema({
         name: req.body.name,
@@ -17,18 +17,21 @@ var newClient = function (req, res) {
     });
 };
 
+// Updates an existing client object in the database.
 var updateClient = function (req, res) {
-
+    // Query to select the appropriate client by id.
     var query = {
         _id: req.body._id
     };
 
+    // New data to be updated.
     var newData = {
         name: req.body.name,
         phones: req.body.phones,
         created: req.body.created
     };
 
+    // Update executed according to query, new data, only one row.
     ClientSchema.update(query, newData, { multi: false },
         function (err, numAffected) {
             res.send({ results: req.body, errors: err });
@@ -36,8 +39,8 @@ var updateClient = function (req, res) {
         });
 };
 
-// Creates a new client object in the database.
 module.exports.save = function (req, res) {
+    // If the _id parameter in the body exists then calls update, else it creates a new record.
     if (req.body._id) {
         updateClient(req, res);
     } else {
@@ -45,6 +48,7 @@ module.exports.save = function (req, res) {
     }
 };
 
+// Returns an object with an array of clients.
 module.exports.list = function (req, res) {
     var query;
 

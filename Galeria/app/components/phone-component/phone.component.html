@@ -1,5 +1,0 @@
-<div ng-repeat="phone in model.phones track by $index">
-	<label for="phoneInput">Telefono #{{$index + 1}}:</label>
-	<input type="number" id="phoneInput" ng-model="phone" ng-change="model.savePhone($index, phone)">
-	<button type="button" ng-click="model.removeNewClientPhone($index)">X</button>
-</div>

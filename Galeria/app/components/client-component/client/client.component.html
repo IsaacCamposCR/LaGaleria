@@ -1,29 +1,28 @@
 <div>
-	<h1>{{model.title}}</h1>
+	<h1 ng-if="model.showReservations">{{model.title}}</h1>
 
-	<form name="clientForm">
+	<ng-form name="clientForm">
 		<fieldset ng-disabled="model.disableForm">
 			<div>
 				<label for="name">Nombre: </label>
-				<input type="text" id="name" ng-model="model.name">
-				<br/>
-				<label for="phoneInput">Telefono(s): </label>
-				<button type="button" ng-click="model.addNewClientPhone()">+</button>
-				<br/>
-				<div ng-repeat="phone in model.phones track by $index">
-					<label for="phoneInput">Telefono #{{$index + 1}}:</label>
-					<input type="number" id="phoneInput" ng-model="phone" ng-change="model.savePhone($index, phone)">
-					<button type="button" ng-click="model.removeNewClientPhone($index)">X</button>
-				</div>
+				<input type="text" name="name" ng-model="model.name" required>
+				<p ng-show="clientForm.name.$invalid">El nombre del cliente es requerido.</p>
+				<phones phones="model.phones"></phones>
 				<label for="created">Fecha de Ingreso</label>
-				<input type="date" id="created" ng-model="model.created">
+				<input type="date" name="created" ng-model="model.created" required>
+				<p ng-show="clientForm.created.$invalid">La fecha de ingreso del cliente no es valida.</p>
 			</div>
 		</fieldset>
-		<div ng-show="!model.pop">
-			<button ng-if="!model.editingClient" type="submit" ng-click="model.saveClient()">Guardar</button>
-			<button type="button" ng-if="model.editingClient" ng-click="model.editClient()">Editar</button>
-			<button type="button" ng-click="model.cancel()">Cancelar</button>
+		<div>
+			<div ng-show="!model.pop">
+				<button ng-disabled="!clientForm.$valid" ng-if="!model.editingClient" type="submit" ng-click="model.saveClient(clientForm.$valid)">Guardar</button>
+				<button ng-if="model.editingClient" type="button" ng-click="model.editClient()">Editar</button>
+				<button type="button" ng-click="model.cancelEdit()">Cancelar</button>
+			</div>
 		</div>
-	</form>
-	<message message="model.message" show="model.pop" confirm="model.confirm()"></message>
+	</ng-form>
+	<message type="model.messageType" message="model.message" show="model.pop" confirm="model.confirm()" cancel="model.cancel()"></message>
+	<div ng-if="model.showReservations">
+		<reservation-list-component client-reservations="model.id" $router="model.$router" />
+	</div>
 </div>

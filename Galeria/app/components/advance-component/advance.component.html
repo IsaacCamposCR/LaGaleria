@@ -1,0 +1,17 @@
+<div>
+    <fieldset ng-disabled="model.disableForm">
+        <h3>Abonos:</h3>
+        <label for="advance">Nuevo Abono: </label>
+        <money-input id="advance" text="model.advanceAmount"></money-input>
+        <input type="date" ng-model="model.advanceDate">
+        <button type="button" ng-click="model.addAdvance()">Agregar Abono</button>
+        <ul>
+            <li ng-repeat="advance in model.advances track by $index">
+                {{advance.date | date:"MM/dd/yyyy"}} - {{advance.amount | currency}}
+                <button type="button" ng-click="model.removeAdvance($index)">Eliminar</button>
+            </li>
+        </ul>
+        
+    </fieldset>
+    <message type="model.messageType" message="model.message" show="model.pop" confirm="model.confirm()" cancel="model.cancel()"></message>
+</div>

@@ -1,7 +1,7 @@
 <div>
 	<h1>{{model.title}}</h1>
 
-	<form name="articleForm">
+	<ng-form name="articleForm">
 		<fieldset ng-disabled="model.disableForm">
 			<div ng-if="!model.editingCategory">
 				<label for="category">Category: </label>
@@ -14,30 +14,33 @@
 				<label for="category">Category: </label>
 				<input type="text" name="category" ng-model="model.category">
 				<button type="button" ng-click="model.addNewCategory()">Guardar</button>
-				<button type="button" ng-click="model.cancelEdit()">Cancelar</button>
+				<button type="button" ng-click="model.cancelEditCategory()">Cancelar</button>
 			</div>
 			<br/>
-			<label for="provider">Proveedor: </label>
-			<select id="provider" ng-model="model.selectedProvider" ng-options="provider for provider in model.providers">
-            </select>
+			<label for="provider">Provider</label>
+			<select id="provider" ng-model="model.selectedProvider" ng-options="provider.name for provider in model.providers track by provider._id">
+			</select>
 			<br/>
 			<label for="code">Codigo del Producto: </label>
-			<input id="code" type="text" ng-model="model.code">
+			<input name="code" type="text" ng-model="model.code" required>
+			<p ng-show="articleForm.code.$invalid">El codigo del producto es requerido.</p>
 			<br/>
 			<label for="description">Descripcion: </label>
-			<input id="description" type="text" ng-model="model.description">
+			<input name="description" type="text" ng-model="model.description" required>
+			<p ng-show="articleForm.description.$invalid">La descripcion del producto es requerida.</p>
 			<br/>
 			<label for="stock">Cantidad Disponible: </label>
 			<input id="stock" type="number" ng-model="model.stock">
+			<label for="history" ng-if="model.editingArticle">Historico: {{model.history}}</label>
 			<br/>
 			<label for="price">Precio: </label>
-			<input id="price" type="number" ng-model="model.price">
+			<money-input text="model.price"></money-input>
 		</fieldset>
 		<div ng-show="!model.pop">
-			<button ng-if="!model.editingArticle" type="submit" ng-click="model.saveArticle()">Guardar</button>
+			<button ng-disabled="!articleForm.$valid" ng-if="!model.editingArticle" type="submit" ng-click="model.saveArticle()">Guardar</button>
 			<button type="button" ng-if="model.editingArticle" ng-click="model.editArticle()">Editar</button>
-			<button type="button" ng-click="model.cancel()">Cancelar</button>
+			<button type="button" ng-click="model.cancelEditArticle()">Cancelar</button>
 		</div>
-	</form>
-	<message message="model.message" show="model.pop" confirm="model.confirm()"></message>
+	</ng-form>
+	<message type="model.messageType" message="model.message" show="model.pop" confirm="model.confirm()" cancel="model.cancel()"></message>
 </div>

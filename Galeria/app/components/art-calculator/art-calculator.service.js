@@ -11,9 +11,9 @@
             return {
                 name: name,
                 required: refillRequired,
-                base: 0,
-                height: 0,
-                refill: 0,
+                base: "",
+                height: "",
+                refill: "",
                 cmPrice: cmPrice,
                 total: 0
             };
