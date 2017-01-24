@@ -1,51 +1,65 @@
-<div>
-    <h1>Inventario</h1>
-    <div>
-        <input type="text" id="search" ng-model="model.articleDescription" placeholder="Busqueda de articulos...">
-        <button type="button" ng-click="model.findArticle()">Buscar</button>
+<div class="panel panel-default">
+
+    <div class="panel-heading">
+        <b>Inventario</b>
+        <div class="input-group">
+            <input type="text" class="form-control" ng-model="model.articleDescription" placeholder="Busqueda de articulos...">
+            <span class="input-group-btn">
+				<button class="btn btn-default" type="button" ng-click="model.findArticle()">
+					<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+            </button>
+            </span>
+        </div>
+        <div>
+            <b>Cantidad Total de Articulos: {{model.totalArticles}} | Cantidad de Articulos Unicos: {{model.uniqueArticles}} | Total Inventario: {{model.total | currency}}</b>
+            <br/>
+            <button class="btn btn-primary" type="button" ng-link="['Article']">Nuevo Articulo</button>
+        </div>
     </div>
-    <div>
-        <h3>Cantidad Total de Articulos: {{model.totalArticles}}</h3>
-        <h3>Cantidad de Articulos Unicos: {{model.uniqueArticles}}</h3>
-        <h3>Total Inventario: {{model.total | currency}}</h3>
-        <button type="button" ng-link="['Article']">Nuevo Articulo</button>
-    </div>
-    <div>
+
+    <div class="panel-body">
         <div ng-repeat="category in model.categories | filter:model.articleDescription">
-            <span ng-click="model.toggleCollapsedCategory(category)"><h3>{{category.name}}: {{category.articles.length}} articulo(s)</h3></span>
-            <div ng-show="category.collapsed">
-                <table>
-                    <thead>
-                        <th>
-                            <div ng-click="model.sort('code')">Codigo del Producto</div>
-                        </th>
-                        <th>
-                            <div ng-click="model.sort('description')">Descripcion</div>
-                        </th>
-                        <th>
-                            <div ng-click="model.sort('provider')">Proveedor</div>
-                        </th>
-                        <th>
-                            <div ng-click="model.sort('stock')">Cantidad</div>
-                        </th>
-                        <th>
-                            <div ng-click="model.sort('price')">Precio</div>
-                        </th>
-                        <th>
-                            <div ng-click="model.sort('price * stock')">Total</div>
-                        </th>
-                        <th></th>
-                    </thead>
-                    <tr ng-repeat="article in category.articles | orderBy:model.orderBy">
-                        <td>{{article.code}}</td>
-                        <td>{{article.description}}</td>
-                        <td>{{article.provider}}</td>
-                        <td>{{article.stock}}</td>
-                        <td>{{article.price | currency}}</td>
-                        <td>{{article.price * article.stock | currency}}</td>
-                        <td><button type="button" ng-link="['EditArticle', {id: article._id}]">Detalles</button></td>
-                    </tr>
-                </table>
+            <div class="panel panel-default">
+
+                <div class="panel-heading">
+                    <span ng-click="model.toggleCollapsedCategory(category)"><b>{{category.name}}: {{category.articles.length}} articulo(s)</b></span>
+                </div>
+
+                <div class="panel-body" ng-show="category.collapsed">
+                    <table class="table table-bordered table-striped table-hover">
+                        <thead>
+                            <th>
+                                <div ng-click="model.sort('code')">Codigo del Producto</div>
+                            </th>
+                            <th>
+                                <div ng-click="model.sort('description')">Descripcion</div>
+                            </th>
+                            <th>
+                                <div ng-click="model.sort('provider')">Proveedor</div>
+                            </th>
+                            <th>
+                                <div ng-click="model.sort('stock')">Cantidad</div>
+                            </th>
+                            <th>
+                                <div ng-click="model.sort('price')">Precio</div>
+                            </th>
+                            <th>
+                                <div ng-click="model.sort('price * stock')">Total</div>
+                            </th>
+                            <th></th>
+                        </thead>
+                        <tr ng-repeat="article in category.articles | orderBy:model.orderBy">
+                            <td>{{article.code}}</td>
+                            <td>{{article.description}}</td>
+                            <td>{{article.provider}}</td>
+                            <td>{{article.stock}}</td>
+                            <td>{{article.price | currency}}</td>
+                            <td>{{article.price * article.stock | currency}}</td>
+                            <td><button class="btn btn-default" type="button" ng-link="['EditArticle', {id: article._id}]">Detalles</button></td>
+                        </tr>
+                    </table>
+                </div>
+
             </div>
         </div>
     </div>

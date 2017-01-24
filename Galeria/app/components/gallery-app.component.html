@@ -1,12 +1,14 @@
-<div>
-	<nav>
-		<a ng-link="['Main']">Inicio</a>
-		<a ng-link="['ArtCalculator']">Nuevo Encargo</a>
-		<a ng-link="['Reservation']">Nueva Venta</a>
-		<a ng-link="['ReservationList']">Ventas</a>
-		<a ng-link="['ClientList']">Clientes</a>
-		<a ng-link="['Inventory']">Inventario</a>
-		<a ng-link="['ProviderList']">Proveedores</a>
+<div class="panel panel-heading">
+	<nav class="navbar navbar-default">
+		<a class="navbar-brand" ng-link="['Main']">La Galeria</a>
+		<ul class="nav navbar-nav">
+			<li><a ng-link="['ArtCalculator']">Nuevo Encargo</a></li>
+			<li><a ng-link="['Reservation']">Nueva Venta</a></li>
+			<li><a ng-link="['ReservationList']">Ventas</a></li>
+			<li><a ng-link="['ClientList']">Clientes</a></li>
+			<li><a ng-link="['Inventory']">Inventario</a></li>
+			<li><a ng-link="['ProviderList']">Proveedores</a></li>
+		</ul>
 	</nav>
 	<ng-outlet></ng-outlet>
 </div>
