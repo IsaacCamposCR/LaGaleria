@@ -2,12 +2,12 @@
 	<div class="panel-heading">
 		<b>Clientes</b>
 		<div class="input-group">
-			<input type="text" class="form-control" ng-model="model.clientName" placeholder="Busqueda de clientes...">
 			<span class="input-group-btn">
 				<button class="btn btn-default" type="button" ng-click="model.findClient()">
-					<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+					<span class="glyphicon glyphicon-search" aria-hidden="true"/>
 				</button>
 			</span>
+			<input type="text" class="form-control" ng-model="model.clientName" placeholder="Busqueda de clientes...">
 		</div>
 	</div>
 
@@ -23,16 +23,16 @@
 				<th>
 					<div ng-click="model.sort('created')">Fecha Ingreso</div>
 				</th>
-				<th>
-					<button class="btn btn-primary" type="button" ng-link="['Client']">Nuevo Cliente</button>
+				<th class="col-sm-1">
+					<button class="btn btn-primary btn-block" type="button" ng-link="['Client']">Nuevo Cliente</button>
 				</th>
 			</thead>
 			<tr ng-repeat="client in model.clients | filter:model.clientName | orderBy:model.orderBy">
 				<td><span>{{client.name}}</span></td>
 				<td><span>{{client.phones[0]}}</span></td>
 				<td>{{client.created | date:"MM/dd/yyyy"}}</td>
-				<td>
-					<button class="btn btn-default" type="button" ng-link="['EditClient', {id: client._id}]">Detalles</button>
+				<td class="col-sm-1">
+					<button class="btn btn-info btn-block" type="button" ng-link="['EditClient', {id: client._id}]">Detalles</button>
 				</td>
 			</tr>
 		</table>

@@ -1,6 +1,8 @@
-<div ng-show="model.show">
-	<span>{{model.message}}</span>
-	<hr/>
-	<button type="button" ng-click="model.confirmMessage()">OK</button>
-	<button type="button" ng-click="model.cancelMessage()" ng-show="model.cancelButton">Cancelar</button>
+<div class="" ng-show="model.show">
+	<div>
+		<span class="alert alert-danger">{{model.message}}</span>
+		<hr/>
+		<button type="button" ng-click="model.confirmMessage()">OK</button>
+		<button type="button" ng-click="model.cancelMessage()" ng-show="model.cancelButton">Cancelar</button>
+	</div>
 </div>

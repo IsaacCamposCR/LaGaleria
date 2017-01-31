@@ -1,15 +1,34 @@
 <ng-form name="phoneForm">
-	<div>
-		<label>Telefono(s): </label>
-		<button ng-disabled="phoneForm.phoneinput.$invalid" type="button" ng-click="model.addNewClientPhone()">+</button>
-		<br/>
-		<div ng-repeat="phone in model.phones track by $index">
-			<label for="phoneinput">Telefono #{{$index + 1}}:</label>
-			<input type="text" name="phoneinput" ng-model="phone" ng-keydown="model.supressKeys($event, $index)" ng-keyup="model.format($index)"
-				ng-change="model.savePhone($index, phone)" required>
-			<button type="button" ng-click="model.removeNewClientPhone($index)">X</button>
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<div class="form-group">
+				<label class="control-label">Telefono(s): </label>
+				<div>
+					<button class="btn btn-success" ng-disabled="phoneForm.phoneinput.$invalid" type="button" ng-click="model.addNewClientPhone()">
+						<span class="glyphicon glyphicon-plus" aria-hidden="true"/>
+					</button>
+				</div>
+			</div>
+
+			<div ng-repeat="phone in model.phones track by $index">
+				<div class="form-group">
+					<label class="" for="phoneinput">Telefono #{{$index + 1}}:</label>
+					<div class="">
+						<input class="input-sm" type="text" name="phoneinput" ng-model="phone" ng-keydown="model.supressKeys($event, $index)" ng-keyup="model.format($index)"
+							ng-change="model.savePhone($index, phone)" required>
+
+						<button class="btn btn-danger" type="button" ng-click="model.removeNewClientPhone($index)">
+							<span class="glyphicon glyphicon-trash" aria-hidden="true"/>
+						</button>
+					</div>
+				</div>
+				<span class="alert alert-danger" ng-show="phoneForm.phoneinput.$invalid">
+					<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> El numero de telefono es requerido.
+				</span>
+			</div>
+
+			<message message="model.message" show="model.pop" confirm="model.confirm()"></message>
 		</div>
-		<p ng-show="phoneForm.phoneinput.$invalid">El numero de telefono es requerido.</p>
-		<message message="model.message" show="model.pop" confirm="model.confirm()"></message>
+
 	</div>
 </ng-form>

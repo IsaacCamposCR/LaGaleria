@@ -2,12 +2,12 @@
     <div class="panel-heading">
         <b>Encargos y Apartados</b>
         <div class="input-group">
-            <input type="text" class="form-control" ng-model="model.reservationName" placeholder="Busqueda de ventas, encargos y apartados...">
             <span class="input-group-btn">
 				<button class="btn btn-default" type="button">
-					<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-            </button>
+					<span class="glyphicon glyphicon-search" aria-hidden="true"/>
+                </button>
             </span>
+            <input type="text" class="form-control" ng-model="model.reservationName" placeholder="Busqueda de ventas, encargos y apartados...">
         </div>
     </div>
 
@@ -32,7 +32,7 @@
                 <th>
                     <div ng-click="model.sort('price')">Saldo</div>
                 </th>
-                <th>
+                <th class="col-sm-2">
                     <div class="btn-group" role="group" aria-label="...">
                         <button class="btn btn-primary" data-toggle="tooltip" data-placement="bottom" title="Nueva Venta" type="button" ng-link="['Reservation']">
                             <span class="glyphicon glyphicon-shopping-cart"></span>
@@ -50,8 +50,8 @@
                 <td>{{reservation.client}}</td>
                 <td>{{reservation.article}}{{reservation.order}}</td>
                 <td>{{reservation.price | currency}}</td>
-                <td>
-                    <button class="btn btn-default" type="button" ng-click="model.redirect(reservation)">Detalles</button>
+                <td class="col-sm-2">
+                    <button class="btn btn-info btn-block" type="button" ng-click="model.redirect(reservation)">Detalles</button>
                 </td>
             </tr>
         </table>

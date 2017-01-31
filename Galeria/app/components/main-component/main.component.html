@@ -8,7 +8,7 @@
                 <th> Fecha de Entrega </th>
                 <th> Saldo </th>
                 <th> Estado </th>
-                <th></th>
+                <th class="col-sm-1"></th>
             </thead>
             <tbody>
                 <tr ng-repeat="order in model.nextOrders">
@@ -16,8 +16,8 @@
                     <td>{{order.delivery | date:"MM/dd/yyyy"}}</td>
                     <td>{{order.price | currency}}</td>
                     <td class="{{order.class}}">{{order.status}}</td>
-                    <td>
-                        <button class="btn btn-default" type="button" ng-click="model.redirect(order)">Detalles</button>
+                    <td class="col-sm-1">
+                        <button class="btn btn-info btn-block" type="button" ng-click="model.redirect(order)">Detalles</button>
                     </td>
                 </tr>
             </tbody>
@@ -31,7 +31,7 @@
                 <th> Fecha de Entrega </th>
                 <th> Saldo </th>
                 <th> Estado </th>
-                <th></th>
+                <th class="col-sm-1"></th>
             </thead>
             <tbody>
                 <tr ng-repeat="reservation in model.pendingRemaining">
@@ -40,8 +40,8 @@
                     <td>{{reservation.delivery | date:"MM/dd/yyyy"}}</td>
                     <td>{{reservation.price | currency}}</td>
                     <td class="{{reservation.class}}">{{reservation.status}}</td>
-                    <td>
-                        <button class="btn btn-default" type="button" ng-click="model.redirect(reservation)">Detalles</button>
+                    <td class="col-sm-1">
+                        <button class="btn btn-info btn-block" type="button" ng-click="model.redirect(reservation)">Detalles</button>
                     </td>
                 </tr>
             </tbody>

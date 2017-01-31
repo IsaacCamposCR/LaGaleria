@@ -14,3 +14,43 @@
 .table tbody tr.warning td {
   background-color: lightgoldenrodyellow;
 }
+
+.form-group {
+  margin-bottom: 7px;
+}
+
+.alert {
+  padding: 4px;;
+  
+  margin-right: 0;
+  margin-left: 0;
+  margin-bottom: 10px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+}
+
+.container {
+  padding-top: 0;
+  padding-bottom: 0;
+  background-color: #b7b7b7;
+}
+
+.row {
+  margin-bottom: 10px;
+}
+
+.panel {
+  background-color: #b7b7b7;
+}
+
+.panel-default {
+  background-color: #b7b7b7;
+}
+
+.panel-body {
+  background-color: #ffffff;
+}
+
+body {
+  margin-top: 40px;
+}

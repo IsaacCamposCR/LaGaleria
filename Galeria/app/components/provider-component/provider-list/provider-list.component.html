@@ -2,12 +2,12 @@
 	<div class="panel-heading">
 		<b>Proveedores</b>
 		<div class="input-group">
-			<input type="text" class="form-control" ng-model="model.providerName" placeholder="Busqueda de proveedores...">
 			<span class="input-group-btn">
 				<button class="btn btn-default" type="button" ng-click="model.findProviders()">
-					<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+					<span class="glyphicon glyphicon-search" aria-hidden="true"/>
 				</button>
 			</span>
+			<input type="text" class="form-control" ng-model="model.providerName" placeholder="Busqueda de proveedores...">
 		</div>
 	</div>
 
@@ -23,16 +23,16 @@
 				<th>
 					<div ng-click="model.sort('remaining')">Saldo</div>
 				</th>
-				<th>
-					<button class="btn btn-primary" type="button" ng-link="['Provider']">Nuevo Proveedor</button>
+				<th class="col-sm-1">
+					<button class="btn btn-primary btn-block" type="button" ng-link="['Provider']">Nuevo Proveedor</button>
 				</th>
 			</thead>
 			<tr ng-repeat="provider in model.providers | filter:model.providerName | orderBy: model.orderBy">
 				<td><span>{{provider.name}}</span></td>
 				<td><span>{{provider.phones[0]}}</span></td>
 				<td>{{provider.remaining | currency}}</td>
-				<td>
-					<button class="btn btn-default" type="button" ng-link="['EditProvider', {id: provider._id}]">Detalles</button>
+				<td class="col-sm-1">
+					<button class="btn btn-info btn-block" type="button" ng-link="['EditProvider', {id: provider._id}]">Detalles</button>
 				</td>
 			</tr>
 		</table>
