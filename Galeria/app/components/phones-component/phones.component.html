@@ -12,18 +12,20 @@
 
 			<div ng-repeat="phone in model.phones track by $index">
 				<div class="form-group">
-					<label class="" for="phoneinput">Telefono #{{$index + 1}}:</label>
-					<div class="">
-						<input class="input-sm" type="text" name="phoneinput" ng-model="phone" ng-keydown="model.supressKeys($event, $index)" ng-keyup="model.format($index)"
-							ng-change="model.savePhone($index, phone)" required>
+					<label for="phoneinput">Telefono #{{$index + 1}}:</label>
 
-						<button class="btn btn-danger" type="button" ng-click="model.removeNewClientPhone($index)">
-							<span class="glyphicon glyphicon-trash" aria-hidden="true"/>
-						</button>
+					<div class="input-group">
+						<input class="form-control" type="text" name="phoneinput" ng-model="phone" ng-keydown="model.supressKeys($event, $index)" ng-keyup="model.format($index)"
+							ng-change="model.savePhone($index, phone)" required>
+						<span class="input-group-btn">
+                            <button class="btn btn-danger" type="button" ng-click="model.removeNewClientPhone($index)">
+								<span class="glyphicon glyphicon-trash" aria-hidden="true"/>
+							</button>
+                        </span>
 					</div>
 				</div>
 				<span class="alert alert-danger" ng-show="phoneForm.phoneinput.$invalid">
-					<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> El numero de telefono es requerido.
+					<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> El telefono es requerido.
 				</span>
 			</div>
 

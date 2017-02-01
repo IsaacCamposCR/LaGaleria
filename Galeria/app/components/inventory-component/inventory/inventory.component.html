@@ -19,49 +19,48 @@
 
     <div class="panel-body">
         <div ng-repeat="category in model.categories | filter:model.articleDescription">
-            <div class="panel panel-default">
+            <!--<div class="panel panel-default">-->
 
-                <div class="panel-heading">
-                    <span class="btn btn-primary btn-block" ng-click="model.toggleCollapsedCategory(category)">
+            <div>
+                <span class="btn btn-default btn-block" ng-click="model.toggleCollapsedCategory(category)">
                         <span class="{{category.class}}" aria-hidden="true"></span>
-                    <b>{{category.name}}: {{category.articles.length}} articulo(s)</b>
-                    </span>
-                </div>
-                <table class="table table-bordered table-striped table-hover" ng-show="category.collapsed">
-                    <thead>
-                        <th>
-                            <div ng-click="model.sort('code')">Codigo del Producto</div>
-                        </th>
-                        <th>
-                            <div ng-click="model.sort('description')">Descripcion</div>
-                        </th>
-                        <th>
-                            <div ng-click="model.sort('provider')">Proveedor</div>
-                        </th>
-                        <th>
-                            <div ng-click="model.sort('stock')">Cantidad</div>
-                        </th>
-                        <th>
-                            <div ng-click="model.sort('price')">Precio</div>
-                        </th>
-                        <th>
-                            <div ng-click="model.sort('price * stock')">Total</div>
-                        </th>
-                        <th class="col-sm-1">
-                            <button class="btn btn-primary" type="button" ng-link="['Article']">Nuevo Articulo</button>
-                        </th>
-                    </thead>
-                    <tr ng-repeat="article in category.articles | orderBy:model.orderBy">
-                        <td>{{article.code}}</td>
-                        <td>{{article.description}}</td>
-                        <td>{{article.provider}}</td>
-                        <td>{{article.stock}}</td>
-                        <td>{{article.price | currency}}</td>
-                        <td>{{article.price * article.stock | currency}}</td>
-                        <td class="col-sm-1"><button class="btn btn-info btn-block" type="button" ng-link="['EditArticle', {id: article._id}]">Detalles</button></td>
-                    </tr>
-                </table>
+                <b>{{category.name}}: {{category.articles.length}} articulo(s)</b>
+                </span>
             </div>
+            <table class="table table-bordered table-striped table-hover" ng-show="category.collapsed">
+                <thead>
+                    <th>
+                        <div ng-click="model.sort('code')">Codigo del Producto</div>
+                    </th>
+                    <th>
+                        <div ng-click="model.sort('description')">Descripcion</div>
+                    </th>
+                    <th>
+                        <div ng-click="model.sort('provider')">Proveedor</div>
+                    </th>
+                    <th>
+                        <div ng-click="model.sort('stock')">Cantidad</div>
+                    </th>
+                    <th>
+                        <div ng-click="model.sort('price')">Precio</div>
+                    </th>
+                    <th>
+                        <div ng-click="model.sort('price * stock')">Total</div>
+                    </th>
+                    <th class="col-sm-1">
+                        <button class="btn btn-primary" type="button" ng-link="['Article']">Nuevo Articulo</button>
+                    </th>
+                </thead>
+                <tr ng-repeat="article in category.articles | orderBy:model.orderBy">
+                    <td>{{article.code}}</td>
+                    <td>{{article.description}}</td>
+                    <td>{{article.provider}}</td>
+                    <td>{{article.stock}}</td>
+                    <td>{{article.price | currency}}</td>
+                    <td>{{article.price * article.stock | currency}}</td>
+                    <td class="col-sm-1"><button class="btn btn-info btn-block" type="button" ng-link="['EditArticle', {id: article._id}]">Detalles</button></td>
+                </tr>
+            </table>
         </div>
     </div>
 </div>

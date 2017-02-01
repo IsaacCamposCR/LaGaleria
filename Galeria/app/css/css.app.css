@@ -44,7 +44,12 @@
 }
 
 .panel-default {
+  border-color: #b7b7b7;
   background-color: #b7b7b7;
+}
+
+.panel-heading {
+  background-color: #f5f5f5;
 }
 
 .panel-body {
