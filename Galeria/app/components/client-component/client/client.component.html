@@ -2,7 +2,7 @@
 	<ng-form name="clientForm">
 		<caption ng-if="model.showReservations">{{model.title}}</caption>
 		<fieldset ng-disabled="model.disableForm">
-			<div class="col-sm-6">
+			<div class="col-sm-5">
 				<div class="form-group">
 					<label for="name">Nombre:</label>
 					<input class="form-control input-sm" type="text" name="name" ng-model="model.name" required>
@@ -18,7 +18,7 @@
 						<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>La fecha de ingreso invalida.
 				</span>
 			</div>
-			<phones class="col-sm-6" phones="model.phones"></phones>
+			<phones class="col-sm-7" phones="model.phones"></phones>
 		</fieldset>
 		<div class="btn-group" ng-show="!model.pop">
 			<button class="btn btn-success" ng-disabled="!clientForm.$valid" ng-if="!model.editingClient" type="submit" ng-click="model.saveClient(clientForm.$valid)">Guardar</button>
