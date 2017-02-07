@@ -89,6 +89,7 @@
             model.remaining = 0;
             model.details = "";
             model.date = new Date();
+            model.calculatorSize = "col-sm-4";
 
             if (next.params.id) {
                 loadOrder(next.params.id);
@@ -101,6 +102,17 @@
         // Whenever a new type is selected the calculator set must be refreshed.
         model.renderCalculators = function () {
             model.products = calculatorService.generateCalculators(model.selectedArt);
+            resizeCalculators();
+        };
+
+        // When calculators are rendered, this method resizes the calculators to best fit the elements.
+        var resizeCalculators = function () {
+            if (model.products.length > 2) {
+                model.calculatorSize = "col-sm-3";
+            }
+            else {
+                model.calculatorSize = "col-sm-4";
+            }
         };
 
         model.totals = function () {

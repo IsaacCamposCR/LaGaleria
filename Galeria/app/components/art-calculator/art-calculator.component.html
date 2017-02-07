@@ -1,32 +1,67 @@
-<div>
-    <h1>{{model.title}}</h1>
-
+<div class="panel-heading">
+    <caption>{{model.title}}</caption>
+</div>
+<div class="panel-body">
     <ng-form name="artForm">
         <fieldset ng-disabled="model.disableForm">
-            <div>
-                <client-lookup-component client-id="model.clientId" />
+
+            <div class="row">
+                <div class="col-sm-5">
+                    <div class="form-group">
+                        <label for="invoice"># de Documento: </label>
+                        <div class="input-group">
+                            <input type="text" id="invoice" ng-model="model.invoice" class="form-control">
+                            <span class="input-group-addon">
+                                <input type="checkbox" ng-model="model.complete">Listo para Entregar
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="orderDate">Fecha de Ingreso: </label>
+                        <input class="form-control" type="date" name="orderDate" ng-model="model.date">
+                    </div>
+                    <div class="form-group">
+                        <label for="delivery">Fecha de Entrega: </label>
+                        <input class="form-control" type="date" name="delivery" ng-model="model.delivery">
+                    </div>
+                    <div>
+                        <label for="selectArt">Tipo de Arte: </label>
+                        <select class="form-control" id="selectArt" ng-model="model.selectedArt" ng-options="art for art in model.arts" ng-change="model.renderCalculators()">
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-sm-7">
+                    <client-lookup-component client-id="model.clientId" />
+                </div>
             </div>
             <hr/>
-            <div ng-if="model.disableCalculators">
-                <label for="selectArt">Tipo de Arte: </label>
-                <select id="selectArt" ng-model="model.selectedArt" ng-options="art for art in model.arts" ng-change="model.renderCalculators()">
-            </select>
-                <br/>
-                <div ng-repeat="product in model.products">
+            <div class="row" ng-if="model.disableCalculators">
+                <div class="{{model.calculatorSize}}" ng-repeat="product in model.products">
                     <calculator product="product" totals="model.totals()" />
                 </div>
-                <span>Subtotal: {{model.subtotal | currency}}</span>
-                <br/>
-                <span>Otros: {{model.others | currency}}</span>
-                <br/>
-                <span>Total: {{model.productTotal | currency}}</span>
-                <hr/>
-                <label for="details">Comentarios:</label>
-                <br/>
-                <textarea name="details" rows="4" cols="50" ng-model="model.details"></textarea>
-                <br/>
-                <button ng-disabled="!artForm.$valid" type="button" ng-click="model.addOrder()">Agregar Orden</button>
+
+                <div class="panel panel-default {{model.calculatorSize}}">
+                    <div class="panel-heading">
+                        <caption>Totales</caption>
+                    </div>
+                    <div class="panel-body">
+                        <span>Subtotal: {{model.subtotal | currency}}</span>
+                        <br/>
+                        <span>Otros: {{model.others | currency}}</span>
+                        <br/>
+                        <span>Total: {{model.productTotal | currency}}</span>
+                        <div class="form-group">
+                            <label for="details">Comentarios:</label>
+                            <textarea class="form-control" name="details" rows="4" cols="50" ng-model="model.details"></textarea>
+                        </div>
+                    </div>
+                    <div class="panel-footer">
+                        <button class="btn btn-success btn-block" ng-disabled="!artForm.$valid" type="button" ng-click="model.addOrder()">Agregar Orden</button>
+                    </div>
+                </div>
             </div>
+            <hr/>
             <div>
                 <h2>Encargos:</h2>
                 <ul>
@@ -47,11 +82,6 @@
                 <money-input text="model.price" ng-keydown="model.updatePrice()" blur="model.orderTotals()"></money-input>
                 <button type="button" ng-click="model.resetPrice()">Reestablecer</button>
                 <br/>
-                <label for="orderDate">Fecha de Ingreso: </label>
-                <input type="date" name="orderDate" ng-model="model.date">
-                <label for="delivery">Fecha de Entrega: </label>
-                <input type="date" name="delivery" ng-model="model.delivery">                
-                <input type="checkbox" ng-model="model.complete">Listo para Entregar
             </div>
             <br/>
             <div>
