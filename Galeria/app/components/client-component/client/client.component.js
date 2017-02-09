@@ -150,7 +150,9 @@
                     model.disableForm = model.editingClient;
                 },
                 model);
+
+            angular.element('#myModal').attr("visible", false);
         };
     }
 
-} ());
+}());

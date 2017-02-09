@@ -45,6 +45,8 @@
 
         model.confirmMessage = function () {
             model.show = false;
+            angular.element('#myModal').attr("class", "");
+            angular.element('#myModal').modal('hide');
             model.confirm();
         };
 
@@ -54,4 +56,4 @@
         };
     }
 
-} ());
+}());

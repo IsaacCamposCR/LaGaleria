@@ -180,11 +180,12 @@
             // Builds up a description string containing the order details.
             model.products.forEach(function (product) {
                 model.details +=
-                    "\n" + product.name +
-                    ((product.base) ? ":\nAncho:" + product.base : "") +
-                    ((product.height) ? "\nAlto:" + product.height : "") +
-                    ((product.refill) ? "\nRefill:" + product.refill : "") +
-                    "\n\n";
+                    "\n-" + product.name +
+                    ((product.base) ? ":\nAncho: " + product.base + " cm." : "") +
+                    ((product.height) ? "\nAlto: " + product.height + " cm." : "") +
+                    ((product.refill) ? "\nRefill: " + product.refill + " cm." : "");
+                model.details.trimLeft();
+                console.log(model.details);
             });
 
             // Adds a new order with data from the calculators.
@@ -305,4 +306,4 @@
         };
     }
 
-} ());
+}());

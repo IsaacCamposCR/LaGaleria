@@ -21,13 +21,18 @@
 			<phones class="col-sm-7" phones="model.phones"></phones>
 		</fieldset>
 		<div class="btn-group" ng-show="!model.pop">
-			<button class="btn btn-success" ng-disabled="!clientForm.$valid" ng-if="!model.editingClient" type="submit" ng-click="model.saveClient(clientForm.$valid)">Guardar</button>
-			<button class="btn btn-warning" ng-if="model.editingClient" type="button" ng-click="model.editClient()">Editar</button>
-			<button class="btn btn-danger" type="button" ng-click="model.cancelEdit()">Cancelar</button>
+			<button class="btn btn-success" data-toggle="modal" data-target="#myModal" ng-disabled="!clientForm.$valid" ng-if="!model.editingClient"
+				type="submit" ng-click="model.saveClient(clientForm.$valid)">Guardar</button>
+				<button class="btn btn-warning" data-toggle="modal" data-target="#myModal" ng-if="model.editingClient" type="button" ng-click="model.editClient()">Editar</button>
+				<button class="btn btn-danger" data-toggle="modal" data-target="#myModal" type="button" ng-click="model.cancelEdit()">Cancelar</button>
 		</div>
 
 	</ng-form>
-	<message type="model.messageType" message="model.message" show="model.pop" confirm="model.confirm()" cancel="model.cancel()"></message>
+
+	<div id="myModal" class="modal fade" role="dialog" >
+		<message type="model.messageType" message="model.message" show="model.pop"
+			confirm="model.confirm()" cancel="model.cancel()"></message>
+	</div>
 	<div ng-if="model.showReservations">
 		<reservation-list-component client-reservations="model.id" $router="model.$router" />
 	</div>

@@ -62,26 +62,32 @@
                 </div>
             </div>
             <hr/>
-            <div>
-                <h2>Encargos:</h2>
-                <ul>
-                    <li ng-repeat="order in model.orders track by $index">
-                        {{order.type}}: {{order.amount | currency}}
-                        <button type="button" ng-click="model.deleteOrder($index)">Eliminar</button>
-                        <div>
-                            <textarea rows="5" cols="25">{{order.description}}</textarea>
+            <div class="row">
+                <div class="panel panel-default col-sm-3">
+                    <div class="panel-body">
+                        <label>Total Encargos: {{model.orderTotal | currency}}</label>
+                        <br/>
+                        <span>Saldo: {{model.remaining | currency}}</span>
+                        <br/>
+                        <label for="specialPrice">Precio Final: </label>
+                        <money-input text="model.price" ng-keydown="model.updatePrice()" blur="model.orderTotals()"></money-input>
+                        <button class="btn btn-warning btn-block" type="button" ng-click="model.resetPrice()">Reestablecer</button>
+                    </div>
+                </div>
+
+                <div class="col-sm-3" ng-repeat="order in model.orders track by $index">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            {{order.type}}: {{order.amount | currency}}
                         </div>
-                    </li>
-                </ul>
-                <hr/>
-                <span>Total Encargos: {{model.orderTotal | currency}}</span>
-                <br/>
-                <span>Saldo: {{model.remaining | currency}}</span>
-                <br/>
-                <label for="specialPrice">Precio Final: </label>
-                <money-input text="model.price" ng-keydown="model.updatePrice()" blur="model.orderTotals()"></money-input>
-                <button type="button" ng-click="model.resetPrice()">Reestablecer</button>
-                <br/>
+                        <div class="panel-body">
+                            <div class="form-control-static">{{order.description}}</div>
+                        </div>
+                        <div class="panel-footer">
+                            <button class="btn btn-danger btn-block" type="button" ng-click="model.deleteOrder($index)">Eliminar</button>
+                        </div>
+                    </div>
+                </div>
             </div>
             <br/>
             <div>
@@ -89,9 +95,11 @@
             </div>
         </fieldset>
         <hr/>
-        <button type="button" ng-if="!model.editingOrder" ng-click="model.finish()">Completar Encargo</button>
-        <button type="button" ng-if="model.editingOrder" ng-click="model.editOrder()">Editar</button>
-        <button type="button" ng-click="model.cancelOrder()">Cancelar</button>
+        <div class="btn-group">
+            <button class="btn btn-success" type="button" ng-if="!model.editingOrder" ng-click="model.finish()">Completar Encargo</button>
+            <button class="btn btn-warning" type="button" ng-if="model.editingOrder" ng-click="model.editOrder()">Editar</button>
+            <button class="btn btn-danger" type="button" ng-click="model.cancelOrder()">Cancelar</button>
+        </div>
     </ng-form>
     <message type="model.messageType" message="model.message" show="model.pop" confirm="model.confirm()" cancel="model.cancel()"></message>
 </div>
