@@ -35,7 +35,10 @@
                     function () {
                         model.disableForm = false;
                     },
+                    function () {
+                    },
                     model);
+                $('#myAdvanceModal').modal('show');
                 return;
             }
 
@@ -46,7 +49,10 @@
                     function () {
                         model.disableForm = false;
                     },
+                    function () {
+                    },
                     model);
+                $('#myAdvanceModal').modal('show');
                 return;
             }
 
@@ -65,9 +71,9 @@
         // Remove the advance from the array and update totals.
         model.removeAdvance = function (index) {
             model.advances.splice(index, 1);
-            
+
             model.displayTotals();
         };
     }
 
-} ());
+}());

@@ -15,9 +15,9 @@
 					<label for="phoneinput">Telefono #{{$index + 1}}:</label>
 
 					<div class="input-group">
-						<input class="form-control" type="text" name="phoneinput" ng-model="phone" ng-keydown="model.supressKeys($event, $index)" ng-keyup="model.format($index)"
-							ng-change="model.savePhone($index, phone)" required>
-						<span class="input-group-btn">
+						<input class="form-control" type="text" name="phoneinput" ng-model="phone" ng-keydown="model.supressKeys($event, $index)"
+							ng-keyup="model.format($index)" ng-change="model.savePhone($index, phone)" required>
+							<span class="input-group-btn">
                             <button class="btn btn-danger" type="button" ng-click="model.removeNewClientPhone($index)">
 								<span class="glyphicon glyphicon-trash" aria-hidden="true"/>
 							</button>
@@ -29,7 +29,9 @@
 				</span>
 			</div>
 
-			<message message="model.message" show="model.pop" confirm="model.confirm()"></message>
+			<div id="myPhonesModal" class="modal fade" role="dialog">
+				<message type="model.messageType" message="model.message" show="model.pop" confirm="model.confirm()"></message>
+			</div>
 		</div>
 
 	</div>

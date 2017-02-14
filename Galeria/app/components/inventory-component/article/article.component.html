@@ -65,5 +65,7 @@
 			<button class="btn btn-danger" type="button" ng-click="model.cancelEditArticle()">Cancelar</button>
 		</div>
 	</ng-form>
-	<message type="model.messageType" message="model.message" show="model.pop" confirm="model.confirm()" cancel="model.cancel()"></message>
+	<div id="myModal" class="modal fade" role="dialog">
+		<message type="model.messageType" message="model.message" show="model.pop" confirm="model.confirm()" cancel="model.cancel()"></message>
+	</div>
 </div>

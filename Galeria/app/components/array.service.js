@@ -70,7 +70,7 @@
             model.messageType = type;
             model.message = message;
             model.pop = pop;
-            model.disableForm = true;
+            //model.disableForm = true;
             model.confirm = confirm;
             if (cancel) {
                 model.cancel = cancel;

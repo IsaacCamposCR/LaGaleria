@@ -7,13 +7,13 @@
     module.component("phones", {
         templateUrl: "/components/phones-component/phones.component.html",
         controllerAs: "model",
-        controller: [phonesController],
+        controller: ["arrayService", phonesController],
         bindings: {
             "phones": "="
         }
     });
 
-    function phonesController() {
+    function phonesController(arrayService) {
         var model = this;
 
         model.$onInit = function () {
@@ -31,11 +31,14 @@
         // Removes the selected phone from the array, the display is updated by removing an input.
         model.removeNewClientPhone = function (index) {
             if (model.phones.length === 1) {
-                popUp(true,
+                arrayService.pop("error",
+                    true,
                     "Debe ingresar al menos un numero de telefono...",
                     // Sets the custom action to perform when deleting phone numbers.
-                    function () {
-                    });
+                    function () { },
+                    function () { },
+                    model);
+                $('#myPhonesModal').modal('show');
             }
             else {
                 model.phones.splice(index, 1);
@@ -45,9 +48,12 @@
         // Adds a new empty string to the phones array in order to display a new input.
         model.addNewClientPhone = function () {
             if (model.phones[model.phones.length - 1] === "") {
-                popUp(true,
+                arrayService.pop("error",
+                    true,
                     "Debe proveer primero el telefono anterior.",
-                    function () { });
+                    function () { },
+                    function () { },
+                    model);
             }
             else {
                 model.phones.push("");
@@ -82,12 +88,5 @@
             }
         };
 
-        // Pop up message component. The model.pop property allows the form to hide the buttons when displaying the popup. 
-        // This mechanism might not be required once styles are put in.
-        var popUp = function (pop, message, confirm) {
-            model.message = message;
-            model.pop = pop;
-        };
-
     }
-} ());
+}());

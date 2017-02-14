@@ -119,10 +119,13 @@
                             "Proveedor guardado con exito!",
                             // Sets the custom action to perform when saving a provider.
                             function () {
+                                angular.element('#myModal').attr("class", "");
+                                angular.element('#myModal').modal('hide');
                                 model.$router.navigate(["ProviderList"]);
                             },
                             function () { },
                             model);
+                        $('#myModal').modal('show');
                     }
                 })
                 .catch(function (response) {
@@ -131,11 +134,14 @@
                         "Ha ocurrido un error...",
                         // Sets the custom action to perform when saving a provider.
                         function () {
+                            angular.element('#myModal').attr("class", "");
+                            angular.element('#myModal').modal('hide');
                             // Programatically navigates to the ProviderList component.
                             model.$router.navigate(["ProviderList"]);
                         },
                         function () { },
                         model);
+                    $('#myModal').modal('show');
                 });
         };
 
@@ -179,6 +185,8 @@
                             },
                             function () { },
                             model);
+
+                        $('#myModal').modal('show');
                         // Reloads the invoices from Mongo.
                         loadInvoices(model.id);
                     }
@@ -191,6 +199,7 @@
                         function () { },
                         function () { },
                         model);
+                    $('#myModal').modal('show');
                 });
         };
 
@@ -217,12 +226,15 @@
                 "Esta seguro que desea cancelar? Perdera los cambios.",
                 // Sets the custom action to perform when canceling.
                 function () {
+                    angular.element('#myModal').attr("class", "");
+                    angular.element('#myModal').modal('hide');
                     model.$router.navigate(["ProviderList"]);
                 },
                 function () {
                     model.disableForm = model.editingProvider;
                 },
                 model);
+            $('#myModal').modal('show');
         };
     }
-} ());
+}());

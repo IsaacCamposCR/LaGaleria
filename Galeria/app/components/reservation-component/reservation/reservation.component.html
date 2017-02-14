@@ -110,10 +110,12 @@
 
         </fieldset>
         <div class="btn-group" ng-show="!model.pop">
-            <button class="btn btn-success" ng-disabled="!reservationForm.$valid" ng-if="!model.editingReservation" type="submit" ng-click="model.saveReservation()">Guardar</button>
+            <button class="btn btn-success"  data-backdrop="static" data-keyboard="false" ng-disabled="!reservationForm.$valid" ng-if="!model.editingReservation" type="submit" ng-click="model.saveReservation()">Guardar</button>
             <button class="btn btn-warning" type="button" ng-if="model.editingReservation" ng-click="model.editReservation()">Editar</button>
             <button class="btn btn-danger" type="button" ng-click="model.cancelEditReservation()">Cancelar</button>
         </div>
     </ng-form>
-    <message type="model.messageType" message="model.message" show="model.pop" confirm="model.confirm()" cancel="model.cancel()"></message>
+    <div id="myReservationModal" class="modal fade" role="dialog">
+        <message type="model.messageType" message="model.message" show="model.pop" confirm="model.confirm()" cancel="model.cancel()"></message>
+    </div>
 </div>

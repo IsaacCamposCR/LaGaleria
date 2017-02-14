@@ -182,6 +182,7 @@
                     },
                     function () { },
                     model);
+                $('#myReservationModal').modal('show');
             }
 
             model.displayTotals();
@@ -232,9 +233,11 @@
                     function () { },
                     function () { },
                     model);
+                $('#myReservationModal').modal('show');
             }
             else {
                 arrayService.pop("warning", false, "", function () { }, function () { }, model);
+                $('#myReservationModal').modal('show');
             }
             model.disableForm = false;
         };
@@ -263,6 +266,7 @@
                     },
                     function () { },
                     model);
+                $('#myReservationModal').modal('show');
                 return;
             }
 
@@ -275,6 +279,7 @@
                     },
                     function () { },
                     model);
+                $('#myReservationModal').modal('show');
                 return;
             }
 
@@ -316,10 +321,13 @@
                             true,
                             "El Apartado se ha guardado con exito!",
                             function () {
+                                angular.element('#myReservationModal').attr("class", "");
+                                angular.element('#myReservationModal').modal('hide');
                                 model.$router.navigate(["ReservationList"]);
                             },
                             function () { },
                             model);
+                        $('#myReservationModal').modal('show');
                     }
                 })
                 .catch(function (response) {
@@ -329,6 +337,7 @@
                         function () { },
                         function () { },
                         model);
+                    $('#myReservationModal').modal('show');
                 });
         };
 
@@ -346,13 +355,16 @@
                 "Esta seguro que desea cancelar? Perdera los cambios.",
                 // Sets the custom action to perform when canceling.
                 function () {
+                    angular.element('#myReservationModal').attr("class", "");
+                    angular.element('#myReservationModal').modal('hide');
                     model.$router.navigate(["ReservationList"]);
                 },
                 function () {
                     model.disableForm = model.editingReservation;
                 },
                 model);
+            $('#myReservationModal').modal('show');
         };
     }
 
-} ());
+}());
