@@ -1,62 +1,96 @@
 <div>
-	<h1>{{model.title}}</h1>
+	<div class="panel panel-default">
+		<div class="panel-body">
 
-	<ng-form name="providerForm">
-		<fieldset ng-disabled="model.disableForm">
-			<label for="providerName">Nombre: </label>
-			<input type="text" name="providerName" ng-model="model.name"  required>
-			<p ng-show="providerForm.providerName.$invalid">El nombre del proveedor es requerido.</p>
-			<phones phones="model.phones"></phones>
-		</fieldset>
-		<div ng-show="!model.pop">
-			<button ng-disabled="!providerForm.$valid" ng-if="!model.editingProvider" type="submit" ng-click="model.saveProvider()">Guardar</button>
-			<button ng-if="model.editingProvider" ng-click="model.editProvider()">Editar</button>
-			<button type="button" ng-click="model.cancelEdit()">Cancelar</button>
+			<ng-form name="providerForm" class="col-sm-6">
+				<caption>{{model.title}}</caption>
+				<fieldset ng-disabled="model.disableForm">
+
+					<div class="form-group">
+						<label for="providerName">Nombre: </label>
+						<input class="form-control input-sm" type="text" name="providerName" ng-model="model.name" required>
+					</div>
+					<span class="alert alert-danger" ng-show="providerForm.providerName.$invalid">
+						<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>El nombre del proveedor es requerido.
+					</span>
+					<phones phones="model.phones"></phones>
+
+				</fieldset>
+				<div class="btn-group" ng-show="!model.pop">
+					<button class="btn btn-success" ng-disabled="!providerForm.$valid" ng-if="!model.editingProvider" type="submit" ng-click="model.saveProvider()">Guardar</button>
+					<button class="btn btn-warning" ng-if="model.editingProvider" ng-click="model.editProvider()">Editar</button>
+					<button class="btn btn-danger" type="button" ng-click="model.cancelEdit()">Cancelar</button>
+				</div>
+			</ng-form>
+
+			<ng-form name="invoiceForm" class="col-sm-6">
+				<!--<span ng-show="model.editingProvider" ng-click="model.invoiceForm()">Insertar Nuevo Documento</span>-->
+				<caption>Insertar Nuevo Documento</caption>
+				<div>
+					<!-- ng-show="model.newInvoice">-->
+					<div class="form-group">
+						<label for="type">Nuevo Documento</label>
+						<select class="form-control dropdown" id="type" ng-model="model.selectedInvoiceType" ng-options="invoiceType for invoiceType in model.invoiceTypes"></select>
+					</div>
+
+					<div class="form-group">
+						<label for="invoiceNumber"># de Factura</label>
+						<input class="form-control input-sm" type="text" id="invoiceNumber" ng-model="model.invoiceNumber">
+					</div>
+
+					<div class="form-group">
+						<label for="amount">Monto</label>
+						<money-input id="amount" text="model.invoiceAmount"></money-input>
+					</div>
+
+					<div class="form-group">
+						<label for="date">Fecha de Emision</label>
+						<input class="form-control" type="date" id="date" ng-model="model.invoiceDate">
+					</div>
+
+					<div class="form-group">
+						<label for="dueDate">Fecha de Vencimiento</label>
+						<input class="form-control" type="date" id="dueDate" ng-model="model.invoiceDueDate">
+					</div>
+
+					<div class="btn-group">
+						<button class="btn btn-success" type="button" ng-click="model.addInvoice()">Agregar Factura</button>
+						<button class="btn btn-danger" type="button" ng-click="model.cancelInvoice()">Cancelar</button>
+					</div>
+				</div>
+			</ng-form>
+
 		</div>
-	</ng-form>
-	<hr/>
-	<span ng-show="model.editingProvider" ng-click="model.invoiceForm()">Insertar Nuevo Documento</span>
-	<div ng-show="model.newInvoice">
-		<label for="type">Tipo de Factura</label>
-		<select id="type" ng-model="model.selectedInvoiceType" ng-options="invoiceType for invoiceType in model.invoiceTypes">
-		</select>
-		<br/>
-		<label for="invoiceNumber"># de Factura</label>
-		<input type="text" id="invoiceNumber" ng-model="model.invoiceNumber">
-		<br/>
-		<label for="amount">Monto</label>
-		<money-input text="model.invoiceAmount"></money-input>
-		<!--<input type="number" id="amount" ng-model="model.invoiceAmount">-->
-		<br/>
-		<label for="date">Fecha de Emision</label>
-		<input type="date" id="date" ng-model="model.invoiceDate">
-		<br/>
-		<label for="dueDate">Fecha de Vencimiento</label>
-		<input type="date" id="dueDate" ng-model="model.invoiceDueDate">
-		<br/>
-		<button type="button" ng-click="model.addInvoice()">Agregar Factura</button>
-		<button type="button" ng-click="model.cancelInvoice()">Cancelar</button>
 	</div>
-	<hr/>
-	<div>
-		<table>
-			<thead>
-				<th># de Documento</th>
-				<th>Tipo de Documento</th>
-				<th>Monto</th>
-				<th>Fecha Emision</th>
-				<th>Fecha Vencimiento</th>
-				<th>Saldo</th>
-			</thead>
-			<tr ng-repeat="invoice in model.invoices | orderBy:'-date'">
-				<td>{{invoice.number}}</td>
-				<td>{{invoice.type}}</td>
-				<td>{{invoice.amount | currency}}</td>
-				<td>{{invoice.date | date:"MM/dd/yyyy"}}</td>
-				<td>{{invoice.due | date:"MM/dd/yyyy"}}</td>
-				<td>{{invoice.balance | currency}}</td>
-			</tr>
-		</table>
+
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<caption>Documentos del Proveedor</caption>
+		</div>
+		<div class="panel-body">
+
+			<table class="table table-bordered table-striped table-hover">
+				<thead>
+					<th># de Documento</th>
+					<th>Tipo de Documento</th>
+					<th>Monto</th>
+					<th>Fecha Emision</th>
+					<th>Fecha Vencimiento</th>
+					<th>Saldo</th>
+				</thead>
+				<tr ng-repeat="invoice in model.invoices | orderBy:'-date'">
+					<td>{{invoice.number}}</td>
+					<td>{{invoice.type}}</td>
+					<td>{{invoice.amount | currency}}</td>
+					<td>{{invoice.date | date:"MM/dd/yyyy"}}</td>
+					<td>{{invoice.due | date:"MM/dd/yyyy"}}</td>
+					<td>{{invoice.balance | currency}}</td>
+				</tr>
+			</table>
+
+		</div>
 	</div>
-	<message type="model.messageType" show="model.pop" message="model.message" confirm="model.confirm()" cancel="model.cancel()"></message>
+	<div id="myModal" class="modal fade" role="dialog">
+		<message type="model.messageType" show="model.pop" message="model.message" confirm="model.confirm()" cancel="model.cancel()"></message>
+	</div>
 </div>

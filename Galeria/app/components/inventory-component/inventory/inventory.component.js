@@ -25,6 +25,13 @@
         // Article lists are callapsed by default, clicking the article category toggles visibility.
         model.toggleCollapsedCategory = function (category) {
             category.collapsed = !category.collapsed;
+
+            if (category.class === "glyphicon glyphicon-triangle-bottom") {
+                category.class = "glyphicon glyphicon-triangle-top";
+            }
+            else {
+                category.class = "glyphicon glyphicon-triangle-bottom";
+            }
         };
 
         // Finds an article by description.
@@ -72,7 +79,9 @@
                                         model.categories.push({
                                             id: item._id,
                                             name: item.category,
-                                            articles: articles
+                                            articles: articles,
+                                            // Sets the collapsed glyph icon.
+                                            class: "glyphicon glyphicon-triangle-bottom"
                                         });
 
                                         // Update the totals for the inventory.
@@ -107,7 +116,7 @@
 
         model.sort = function (column) {
             model.orderBy = arrayService.sort(model.orderBy, column);
-        }
+        };
 
     }
 } ());

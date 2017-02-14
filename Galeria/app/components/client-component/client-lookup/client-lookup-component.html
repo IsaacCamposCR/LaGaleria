@@ -1,16 +1,27 @@
-<div>
-    <div>
-        <label for="client">Buscar Cliente: </label>
-        <input id="client" type="text" ng-model="model.client" ng-keyup="model.beginClientSearch()" autocomplete="off">
-        <div ng-show="model.lookupClient" ng-repeat="client in model.lookupClients" ng-click="model.selectClient(client._id)">
-            <span>
-            {{client.name}} - {{client.phones[0]}}
-        </span>
+<div class="panel panel-default">
+
+    <div class="panel-heading">
+        <div class="input-group">
+            <span class="input-group-btn">
+            <button class="btn btn-default" type="button">
+                <span class="glyphicon glyphicon-search" aria-hidden="true"></span> Buscar Cliente
+            </button>
+            </span>
+            <input type="text" class="form-control" ng-model="model.client" ng-keyup="model.beginClientSearch()" autocomplete="off" placeholder="Buscar Cliente...">
         </div>
+
+        <div class="list-group">
+            <a class="list-group-item" ng-show="model.lookupClient" ng-repeat="client in model.lookupClients" ng-click="model.selectClient(client._id)">
+                <div>{{client.name}}
+                    <span class="badge pull-right">
+                        <span class="glyphicon glyphicon-phone-alt" aria-hidden="true"></span> {{client.phones[0]}}
+                    </span>
+                </div>
+            </a>
+        </div>
+
     </div>
-    <hr/>
-    <div>
-        <!-- ng-show="model.clientFound">-->
+    <div class="panel-body">
         <client-component clientid="model.clientId" $router="model.$router" />
     </div>
 </div>

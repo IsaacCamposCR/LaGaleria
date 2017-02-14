@@ -1,51 +1,59 @@
-<div>
-    <h1>Encargos y Apartados</h1>
-    <div>
-        <input type="text" id="search" ng-model="model.reservationName" placeholder="Busqueda de venta...">
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <b>Encargos y Apartados</b>
+        <div class="input-group">
+            <span class="input-group-btn">
+				<button class="btn btn-default" type="button">
+					<span class="glyphicon glyphicon-search" aria-hidden="true"/>
+                </button>
+            </span>
+            <input type="text" class="form-control" ng-model="model.reservationName" placeholder="Busqueda de ventas, encargos y apartados...">
+        </div>
     </div>
-    <table>
-        <thead>
-            <th>
-                <div ng-click="model.sort('invoice')"># de Documento</div>
-            </th>
-            <th>
-                <div ng-click="model.sort('type')">Tipo de Entrada</div>
-            </th>
-            <th>
-                <div ng-click="model.sort('date')">Fecha de Ingreso</div>
-            </th>
-            <th>
-                <div ng-click="model.sort('delivery')">Fecha de Entrega</div>
-            </th>
-            <th>
-                <div ng-click="model.sort('client')">Cliente</div>
-            </th>
-            <th>
-                <div ng-click="model.sort('article')">Articulos</div>
-            </th>
-            <th>
-                <div ng-click="model.sort('order')">Encargos</div>
-            </th>
-            <th>
-                <div ng-click="model.sort('price')">Saldo</div>
-            </th>
-            <th>
-                <button type="button" ng-link="['Reservation']">Nuevo Apartado</button>
-                <button type="button" ng-link="['ArtCalculator']">Nuevo Encargo</button>
-            </th>
-        </thead>
-        <tr ng-repeat="reservation in model.reservations | filter:model.reservationName | orderBy:model.orderBy">
-            <td>{{reservation.invoice}}</td>
-            <td>{{reservation.type}}</td>
-            <td>{{reservation.date | date:"MM/dd/yyyy"}}</td>
-            <td>{{reservation.delivery | date:"MM/dd/yyyy"}}</td>
-            <td>{{reservation.client}}</td>
-            <td>{{reservation.article}}</td>
-            <td>{{reservation.order}}</td>
-            <td>{{reservation.price | currency}}</td>
-            <td>
-                <button type="button" ng-click="model.redirect(reservation)">Detalles</button>
-            </td>
-        </tr>
-    </table>
+
+    <div class="panel-body">
+        <table class="table table-bordered table-striped table-hover">
+            <thead>
+                <th>
+                    <div ng-click="model.sort('type')">Tipo de Entrada</div>
+                </th>
+                <th>
+                    <div ng-click="model.sort('date')">Fecha de Ingreso</div>
+                </th>
+                <th>
+                    <div ng-click="model.sort('delivery')">Fecha de Entrega</div>
+                </th>
+                <th>
+                    <div ng-click="model.sort('client')">Cliente</div>
+                </th>
+                <th>
+                    <div ng-click="model.sort('article')">Descripcion</div>
+                </th>
+                <th>
+                    <div ng-click="model.sort('price')">Saldo</div>
+                </th>
+                <th class="col-sm-2">
+                    <div class="btn-group" role="group" aria-label="...">
+                        <button class="btn btn-primary" data-toggle="tooltip" data-placement="bottom" title="Nueva Venta" type="button" ng-link="['Reservation']">
+                            <span class="glyphicon glyphicon-gift"></span>
+                        </button>
+                        <button class="btn btn-primary" data-toggle="tooltip" data-placement="bottom" title="Nuevo Encargo" type="button" ng-link="['ArtCalculator']">
+                            <span class="glyphicon glyphicon-picture"></span>    
+                        </button>
+                    </div>
+                </th>
+            </thead>
+            <tr ng-repeat="reservation in model.reservations | filter:model.reservationName | orderBy:model.orderBy">
+                <td>{{reservation.type}}</td>
+                <td>{{reservation.date | date:"MM/dd/yyyy"}}</td>
+                <td>{{reservation.delivery | date:"MM/dd/yyyy"}}</td>
+                <td>{{reservation.client}}</td>
+                <td>{{reservation.article}}{{reservation.order}}</td>
+                <td>{{reservation.price | currency}}</td>
+                <td class="col-sm-2">
+                    <button class="btn btn-info btn-block" type="button" ng-click="model.redirect(reservation)">Detalles</button>
+                </td>
+            </tr>
+        </table>
+    </div>
 </div>

@@ -89,6 +89,7 @@
             model.remaining = 0;
             model.details = "";
             model.date = new Date();
+            model.calculatorSize = "col-sm-4";
 
             if (next.params.id) {
                 loadOrder(next.params.id);
@@ -101,6 +102,17 @@
         // Whenever a new type is selected the calculator set must be refreshed.
         model.renderCalculators = function () {
             model.products = calculatorService.generateCalculators(model.selectedArt);
+            resizeCalculators();
+        };
+
+        // When calculators are rendered, this method resizes the calculators to best fit the elements.
+        var resizeCalculators = function () {
+            if (model.products.length > 2) {
+                model.calculatorSize = "col-sm-3";
+            }
+            else {
+                model.calculatorSize = "col-sm-4";
+            }
         };
 
         model.totals = function () {
@@ -168,11 +180,12 @@
             // Builds up a description string containing the order details.
             model.products.forEach(function (product) {
                 model.details +=
-                    "\n" + product.name +
-                    ((product.base) ? ":\nAncho:" + product.base : "") +
-                    ((product.height) ? "\nAlto:" + product.height : "") +
-                    ((product.refill) ? "\nRefill:" + product.refill : "") +
-                    "\n\n";
+                    "\n-" + product.name +
+                    ((product.base) ? ":\nAncho: " + product.base + " cm." : "") +
+                    ((product.height) ? "\nAlto: " + product.height + " cm." : "") +
+                    ((product.refill) ? "\nRefill: " + product.refill + " cm." : "");
+                model.details.trimLeft();
+                console.log(model.details);
             });
 
             // Adds a new order with data from the calculators.
@@ -293,4 +306,4 @@
         };
     }
 
-} ());
+}());

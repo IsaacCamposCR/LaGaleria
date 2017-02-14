@@ -1,46 +1,71 @@
-<div>
-	<h1>{{model.title}}</h1>
-
+<div class="panel-body">
 	<ng-form name="articleForm">
+		<caption>{{model.title}}</caption>
 		<fieldset ng-disabled="model.disableForm">
-			<div ng-if="!model.editingCategory">
-				<label for="category">Category: </label>
-				<select id="category" ng-model="model.selectedCategory" ng-options="category.category for category in model.categories track by category._id">
-                </select>
-				<button type="button" ng-click="model.editCategory()">Editar</button>
-				<button type="button" ng-click="model.newCategory()">Agregar</button>
+			<div class="panel panel-default">
+
+				<div class="panel-body">
+					<div class="form-group" ng-if="!model.editingCategory">
+						<label class="control-label" for="category">Category: </label>
+						<div>
+							<select class="form-control dropdown" id="category" ng-model="model.selectedCategory" ng-options="category.category for category in model.categories track by category._id"></select>
+						</div>
+						<br/>
+						<div class="btn-group">
+							<button class="btn btn-warning" type="button" ng-click="model.editCategory()">Editar</button>
+							<button class="btn btn-success" type="button" ng-click="model.newCategory()">Agregar</button>
+						</div>
+					</div>
+					<div class="form-group" ng-if="model.editingCategory">
+						<label for="category">Category: </label>
+						<input class="form-control input-sm" type="text" name="category" ng-model="model.category">
+						<br/>
+						<div class="btn-group">
+							<button class="btn btn-success" type="button" ng-click="model.addNewCategory()">Guardar</button>
+							<button class="btn btn-danger" type="button" ng-click="model.cancelEditCategory()">Cancelar</button>
+						</div>
+					</div>
+				</div>
 			</div>
-			<div ng-if="model.editingCategory">
-				<label for="category">Category: </label>
-				<input type="text" name="category" ng-model="model.category">
-				<button type="button" ng-click="model.addNewCategory()">Guardar</button>
-				<button type="button" ng-click="model.cancelEditCategory()">Cancelar</button>
+
+			<div class="form-group">
+				<label for="provider">Proveedor</label>
+				<select class="form-control dropdown" id="provider" ng-model="model.selectedProvider" ng-options="provider.name for provider in model.providers track by provider._id"></select>
 			</div>
-			<br/>
-			<label for="provider">Provider</label>
-			<select id="provider" ng-model="model.selectedProvider" ng-options="provider.name for provider in model.providers track by provider._id">
-			</select>
-			<br/>
-			<label for="code">Codigo del Producto: </label>
-			<input name="code" type="text" ng-model="model.code" required>
-			<p ng-show="articleForm.code.$invalid">El codigo del producto es requerido.</p>
-			<br/>
-			<label for="description">Descripcion: </label>
-			<input name="description" type="text" ng-model="model.description" required>
-			<p ng-show="articleForm.description.$invalid">La descripcion del producto es requerida.</p>
-			<br/>
-			<label for="stock">Cantidad Disponible: </label>
-			<input id="stock" type="number" ng-model="model.stock">
-			<label for="history" ng-if="model.editingArticle">Historico: {{model.history}}</label>
-			<br/>
-			<label for="price">Precio: </label>
-			<money-input text="model.price"></money-input>
+			<div class="form-group">
+				<label for="code">Codigo del Producto: </label>
+				<input class="form-control input-sm" name="code" type="text" ng-model="model.code" required>
+			</div>
+			<span class="alert alert-danger" ng-show="articleForm.code.$invalid">
+					<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>El codigo del producto es requerido.
+			</span>
+			<div class="form-group">
+				<label for="description">Descripcion: </label>
+				<input class="form-control input-sm" name="description" type="text" ng-model="model.description" required>
+			</div>
+			<span class="alert alert-danger" ng-show="articleForm.description.$invalid">
+					<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>La descripcion del producto es requerida.
+			</span>
+			<div class="form-group">
+				<label for="stock">Cantidad Disponible: </label>
+				<input class="form-control input-sm" name="stock" type="number" ng-model="model.stock" required>
+				<label for="history" ng-if="model.editingArticle">Historico: {{model.history}}</label>
+			</div>
+			<span class="alert alert-danger" ng-show="articleForm.stock.$invalid">
+					<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>La cantidad del producto es requerida.
+			</span>
+			<div class="form-group">
+				<label for="price">Precio: </label>
+				<money-input text="model.price"></money-input>
+			</div>
 		</fieldset>
-		<div ng-show="!model.pop">
-			<button ng-disabled="!articleForm.$valid" ng-if="!model.editingArticle" type="submit" ng-click="model.saveArticle()">Guardar</button>
-			<button type="button" ng-if="model.editingArticle" ng-click="model.editArticle()">Editar</button>
-			<button type="button" ng-click="model.cancelEditArticle()">Cancelar</button>
+		<div class="btn-group" ng-show="!model.pop">
+			<button class="btn btn-success" ng-disabled="!articleForm.$valid" ng-if="!model.editingArticle" type="submit" ng-click="model.saveArticle()">Guardar</button>
+			<button class="btn btn-warning" type="button" ng-if="model.editingArticle" ng-click="model.editArticle()">Editar</button>
+			<button class="btn btn-danger" type="button" ng-click="model.cancelEditArticle()">Cancelar</button>
 		</div>
 	</ng-form>
-	<message type="model.messageType" message="model.message" show="model.pop" confirm="model.confirm()" cancel="model.cancel()"></message>
+	<div id="myModal" class="modal fade" role="dialog">
+		<message type="model.messageType" message="model.message" show="model.pop" confirm="model.confirm()" cancel="model.cancel()"></message>
+	</div>
 </div>

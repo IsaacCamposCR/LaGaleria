@@ -30,9 +30,11 @@
                     result.results.forEach(function (reservation) {
                         if (reservation.orders && reservation.orders.length > 0) {
                             reservation.type = "Encargo";
+                            setOrderClass(reservation);
                         }
                         else {
                             reservation.type = "Apartado";
+                            setReservationClass(reservation);
                         }
                         loadClientData(reservation, model.pendingRemaining);
                     });
@@ -44,6 +46,7 @@
                 .then(function (result) {
                     // Iterates through every reservation to assign client names and article descriptions.
                     result.results.forEach(function (order) {
+                        setOrderClass(order);
                         loadClientData(order, model.nextOrders);
                     });
                 });
@@ -66,6 +69,38 @@
                 model.$router.navigate(['ArtCalculator', { id: order._id }]);
             }
 
+        };
+
+        var setOrderClass = function (order) {
+            order.class = "alert alert-success";
+            order.status = "A Tiempo!";
+
+            // Gets the Date Value from today and the order.
+            var todayDate = new Date();
+            var orderDate = new Date(order.delivery);
+
+            // Converts to short date to remove time values and leave just day/month/year.
+            var shortToday = todayDate.toLocaleDateString();
+            var shortOrder = orderDate.toLocaleDateString();
+
+            // Returns the short date to date format.
+            todayDate = new Date(shortToday);
+            orderDate = new Date(shortOrder);
+
+            if (orderDate.getTime() < todayDate.getTime()) {
+                order.class = "alert alert-danger";
+                order.status = "Atrasado!";
+            }
+
+            if (orderDate.getTime() === todayDate.getTime()) {
+                order.class = "alert alert-warning";
+                order.status = "Entregar Hoy!";
+            }
+        };
+
+        var setReservationClass = function (reservation) {
+            reservation.class = "alert alert-danger";
+            reservation.status = "Saldo Pendiente!";
         };
     }
 } ());

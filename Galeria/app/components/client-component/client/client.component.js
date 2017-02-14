@@ -106,11 +106,14 @@
                                 "Cliente guardado con exito!",
                                 // Sets the custom action to perform when saving a client.
                                 function () {
+                                    angular.element('#myModal').attr("class", "");
+                                    angular.element('#myModal').modal('hide');
                                     // Programatically navigates to the ClientList component.
                                     model.$router.navigate(["ClientList"]);
                                 },
                                 function () { },
                                 model);
+                            $('#myModal').modal('show');
                         }
                     })
                     // Unexpected errors.
@@ -144,13 +147,18 @@
                 "Esta seguro que desea cancelar? Perdera los cambios.",
                 // Sets the custom action to perform when canceling.
                 function () {
+                    angular.element('#myModal').attr("class", "");
+                    angular.element('#myModal').modal('hide');
                     model.$router.navigate(["ClientList"]);
                 },
                 function () {
                     model.disableForm = model.editingClient;
                 },
                 model);
+            $('#myModal').modal('show');
+
+            //angular.element('#myModal').attr("visible", false);
         };
     }
 
-} ());
+}());

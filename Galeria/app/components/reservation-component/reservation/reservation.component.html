@@ -1,59 +1,121 @@
-<div>
-    <h1>{{model.title}}</h1>
-
+<div class="panel-heading">
+    <caption>{{model.title}}</caption>
+</div>
+<div class="panel-body">
     <ng-form name="reservationForm">
         <fieldset ng-disabled="model.disableForm">
-            <div>
-                <client-lookup-component client-id="model.clientId" />
-            </div>
-            <hr/>
-            <div>
-                <label for="invoice"># de Documento: </label>
-                <input id="invoice" type="text" ng-model="model.invoice">
-                <input type="checkbox" ng-model="model.isReservation" ng-change="model.makeReservation()">Apartado
-                <br/>
-                <label for="date">Fecha: </label>
-                <input name="date" type="date" ng-model="model.date" required>
-                <p ng-show="reservationForm.date.$invalid">La fecha de ingreso del cliente no es valida.</p>
-                <br/>
-                <div>
-                    <label for="price">Precio Total: </label>
-                    <money-input id="price" text="model.price" ng-keyup="model.updatePrice()"></money-input>
-                    <button type="button" ng-click="model.resetPrice()">Reestablecer</button>
-                </div>
-                <label for="remaining">Saldo: </label>
-                <span id="remaining">{{model.remaining | currency}}</span>
-                <hr/>
-                <div>
-                    <h3>Articulos:</h3>
-                    <div>
-                        <label for="article">Buscar Articulo: </label>
-                        <input id="article" type="text" ng-model="model.article" ng-keyup="model.beginArticleSearch()" autocomplete="off">
-                        <div ng-show="model.lookupArticle" ng-click="model.selectArticle(article._id)" ng-repeat="article in model.lookupArticles">
-                            <span>{{article.description}}: {{article.price | currency}} - {{article.stock}} restantes.</span>
+            <div class="row">
+
+                <div class="col-sm-5">
+                    <div class="form-group">
+                        <label for="invoice"># de Documento: </label>
+                        <div class="input-group">
+                            <input type="text" id="invoice" ng-model="model.invoice" class="form-control">
+                            <span class="input-group-addon">
+                                <input type="checkbox" ng-model="model.isReservation" ng-change="model.makeReservation()">Apartado
+                            </span>
                         </div>
                     </div>
-                    <ul>
-                        <li ng-repeat="article in model.articles track by $index" ng-if="article.quantity">
-                            <div>
-                                {{article.description}} - {{article.price | currency}} X {{article.quantity}}: {{(article.price * article.quantity) | currency}}
-                                <button type="button" ng-click="model.addArticle(article._id)">+</button>
-                                <button type="button" ng-click="model.removeArticle(article._id, $index)">-</button>
+                    <div class="form-group">
+                        <label for="date">Fecha: </label>
+                        <input class="form-control input-sm" name="date" type="date" ng-model="model.date" required>
+                    </div>
+                    <span class="alert alert-danger" ng-show="reservationForm.date.$invalid">
+					<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> Fecha de ingreso invalida.
+                    </span>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+
+                            <div class="input-group">
+                                <span class="input-group-btn">
+                                <button class="btn btn-default" type="button">
+                                    <span class="glyphicon glyphicon-search" aria-hidden="true"></span>Buscar
+                                Articulo
+                                </button>
+                                </span>
+                                <input class="form-control" id="article" type="text" ng-model="model.article" ng-keyup="model.beginArticleSearch()" autocomplete="off"
+                                    placeholder="Buscar Articulo...">
                             </div>
-                        </li>
-                    </ul>
+
+                            <ul class="list-group">
+                                <li class="list-group-item" ng-show="model.lookupArticle" ng-click="model.selectArticle(article._id)" ng-repeat="article in model.lookupArticles">
+                                    <span>
+                                    {{article.description}}: {{article.price | currency}}
+                                    <span class="badge pull-right">
+                                    {{article.stock}}
+                                    </span>
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="panel-body">
+                            <table class="table table-bordered table-responsive" ng-if="model.articles.length > 0">
+                                <thead>
+                                    <th>Descripcion</th>
+                                    <th>Precio</th>
+                                    <th>Cantidad</th>
+                                    <th>Subtotal</th>
+                                </thead>
+                                <tr ng-repeat="article in model.articles track by $index" ng-if="article.quantity">
+                                    <td>{{article.description}}</td>
+                                    <td>{{article.price | currency}}</td>
+                                    <td>
+                                        <div class="badge">
+                                            <div>
+                                                <span type="button" ng-click="model.addArticle(article._id)">
+                                                <span class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
+                                                </span>
+                                            </div>
+                                            <div>
+                                                {{article.quantity}}
+                                            </div>
+                                            <div>
+                                                <span type="button" ng-click="model.removeArticle(article._id, $index)">
+                                                <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>{{(article.price * article.quantity) | currency}}</td>
+                                </tr>
+                            </table>
+                            <div class="form-group">
+                                <label for="price">Precio Total: </label>
+
+                                <div class="input-group">
+                                    <money-input id="price" text="model.price" ng-keyup="model.updatePrice()"></money-input>
+                                    <span class="input-group-btn">
+                                <button class="btn btn-default" type="button" ng-click="model.resetPrice()">
+                                    <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span>                                    Reestablecer
+                                    </button>
+                                    </span>
+                                </div>
+                            </div>
+                            <caption>
+                                <label for="remaining">Saldo: </label>
+                                <span id="remaining">{{model.remaining | currency}}</span>
+                            </caption>
+                        </div>
+                    </div>
                 </div>
-                <hr/>
-                <div ng-if="model.isReservation">
-                    <advance-component advances="model.advances" remaining="model.remaining" display-totals="model.displayTotals()" />
+                <div class="col-sm-7">
+                    <client-lookup-component client-id="model.clientId" />
                 </div>
             </div>
+            <hr/>
+            <div class="row" ng-if="model.isReservation">
+                <advance-component advances="model.advances" remaining="model.remaining" display-totals="model.displayTotals()" />
+            </div>
+
         </fieldset>
-        <div ng-show="!model.pop">
-            <button ng-disabled="!reservationForm.$valid" ng-if="!model.editingReservation" type="submit" ng-click="model.saveReservation()">Guardar</button>
-            <button type="button" ng-if="model.editingReservation" ng-click="model.editReservation()">Editar</button>
-            <button type="button" ng-click="model.cancelEditReservation()">Cancelar</button>
+        <div class="btn-group" ng-show="!model.pop">
+            <button class="btn btn-success"  data-backdrop="static" data-keyboard="false" ng-disabled="!reservationForm.$valid" ng-if="!model.editingReservation" type="submit" ng-click="model.saveReservation()">Guardar</button>
+            <button class="btn btn-warning" type="button" ng-if="model.editingReservation" ng-click="model.editReservation()">Editar</button>
+            <button class="btn btn-danger" type="button" ng-click="model.cancelEditReservation()">Cancelar</button>
         </div>
     </ng-form>
-    <message type="model.messageType" message="model.message" show="model.pop" confirm="model.confirm()" cancel="model.cancel()"></message>
+    <div id="myReservationModal" class="modal fade" role="dialog">
+        <message type="model.messageType" message="model.message" show="model.pop" confirm="model.confirm()" cancel="model.cancel()"></message>
+    </div>
 </div>

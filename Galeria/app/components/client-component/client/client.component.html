@@ -1,27 +1,36 @@
-<div>
-	<h1 ng-if="model.showReservations">{{model.title}}</h1>
-
+<div class="panel-body">
 	<ng-form name="clientForm">
+		<caption ng-if="model.showReservations">{{model.title}}</caption>
 		<fieldset ng-disabled="model.disableForm">
-			<div>
-				<label for="name">Nombre: </label>
-				<input type="text" name="name" ng-model="model.name" required>
-				<p ng-show="clientForm.name.$invalid">El nombre del cliente es requerido.</p>
-				<phones phones="model.phones"></phones>
-				<label for="created">Fecha de Ingreso</label>
-				<input type="date" name="created" ng-model="model.created" required>
-				<p ng-show="clientForm.created.$invalid">La fecha de ingreso del cliente no es valida.</p>
+			<div class="col-sm-5">
+				<div class="form-group">
+					<label for="name">Nombre:</label>
+					<input class="form-control input-sm" type="text" name="name" ng-model="model.name" required>
+				</div>
+				<span class="alert alert-danger" ng-show="clientForm.name.$invalid">
+						<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>El nombre del cliente es requerido.
+				</span>
+				<div class="form-group">
+					<label for="created">Fecha de Ingreso:</label>
+					<input class="form-control" type="date" name="created" ng-model="model.created" required>
+				</div>
+				<span class="alert alert-danger" ng-show="clientForm.created.$invalid">
+						<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>La fecha de ingreso invalida.
+				</span>
 			</div>
+			<phones class="col-sm-7" phones="model.phones"></phones>
 		</fieldset>
-		<div>
-			<div ng-show="!model.pop">
-				<button ng-disabled="!clientForm.$valid" ng-if="!model.editingClient" type="submit" ng-click="model.saveClient(clientForm.$valid)">Guardar</button>
-				<button ng-if="model.editingClient" type="button" ng-click="model.editClient()">Editar</button>
-				<button type="button" ng-click="model.cancelEdit()">Cancelar</button>
-			</div>
+		<div class="btn-group" ng-show="!model.pop">
+			<button class="btn btn-success" ng-disabled="!clientForm.$valid" ng-if="!model.editingClient" type="submit" ng-click="model.saveClient(clientForm.$valid)">Guardar</button>
+			<button class="btn btn-warning" ng-if="model.editingClient" type="button" ng-click="model.editClient()">Editar</button>
+			<button class="btn btn-danger" type="button" ng-click="model.cancelEdit()">Cancelar</button>
 		</div>
+
 	</ng-form>
-	<message type="model.messageType" message="model.message" show="model.pop" confirm="model.confirm()" cancel="model.cancel()"></message>
+
+	<div id="myModal" class="modal fade" role="dialog">
+		<message type="model.messageType" message="model.message" show="model.pop" confirm="model.confirm()" cancel="model.cancel()"></message>
+	</div>
 	<div ng-if="model.showReservations">
 		<reservation-list-component client-reservations="model.id" $router="model.$router" />
 	</div>

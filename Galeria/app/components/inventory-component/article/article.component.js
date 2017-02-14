@@ -93,12 +93,15 @@
                     true,
                     "No existen proveedores en la base de datos. Desea ingresar un nuevo proveedor?",
                     function () {
+                        angular.element('#myModal').attr("class", "");
+                        angular.element('#myModal').modal('hide');
                         model.$router.navigate(["Provider"]);
                     },
                     function () {
                         model.disableForm = false;
                     },
                     model);
+                $('#myModal').modal('show');
             }
             model.invoice = "";
             model.description = "";
@@ -178,10 +181,13 @@
                             "Articulo guardado con exito!",
                             // Programatically navigates to the inventory component.
                             function () {
+                                angular.element('#myModal').attr("class", "");
+                                angular.element('#myModal').modal('hide');
                                 model.$router.navigate(["Inventory"])
                             },
                             function () { },
                             model);
+                        $('#myModal').modal('show');
                     }
                 })
                 .catch(function (response) {
@@ -190,11 +196,14 @@
                         "Ha ocurrido un error...",
                         // Sets the custom action to perform when saving a provider.
                         function () {
+                            angular.element('#myModal').attr("class", "");
+                            angular.element('#myModal').modal('hide');
                             // Programatically navigates to the ProviderList component.
                             model.$router.navigate(["Inventory"]);
                         },
                         function () { },
                         model);
+                    $('#myModal').modal('show');
                 });
         };
 
@@ -231,6 +240,7 @@
                             },
                             function () { },
                             model);
+                        $('#myModal').modal('show');
                     }
                 })
                 .catch(function (response) {
@@ -241,10 +251,13 @@
                         // Sets the custom action to perform when saving a client.
                         function () {
                             // Programatically navigates to the ClientList component.
+                            angular.element('#myModal').attr("class", "");
+                            angular.element('#myModal').modal('hide');
                             model.$router.navigate(["Inventory"]);
                         },
                         function () { },
                         model);
+                    $('#myModal').modal('show');
                 });
         };
 
@@ -280,12 +293,15 @@
                 "Esta seguro que desea cancelar? Perdera los cambios.",
                 // Sets the custom action to perform when canceling.
                 function () {
+                    angular.element('#myModal').attr("class", "");
+                    angular.element('#myModal').modal('hide');
                     model.$router.navigate(["Inventory"]);
                 },
                 function () {
                     model.disableForm = model.editingArticle;
                 },
                 model);
+            $('#myModal').modal('show');
         };
     }
-} ());
+}());

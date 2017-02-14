@@ -1,5 +1,8 @@
 <ng-form name="moneyForm">
-    <input name="price" type="text" ng-model="model.text" step="0.01" ng-keydown="model.supressKeys($event)" ng-keyup="model.format()"
-        ng-blur="model.blur()" required>
-    <p ng-show="moneyForm.price.$invalid">El monto es requerido.</p>
+    <input class="form-control" name="price" type="text" ng-model="model.text" step="0.01" ng-keydown="model.supressKeys($event)"
+        ng-keyup="model.format()" ng-blur="model.blur()" required>
+        <br/>
+    <span class="alert alert-danger" ng-show="moneyForm.price.$invalid">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>El monto es requerido.
+    </span>
 </ng-form>
