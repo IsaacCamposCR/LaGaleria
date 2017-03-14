@@ -16,10 +16,13 @@
 					<phones phones="model.phones"></phones>
 
 				</fieldset>
-				<div class="btn-group" ng-show="!model.pop">
-					<button class="btn btn-success" ng-disabled="!providerForm.$valid" ng-if="!model.editingProvider" type="submit" ng-click="model.saveProvider()">Guardar</button>
-					<button class="btn btn-warning" ng-if="model.editingProvider" ng-click="model.editProvider()">Editar</button>
-					<button class="btn btn-danger" type="button" ng-click="model.cancelEdit()">Cancelar</button>
+				<hr/>
+				<div class="center">
+					<div class="btn-group">
+						<button class="btn btn-success" ng-disabled="!providerForm.$valid" ng-if="!model.editingProvider" type="submit" ng-click="model.saveProvider()">Guardar Proveedor</button>
+						<button class="btn btn-warning" ng-if="model.editingProvider" ng-click="model.editProvider()">Editar Proveedor</button>
+						<button class="btn btn-danger" type="button" ng-click="model.cancelEdit()">Cancelar</button>
+					</div>
 				</div>
 			</ng-form>
 
@@ -53,9 +56,12 @@
 						<input class="form-control" type="date" id="dueDate" ng-model="model.invoiceDueDate">
 					</div>
 
-					<div class="btn-group">
-						<button class="btn btn-success" type="button" ng-click="model.addInvoice()">Agregar Factura</button>
-						<button class="btn btn-danger" type="button" ng-click="model.cancelInvoice()">Cancelar</button>
+					<hr/>
+					<div class="center">
+						<div class="btn-group">
+							<button class="btn btn-success" type="button" ng-click="model.addInvoice()">Agregar Factura</button>
+							<button class="btn btn-danger" type="button" ng-click="model.cancelInvoice()">Cancelar</button>
+						</div>
 					</div>
 				</div>
 			</ng-form>

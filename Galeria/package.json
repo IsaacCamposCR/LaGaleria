@@ -8,6 +8,8 @@
         "express": "4.13.0",
         "mongoose": "*",
         "body-parser": "1.13.1",
+        "jsonwebtoken": "*",
+        "express-jwt": "*",
         "morgan": "*"
     }
 }

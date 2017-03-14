@@ -6,7 +6,7 @@
     module.component("mainComponent", {
         templateUrl: "/components/main-component/main.component.html",
         controllerAs: "model",
-        //The calculatorService must be added as a literal string in order to remain when the js is minified.
+        //The services must be added as a literal strings in order to remain when the js is minified.
         controller: ["clientService", "reservationService", "arrayService", mainController],
         bindings: {
             "$router": "<"

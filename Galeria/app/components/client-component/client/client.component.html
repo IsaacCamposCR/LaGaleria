@@ -20,10 +20,13 @@
 			</div>
 			<phones class="col-sm-7" phones="model.phones"></phones>
 		</fieldset>
-		<div class="btn-group" ng-show="!model.pop">
-			<button class="btn btn-success" ng-disabled="!clientForm.$valid" ng-if="!model.editingClient" type="submit" ng-click="model.saveClient(clientForm.$valid)">Guardar</button>
-			<button class="btn btn-warning" ng-if="model.editingClient" type="button" ng-click="model.editClient()">Editar</button>
-			<button class="btn btn-danger" type="button" ng-click="model.cancelEdit()">Cancelar</button>
+		<hr/>
+		<div class="center">
+			<div class="btn-group">
+				<button class="btn btn-success" ng-disabled="!clientForm.$valid" ng-if="!model.editingClient" type="submit" ng-click="model.saveClient(clientForm.$valid)">Guardar Cliente</button>
+				<button class="btn btn-warning" ng-if="model.editingClient" type="button" ng-click="model.editClient()">Editar Cliente</button>
+				<button class="btn btn-danger" type="button" ng-click="model.cancelEdit()">Cancelar</button>
+			</div>
 		</div>
 
 	</ng-form>

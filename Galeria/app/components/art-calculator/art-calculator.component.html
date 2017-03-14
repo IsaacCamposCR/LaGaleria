@@ -95,10 +95,12 @@
             </div>
         </fieldset>
         <hr/>
-        <div class="btn-group">
-            <button class="btn btn-success" type="button" ng-if="!model.editingOrder" ng-click="model.finish()">Completar Encargo</button>
-            <button class="btn btn-warning" type="button" ng-if="model.editingOrder" ng-click="model.editOrder()">Editar</button>
-            <button class="btn btn-danger" type="button" ng-click="model.cancelOrder()">Cancelar</button>
+        <div class="center">
+            <div class="btn-group">
+                <button class="btn btn-success" type="button" ng-if="!model.editingOrder" ng-click="model.finish()">Completar Encargo</button>
+                <button class="btn btn-warning" type="button" ng-if="model.editingOrder" ng-click="model.editOrder()">Editar</button>
+                <button class="btn btn-danger" type="button" ng-click="model.cancelOrder()">Cancelar</button>
+            </div>
         </div>
     </ng-form>
     <message type="model.messageType" message="model.message" show="model.pop" confirm="model.confirm()" cancel="model.cancel()"></message>

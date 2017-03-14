@@ -12,7 +12,7 @@
 
         <div class="list-group">
             <a class="list-group-item" ng-show="model.lookupClient" ng-repeat="client in model.lookupClients" ng-click="model.selectClient(client._id)">
-                <div>{{client.name}}
+                <div style="text-align: left">{{client.name}}
                     <span class="badge pull-right">
                         <span class="glyphicon glyphicon-phone-alt" aria-hidden="true"></span> {{client.phones[0]}}
                     </span>

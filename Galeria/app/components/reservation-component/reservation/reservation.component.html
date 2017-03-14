@@ -40,12 +40,12 @@
 
                             <ul class="list-group">
                                 <li class="list-group-item" ng-show="model.lookupArticle" ng-click="model.selectArticle(article._id)" ng-repeat="article in model.lookupArticles">
-                                    <span>
-                                    {{article.description}}: {{article.price | currency}}
-                                    <span class="badge pull-right">
-                                    {{article.stock}}
-                                    </span>
-                                    </span>
+                                    <div style="text-align: left">
+                                        {{article.description}}: {{article.price | currency}}
+                                        <span class="badge pull-right">
+                                            {{article.stock}}
+                                        </span>
+                                    </div>
                                 </li>
                             </ul>
                         </div>
@@ -109,10 +109,13 @@
             </div>
 
         </fieldset>
-        <div class="btn-group" ng-show="!model.pop">
-            <button class="btn btn-success"  data-backdrop="static" data-keyboard="false" ng-disabled="!reservationForm.$valid" ng-if="!model.editingReservation" type="submit" ng-click="model.saveReservation()">Guardar</button>
-            <button class="btn btn-warning" type="button" ng-if="model.editingReservation" ng-click="model.editReservation()">Editar</button>
-            <button class="btn btn-danger" type="button" ng-click="model.cancelEditReservation()">Cancelar</button>
+        <div class="center">
+            <div class="btn-group">
+                <button class="btn btn-success" data-backdrop="static" data-keyboard="false" ng-disabled="!reservationForm.$valid" ng-if="!model.editingReservation"
+                    type="submit" ng-click="model.saveReservation()">Guardar</button>
+                    <button class="btn btn-warning" type="button" ng-if="model.editingReservation" ng-click="model.editReservation()">Editar</button>
+                    <button class="btn btn-danger" type="button" ng-click="model.cancelEditReservation()">Cancelar</button>
+            </div>
         </div>
     </ng-form>
     <div id="myReservationModal" class="modal fade" role="dialog">

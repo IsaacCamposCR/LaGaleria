@@ -1,6 +1,19 @@
 var express = require("express");
 var morgan = require("morgan");
 var path = require("path");
+var expressJWT = require("express-jwt");
+var jwt = require("jsonwebtoken");
+
+//Unprotected resources for JWT
+var unprotected = [
+    "/api/login", 
+    "/login",
+    "/app.angular.js",
+    "/favicon.ico",
+    /\/css*/,
+    /\/lib*/,
+    /\/components*/
+];
 
 // Mongoose ODM...
 var mongoose = require("mongoose");
@@ -24,15 +37,22 @@ var bodyParser = require("body-parser");
 
 //app.use(morgan("dev"));
 app.use(bodyParser.urlencoded({ extended: true }));
+//app.use('/api/s', jwt({secret: config.secrets.AUTH_SECRET, isRevoked: authService.isTokenRevoked}));
+app.use(expressJWT({ secret: "nyancat 4 ever" }).unless({ path: unprotected }));
 app.use(bodyParser.json());
 app.use(express.static(rootPath + "/app"));
 
 // Client Server
+var users = require("./modules/user.server");
 var clients = require("./modules/client.server");
 var articles = require("./modules/article.server");
 var categories = require("./modules/category.server");
 var providers = require("./modules/provider.server");
 var reservations = require("./modules/reservation.server");
+
+// User endpoints
+// login
+app.post("/api/login", users.login);
 
 // Client endpoints
 // Creates a new client

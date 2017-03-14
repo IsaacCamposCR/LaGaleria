@@ -10,19 +10,23 @@
 						<div>
 							<select class="form-control dropdown" id="category" ng-model="model.selectedCategory" ng-options="category.category for category in model.categories track by category._id"></select>
 						</div>
-						<br/>
-						<div class="btn-group">
-							<button class="btn btn-warning" type="button" ng-click="model.editCategory()">Editar</button>
-							<button class="btn btn-success" type="button" ng-click="model.newCategory()">Agregar</button>
+						<hr/>
+						<div class="center">
+							<div class="btn-group">
+								<button class="btn btn-warning" type="button" ng-click="model.editCategory()">Editar Categoria</button>
+								<button class="btn btn-success" type="button" ng-click="model.newCategory()">Agregar</button>
+							</div>
 						</div>
 					</div>
 					<div class="form-group" ng-if="model.editingCategory">
 						<label for="category">Category: </label>
 						<input class="form-control input-sm" type="text" name="category" ng-model="model.category">
-						<br/>
-						<div class="btn-group">
-							<button class="btn btn-success" type="button" ng-click="model.addNewCategory()">Guardar</button>
-							<button class="btn btn-danger" type="button" ng-click="model.cancelEditCategory()">Cancelar</button>
+						<hr/>
+						<div class="center">
+							<div class="btn-group">
+								<button class="btn btn-success" type="button" ng-click="model.addNewCategory()">Guardar Categoria</button>
+								<button class="btn btn-danger" type="button" ng-click="model.cancelEditCategory()">Cancelar</button>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -59,10 +63,13 @@
 				<money-input text="model.price"></money-input>
 			</div>
 		</fieldset>
-		<div class="btn-group" ng-show="!model.pop">
-			<button class="btn btn-success" ng-disabled="!articleForm.$valid" ng-if="!model.editingArticle" type="submit" ng-click="model.saveArticle()">Guardar</button>
-			<button class="btn btn-warning" type="button" ng-if="model.editingArticle" ng-click="model.editArticle()">Editar</button>
-			<button class="btn btn-danger" type="button" ng-click="model.cancelEditArticle()">Cancelar</button>
+		<hr/>
+		<div class="center">
+			<div class="btn-group">
+				<button class="btn btn-success" ng-disabled="!articleForm.$valid" ng-if="!model.editingArticle" type="submit" ng-click="model.saveArticle()">Guardar</button>
+				<button class="btn btn-warning" type="button" ng-if="model.editingArticle" ng-click="model.editArticle()">Editar</button>
+				<button class="btn btn-danger" type="button" ng-click="model.cancelEditArticle()">Cancelar</button>
+			</div>
 		</div>
 	</ng-form>
 	<div id="myModal" class="modal fade" role="dialog">
