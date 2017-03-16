@@ -23,6 +23,7 @@
         model.login = function () {
             userService.login({ username: model.username, password: model.password }).$promise
                 .then(function (response) {
+                    
                     console.log(response);
                 })
                 .catch(function (response) {
