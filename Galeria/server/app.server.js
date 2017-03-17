@@ -4,16 +4,6 @@ var path = require("path");
 var expressJWT = require("express-jwt");
 var jwt = require("jsonwebtoken");
 
-//Unprotected resources for JWT
-var unprotected = [
-    "/api/login", 
-    "/login",
-    "/app.angular.js",
-    "/favicon.ico",
-    /\/css*/,
-    /\/lib*/,
-    /\/components*/
-];
 
 // Mongoose ODM...
 var mongoose = require("mongoose");
@@ -35,10 +25,12 @@ var app = express();
 var rootPath = path.normalize(__dirname + "/../");
 var bodyParser = require("body-parser");
 
-//app.use(morgan("dev"));
+/*app.get("/", function(req, res){
+    console.log(req.headers);
+});*/
 app.use(bodyParser.urlencoded({ extended: true }));
-//app.use('/api/s', jwt({secret: config.secrets.AUTH_SECRET, isRevoked: authService.isTokenRevoked}));
-app.use(expressJWT({ secret: "nyancat 4 ever" }).unless({ path: unprotected }));
+app.use('/api', expressJWT({ secret: "nyancat 4 ever" }).unless({ path: ["/api/login"] }));
+//app.use(expressJWT({ secret: "nyancat 4 ever" }).unless({ path: unprotected }));
 app.use(bodyParser.json());
 app.use(express.static(rootPath + "/app"));
 

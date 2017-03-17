@@ -15,6 +15,10 @@
     function reservationController(inventoryService, reservationService, arrayService) {
         var model = this;
 
+        model.$onInit = function () {
+            arrayService.islogged(model);
+        };
+
         // Cleans up the form for a new reservation.
         var newReservation = function () {
             model.title = "Nueva Venta";

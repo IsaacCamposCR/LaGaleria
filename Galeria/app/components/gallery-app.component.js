@@ -29,7 +29,7 @@
             { path: "/apartado/:id", component: "reservationComponent", name: "EditReservation" },
             { path: "/apartados", component: "reservationListComponent", name: "ReservationList" },
 
-            { path: "/**", redirectTo: ["ArtCalculator"] }
+            { path: "/**", redirectTo: ["Login"] }
         ]
     });
-} ());
+}());

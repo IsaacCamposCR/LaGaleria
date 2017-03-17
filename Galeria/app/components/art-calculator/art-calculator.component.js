@@ -18,6 +18,10 @@
 
         var model = this;
 
+        model.$onInit = function () {
+            arrayService.islogged(model);
+        };
+
         var newOrder = function () {
             model.editingOrder = false;
 

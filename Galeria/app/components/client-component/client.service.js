@@ -11,6 +11,7 @@
             {
                 query: {
                     method: "GET",
+                    headers: { "authorization": "Bearer " + sessionStorage.getItem("jsonWebToken") },
                     isArray: false
                 }
             });
@@ -60,5 +61,5 @@
         };
     });
 
-} ());
+}());
 

@@ -8,8 +8,8 @@
         templateUrl: "/components/provider-component/provider-list/provider-list.component.html",
         controllerAs: "model",
         controller: ["providerService", "arrayService", providerListController],
-        binding: {
-
+        bindings: {
+            "$router": "<"
         }
     });
 
@@ -18,6 +18,8 @@
 
         // When the component is initialized, loads all the providers.
         model.$onInit = function () {
+            arrayService.islogged(model);
+
             model.orderBy = "+name";
             model.providers = [];
 
@@ -56,4 +58,4 @@
         };
     }
 
-} ());
+}());

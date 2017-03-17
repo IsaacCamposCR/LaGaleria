@@ -18,6 +18,10 @@
 
         var model = this;
 
+        model.$onInit = function () {
+            arrayService.islogged(model);
+        };
+
         // When the component is activated (From inventory).
         // Load the data from the article, or create a blank form for a new article.
         model.$routerOnActivate = function (next) {

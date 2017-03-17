@@ -7,7 +7,7 @@
     module.component("calculator", {
         templateUrl: "/components/calculator/calculator.component.html",
         controllerAs: "model",
-        controller: [calculatorController],
+        controller: ["arrayService", calculatorController],
         bindings: {
             product: "<",
             // Binds the totals function from the parent in order to update the totals in the parent.
@@ -15,11 +15,12 @@
         },
     });
 
-    function calculatorController() {
+    function calculatorController(arrayService) {
 
         var model = this;
 
         model.$onInit = function () {
+            arrayService.islogged(model);
         };
 
         // Everytime an input changes in the calculator, the total function bound is executed.

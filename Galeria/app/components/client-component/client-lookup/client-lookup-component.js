@@ -6,18 +6,18 @@
     module.component("clientLookupComponent", {
         templateUrl: "/components/client-component/client-lookup/client-lookup-component.html",
         controllerAs: "model",
-        controller: ["clientService", clientLookupController],
+        controller: ["clientService", "arrayService", clientLookupController],
         bindings: {
             "clientId": "="
         }
     });
 
-    function clientLookupController(clientService) {
+    function clientLookupController(clientService, arrayService) {
 
         var model = this;
 
         model.$onInit = function () {  
-            //model.clientFound = false;
+            arrayService.islogged(model);
         };
 
         // When the user starts typing in the Client field, 

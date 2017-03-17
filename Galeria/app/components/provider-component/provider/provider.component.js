@@ -17,6 +17,10 @@
     function providerController(providerService, arrayService) {
         var model = this;
 
+        model.$onInit = function () {
+            arrayService.islogged(model);
+        };
+
         // When the component is activated (From provider-list).
         // Load the data from the provider, or create a blank form for a new provider.
         model.$routerOnActivate = function (next) {

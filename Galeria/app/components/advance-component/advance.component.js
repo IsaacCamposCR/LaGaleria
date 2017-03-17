@@ -19,6 +19,7 @@
         var model = this;
 
         model.$onInit = function () {
+            arrayService.islogged(model);
             model.advances = [];
             model.advanceAmount = 0;
             model.advanceDate = new Date();

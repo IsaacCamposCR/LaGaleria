@@ -5,6 +5,14 @@
     var module = angular.module("theGallery");
 
     module.factory("arrayService", function () {
+
+        // If the user is not logged in, it will redirect to the login page.
+        var loginRedirect = function (model) {
+            if (!sessionStorage.getItem("jsonWebToken")) {
+                model.$router.navigate(["Login"]);
+            }
+        };
+
         var lookupItemFromArray = function (id, array) {
             // The filter function is not supported on older browsers...
             var result = array.filter(function (item) {
@@ -83,8 +91,9 @@
             sort: sortArrayItems,
             unformat: formatStringIntoNumber,
             errors: responseHasErrors,
-            pop: popUp
+            pop: popUp,
+            islogged: loginRedirect
         };
     });
 
-} ());
+}());

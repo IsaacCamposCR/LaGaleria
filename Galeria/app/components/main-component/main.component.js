@@ -17,6 +17,9 @@
         var model = this;
 
         model.$onInit = function () {
+            arrayService.islogged(model);
+            console.log(sessionStorage.getItem("jsonWebToken"));
+
             model.nextOrders = [];
             model.pendingRemaining = [];
             getNextOrders();
@@ -103,4 +106,4 @@
             reservation.status = "Saldo Pendiente!";
         };
     }
-} ());
+}());

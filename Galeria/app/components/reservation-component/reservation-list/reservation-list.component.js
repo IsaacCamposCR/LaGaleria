@@ -17,6 +17,8 @@
         var model = this;
 
         model.$onInit = function () {
+            arrayService.islogged(model);
+
             model.orderBy = "+date";
             // Initiates the reservation array as empty.
             model.reservations = [];
@@ -109,4 +111,4 @@
         };
 
     }
-} ());
+}());

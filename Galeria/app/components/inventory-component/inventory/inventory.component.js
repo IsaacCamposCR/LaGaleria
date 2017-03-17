@@ -17,6 +17,8 @@
 
         // When the component is initialized, loads all the articles.
         model.$onInit = function () {
+            arrayService.islogged(model);
+            
             model.orderBy = "+description";
             // The false parameter indicates it is not a find command.
             populateArticles(false);

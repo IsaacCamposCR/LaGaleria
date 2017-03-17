@@ -11,13 +11,18 @@
         controller: ["clientService", "arrayService", clientController],
         bindings: {
             "$router": "<",
-            "clientid": "<"
+            "clientid": "<",
+            "hidenavigation": "<"
         }
     });
 
     function clientController(clientService, arrayService) {
 
         var model = this;
+
+        model.$onInit = function () {
+            arrayService.islogged(model);
+        };
 
         // When the component is activated (From client-list).
         // Load the data from the client, or create a blank form for a new client.

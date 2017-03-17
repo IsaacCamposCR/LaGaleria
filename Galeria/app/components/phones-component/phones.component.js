@@ -17,6 +17,8 @@
         var model = this;
 
         model.$onInit = function () {
+            arrayService.islogged(model);
+            
             // Whenever the phones binding is not present, it will create an array with an empty phone.
             if ((!model.phones) || (model.phones.length === 0)) {
                 model.phones = [""];

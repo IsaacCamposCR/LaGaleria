@@ -23,8 +23,21 @@
         model.login = function () {
             userService.login({ username: model.username, password: model.password }).$promise
                 .then(function (response) {
-                    
-                    console.log(response);
+                    if (response.errors) {
+                        arrayService.pop("error",
+                            true,
+                            response.errors,
+                            // Sets the custom action to perform when saving a client.
+                            function () { },
+                            function () { },
+                            model);
+                        $('#myModal').modal('show');
+                    }
+                    else {
+                        storeToken(response.results);
+                        // Programatically navigates to the Main component.
+                        model.$router.navigate(["Main"]);
+                    }
                 })
                 .catch(function (response) {
                     console.log("Error:", response.errors);
@@ -33,12 +46,30 @@
                         "Ha ocurrido un error.",
                         // Sets the custom action to perform when saving a client.
                         function () {
-                            // Programatically navigates to the ClientList component.
+                            // Programatically navigates to the Login component.
                             model.$router.navigate(["Login"]);
                         },
                         function () { },
                         model);
+                    $('#myModal').modal('show');
                 });
+        };
+
+        var storeToken = function (token) {
+            if (typeof (Storage) !== "undefined") {
+                // Code for localStorage/sessionStorage.
+                sessionStorage.setItem("jsonWebToken", token);
+            } else {
+                // Sorry! No Web Storage support..
+                arrayService.pop("error",
+                    true,
+                    "Debe utilizar un navegador mas reciente!",
+                    // Sets the custom action to perform when saving a client.
+                    function () { },
+                    function () { },
+                    model);
+                $('#myModal').modal('show');
+            }
         };
     }
 })();

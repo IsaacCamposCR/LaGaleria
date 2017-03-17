@@ -8,7 +8,10 @@
         templateUrl: "/components/client-component/client-list/client-list.component.html",
         controllerAs: "model",
         //The clientService must be added as a literal string in order to remain when the js is minified.
-        controller: ["clientService", "arrayService", clientListController]
+        controller: ["clientService", "arrayService", clientListController],
+        bindings: {
+            "$router": "<"
+        }
     });
 
     function clientListController(clientService, arrayService) {
@@ -17,6 +20,8 @@
 
         // When the component is initialized, loads all the clients.
         model.$onInit = function () {
+            arrayService.islogged(model);
+            
             model.orderBy = "+name";
 
             clientService.list().$promise.then(function (result) {
