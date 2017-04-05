@@ -10,6 +10,7 @@
         "body-parser": "1.13.1",
         "jsonwebtoken": "*",
         "express-jwt": "*",
+        "bcrypt": "*",
         "morgan": "*"
     }
 }

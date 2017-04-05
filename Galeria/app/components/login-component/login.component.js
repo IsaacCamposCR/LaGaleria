@@ -55,6 +55,32 @@
                 });
         };
 
+        model.newUser = function () {
+            userService.save({ username: model.username, name: "Hi", password: model.password }).$promise
+                .then(function (response) {
+                    if (response.errors) {
+                        arrayService.pop("error",
+                            true,
+                            response.errors,
+                            // Sets the custom action to perform when saving a client.
+                            function () { },
+                            function () { },
+                            model);
+                        $('#myModal').modal('show');
+                    }
+                    else {
+                        arrayService.pop("success",
+                            true,
+                            "Usuario creado con exito!",
+                            // Sets the custom action to perform when saving a client.
+                            function () { },
+                            function () { },
+                            model);
+                        $('#myModal').modal('show');
+                    }
+                });
+        };
+
         var storeToken = function (token) {
             if (typeof (Storage) !== "undefined") {
                 // Code for localStorage/sessionStorage.

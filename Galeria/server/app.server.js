@@ -29,7 +29,7 @@ var bodyParser = require("body-parser");
     console.log(req.headers);
 });*/
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use('/api', expressJWT({ secret: "nyancat 4 ever" }).unless({ path: ["/api/login"] }));
+app.use('/api', expressJWT({ secret: "nyancat 4 ever" }).unless({ path: ["/api/login", "/api/user"] }));
 //app.use(expressJWT({ secret: "nyancat 4 ever" }).unless({ path: unprotected }));
 app.use(bodyParser.json());
 app.use(express.static(rootPath + "/app"));
@@ -43,8 +43,10 @@ var providers = require("./modules/provider.server");
 var reservations = require("./modules/reservation.server");
 
 // User endpoints
-// login
+// User Login
 app.post("/api/login", users.login);
+// Creates a new user
+app.post("/api/user", users.save);
 
 // Client endpoints
 // Creates a new client
